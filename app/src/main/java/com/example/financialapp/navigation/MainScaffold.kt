@@ -14,4 +14,3 @@ fun MainScaffold(navController: NavHostController, currentRoute: String?) {
         AppNavHost(navController, Modifier.padding(padding))
     }
 }
-
