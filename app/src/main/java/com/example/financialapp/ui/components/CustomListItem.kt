@@ -31,6 +31,7 @@ fun CustomListItem(
     modifier: Modifier = Modifier,
     containerColor: Color = MaterialTheme.colorScheme.surface,
     emoji: String? = null,
+    emojiBackgroundColor: Color = MaterialTheme.colorScheme.secondary,
     title: String,
     subTitle: String? = null,
     trailingText: String? = null,
@@ -51,7 +52,7 @@ fun CustomListItem(
                     modifier = Modifier
                         .size(24.dp)
                         .clip(CircleShape)
-                        .background(MaterialTheme.colorScheme.secondary),
+                        .background(emojiBackgroundColor),
                     contentAlignment = Alignment.Center
                 ) {
                     Text(

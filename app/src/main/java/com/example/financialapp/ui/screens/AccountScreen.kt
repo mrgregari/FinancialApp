@@ -25,6 +25,7 @@ import com.example.financialapp.R
 import com.example.financialapp.domain.model.Account
 import com.example.financialapp.ui.components.CustomListItem
 import com.example.financialapp.ui.utils.formatNumber
+import androidx.compose.ui.graphics.Color
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -74,6 +75,7 @@ fun AccountScreen() {
             CustomListItem(
                 modifier = Modifier.height(56.dp),
                 emoji = "\uD83D\uDCB0",
+                emojiBackgroundColor = Color.White,
                 title = "Баланс",
                 trailingText = "${formatNumber(account.balance)} ${account.currency}",
                 containerColor = MaterialTheme.colorScheme.secondary,
