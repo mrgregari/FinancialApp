@@ -46,7 +46,9 @@ fun SearchBar(
         },
         singleLine = true,
         colors = TextFieldDefaults.colors(
-            disabledContainerColor = MaterialTheme.colorScheme.surfaceContainerHigh
+            disabledContainerColor = MaterialTheme.colorScheme.surfaceContainerHigh,
+            focusedIndicatorColor = androidx.compose.ui.graphics.Color.Transparent,
+            unfocusedIndicatorColor = androidx.compose.ui.graphics.Color.Transparent
         )
     )
 }

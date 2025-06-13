@@ -130,7 +130,6 @@ fun ExpensesScreen() {
                     title = expense.title,
                     subTitle = expense.comment,
                     trailingText = "${formatNumber(expense.amount)} $",
-                    subTrailingText = null,
                     showArrow = true,
                 )
                 HorizontalDivider(
