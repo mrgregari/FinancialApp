@@ -38,13 +38,13 @@ fun IncomeScreen() {
 
     val list = listOf<Income>(
         Income(
-            title = "Аренда квартиры",
+            title = "Заплата",
             amount = 100000,
             account = "Сбербанк",
             date = "08.06.2025",
         ),
         Income(
-            title = "На собачку",
+            title = "Подработка",
             amount = 100,
             account = "Сбербанк",
             date = "08.06.2025"

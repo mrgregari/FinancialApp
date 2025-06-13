@@ -46,6 +46,16 @@ fun CategoriesScreen() {
             icon = "\uD83C\uDF6D",
             isIncome = false
         ),
+        Category(
+            name = "Одежда",
+            icon = "\uD83D\uDC57",
+            isIncome = false
+        ),
+        Category(
+            name = "Медицина",
+            icon = "\uD83D\uDC8A",
+            isIncome = false
+        )
     )
 
     Scaffold(

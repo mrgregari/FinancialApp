@@ -53,6 +53,14 @@ fun ExpensesScreen() {
             icon = "\uD83D\uDC36"
         ),
         Expenses(
+            title = "На собачку",
+            amount = 100,
+            account = "Сбербанк",
+            date = "08.06.2025",
+            comment = "Джек",
+            icon = "\uD83D\uDC36"
+        ),
+        Expenses(
             title = "Ремонт квартиры",
             amount = 5000000,
             account = "Сбербанк",
@@ -65,6 +73,20 @@ fun ExpensesScreen() {
             account = "Сбербанк",
             date = "08.06.2025",
             icon = "\uD83C\uDF6D"
+        ),
+        Expenses(
+            title = "Медицина",
+            amount = 100,
+            account = "Сбербанк",
+            date = "08.06.2025",
+            icon = "\uD83D\uDC8A"
+        ),
+        Expenses(
+            title = "Одежда",
+            amount = 100,
+            account = "Сбербанк",
+            date = "08.06.2025",
+            icon = "\uD83D\uDC57"
         )
     )
     Scaffold(

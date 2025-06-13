@@ -27,7 +27,7 @@ fun SettingsScreen() {
     var isDarkTheme by remember { mutableStateOf(false) }
     
     val settings = listOf(
-        "Темная тема" to true,
+        "Тёмная тема" to true,
         "Основной цвет" to false,
         "Звуки" to false,
         "Хаптики" to false,
