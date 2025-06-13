@@ -27,7 +27,7 @@ sealed class Screen(
 
     object Categories : Screen(
         route = "categories",
-        title = "Категории",
+        title = "Статьи",
         icon = R.drawable.bar_chart_side
     )
 

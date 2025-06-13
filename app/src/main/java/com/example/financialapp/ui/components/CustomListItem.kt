@@ -18,6 +18,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -34,6 +35,7 @@ fun CustomListItem(
     subTitle: String? = null,
     trailingText: String? = null,
     subTrailingText: String? = null,
+    arrowIcon: Painter = painterResource(R.drawable.drill_in),
     showArrow: Boolean = false
 ) {
     ListItem(
@@ -54,7 +56,11 @@ fun CustomListItem(
                 ) {
                     Text(
                         text = emoji,
-                        style = MaterialTheme.typography.bodyLarge,
+                        style = if (emoji.any { it.isSurrogate() }) {
+                            MaterialTheme.typography.bodyLarge
+                        } else {
+                            MaterialTheme.typography.labelSmall
+                        },
                         color = Color.Black
                     )
                 }
@@ -107,7 +113,7 @@ fun CustomListItem(
         trailingContent = if (showArrow) {
              {
                 Icon(
-                    painter = painterResource(R.drawable.drill_in),
+                    painter = arrowIcon,
                     contentDescription = "Arrow",
                     tint = Color.Unspecified,
                 )

@@ -51,6 +51,20 @@ fun ExpensesScreen() {
             date = "08.06.2025",
             comment = "Энни",
             icon = "\uD83D\uDC36"
+        ),
+        Expenses(
+            title = "Ремонт квартиры",
+            amount = 5000000,
+            account = "Сбербанк",
+            date = "08.06.2025",
+            icon = "РК"
+        ),
+        Expenses(
+            title = "Продукты",
+            amount = 10000,
+            account = "Сбербанк",
+            date = "08.06.2025",
+            icon = "\uD83C\uDF6D"
         )
     )
     Scaffold(
@@ -75,7 +89,7 @@ fun ExpensesScreen() {
         },
         floatingActionButton = {
             FloatingActionButton(
-                onClick = {  },
+                onClick = { },
                 shape = CircleShape,
                 containerColor = MaterialTheme.colorScheme.primary,
                 contentColor = MaterialTheme.colorScheme.onPrimary
@@ -120,10 +134,10 @@ fun ExpensesScreen() {
                     showArrow = true,
                 )
                 HorizontalDivider(
-                        modifier = Modifier
-                            .fillMaxWidth(),
-                thickness = 1.dp,
-                color = MaterialTheme.colorScheme.outlineVariant
+                    modifier = Modifier
+                        .fillMaxWidth(),
+                    thickness = 1.dp,
+                    color = MaterialTheme.colorScheme.outlineVariant
                 )
             }
         }
