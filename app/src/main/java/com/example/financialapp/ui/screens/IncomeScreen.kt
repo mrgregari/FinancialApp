@@ -30,6 +30,7 @@ import com.example.financialapp.R
 import com.example.financialapp.domain.model.Expenses
 import com.example.financialapp.domain.model.Income
 import com.example.financialapp.ui.components.CustomListItem
+import com.example.financialapp.ui.components.CustomFab
 import com.example.financialapp.ui.utils.formatNumber
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
@@ -71,14 +72,7 @@ fun IncomeScreen() {
             )
         },
         floatingActionButton = {
-            FloatingActionButton(
-                onClick = { },
-                shape = CircleShape,
-                containerColor = MaterialTheme.colorScheme.primary,
-                contentColor = MaterialTheme.colorScheme.onPrimary
-            ) {
-                Icon(Icons.Default.Add, contentDescription = "Add")
-            }
+            CustomFab(onClick = { })
         }
 
     ) { innerPadding ->

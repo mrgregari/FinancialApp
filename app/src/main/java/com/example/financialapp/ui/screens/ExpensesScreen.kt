@@ -32,6 +32,7 @@ import com.example.financialapp.domain.model.Expenses
 import com.example.financialapp.ui.components.CustomListItem
 import com.example.financialapp.ui.theme.FinancialAppTheme
 import com.example.financialapp.ui.utils.formatNumber
+import com.example.financialapp.ui.components.CustomFab
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
@@ -110,14 +111,7 @@ fun ExpensesScreen() {
             )
         },
         floatingActionButton = {
-            FloatingActionButton(
-                onClick = { },
-                shape = CircleShape,
-                containerColor = MaterialTheme.colorScheme.primary,
-                contentColor = MaterialTheme.colorScheme.onPrimary
-            ) {
-                Icon(Icons.Default.Add, contentDescription = "Add")
-            }
+            CustomFab(onClick = { })
         }
     ) { innerPadding ->
         LazyColumn(

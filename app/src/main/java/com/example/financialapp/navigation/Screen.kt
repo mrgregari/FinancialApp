@@ -10,13 +10,13 @@ sealed class Screen(
     object Expenses : Screen(
         route = "expenses",
         title = "Расходы",
-        icon = R.drawable.uptrend
+        icon = R.drawable.downtrend
     )
 
     object Income : Screen(
         route = "income",
         title = "Доходы",
-        icon = R.drawable.downtrend
+        icon = R.drawable.uptrend
     )
 
     object Account : Screen(
@@ -28,7 +28,7 @@ sealed class Screen(
     object Categories : Screen(
         route = "categories",
         title = "Статьи",
-        icon = R.drawable.bar_chart_side
+        icon = R.drawable.categories
     )
 
     object Settings : Screen(

@@ -1,6 +1,11 @@
 package com.example.financialapp.navigation
 
-import androidx.compose.material3.*
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.NavigationBar
+import androidx.compose.material3.NavigationBarItem
+import androidx.compose.material3.NavigationBarItemDefaults
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -20,7 +25,12 @@ fun AppBottomBar(navController: NavHostController, currentRoute: String?) {
         bottomBarScreens.forEach { screen ->
             val selected = currentRoute == screen.route
             NavigationBarItem(
-                icon = { Icon(painterResource(screen.icon), null) },
+                icon = {
+                    Icon(
+                        painter = painterResource(screen.icon),
+                        contentDescription = null
+                    )
+                },
                 label = {
                     Text(
                         text = screen.title,

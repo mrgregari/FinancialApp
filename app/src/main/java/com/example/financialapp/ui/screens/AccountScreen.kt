@@ -24,6 +24,7 @@ import androidx.compose.ui.unit.dp
 import com.example.financialapp.R
 import com.example.financialapp.domain.model.Account
 import com.example.financialapp.ui.components.CustomListItem
+import com.example.financialapp.ui.components.CustomFab
 import com.example.financialapp.ui.utils.formatNumber
 import androidx.compose.ui.graphics.Color
 
@@ -59,14 +60,7 @@ fun AccountScreen() {
             )
         },
         floatingActionButton = {
-            FloatingActionButton(
-                onClick = { },
-                shape = CircleShape,
-                containerColor = MaterialTheme.colorScheme.primary,
-                contentColor = MaterialTheme.colorScheme.onPrimary
-            ) {
-                Icon(Icons.Default.Add, contentDescription = "Add")
-            }
+            CustomFab(onClick = { })
         }
     ) { innerPadding ->
         Column(
