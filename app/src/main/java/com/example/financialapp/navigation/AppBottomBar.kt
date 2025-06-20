@@ -42,7 +42,7 @@ fun AppBottomBar(navController: NavHostController, currentRoute: String?) {
                 selected = selected,
                 onClick = {
                     navController.navigate(screen.route) {
-                        popUpTo(navController.graph.startDestinationId) { saveState = true }
+                        popUpTo(screen.route) { inclusive = true }
                         launchSingleTop = true
                         restoreState = true
                     }

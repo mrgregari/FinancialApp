@@ -3,7 +3,7 @@ package com.example.financialapp.domain.models
 data class Account(
     val id: Int = UNDEFINED_ID,
     val name: String,
-    val balance: Int,
+    val balance: String,
     val currency: String
 ) {
     companion object {

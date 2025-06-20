@@ -67,7 +67,10 @@ fun CategoriesScreen(
                             color = MaterialTheme.colorScheme.outlineVariant
                         )
                     }
-                    items(categories) { category ->
+                    items(
+                        items = categories,
+                        key = { it.id }
+                    ) { category ->
                         CustomListItem(
                             modifier = Modifier.height(70.dp),
                             emoji = category.icon,

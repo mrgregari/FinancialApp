@@ -35,14 +35,14 @@ fun ExpensesScreen() {
     val list = listOf<Expenses>(
         Expenses(
             title = "Аренда квартиры",
-            amount = 100000,
+            amount = "100000.00",
             account = "Сбербанк",
             date = "08.06.2025",
             icon = "\uD83C\uDFE0",
         ),
         Expenses(
             title = "На собачку",
-            amount = 100,
+            amount = "100.0",
             account = "Сбербанк",
             date = "08.06.2025",
             comment = "Энни",
@@ -50,7 +50,7 @@ fun ExpensesScreen() {
         ),
         Expenses(
             title = "На собачку",
-            amount = 100,
+            amount = "100.00",
             account = "Сбербанк",
             date = "08.06.2025",
             comment = "Джек",
@@ -58,28 +58,28 @@ fun ExpensesScreen() {
         ),
         Expenses(
             title = "Ремонт квартиры",
-            amount = 5000000,
+            amount = "5000000.55",
             account = "Сбербанк",
             date = "08.06.2025",
             icon = "РК"
         ),
         Expenses(
             title = "Продукты",
-            amount = 10000,
+            amount = "10000.11",
             account = "Сбербанк",
             date = "08.06.2025",
             icon = "\uD83C\uDF6D"
         ),
         Expenses(
             title = "Медицина",
-            amount = 100,
+            amount = "100.00",
             account = "Сбербанк",
             date = "08.06.2025",
             icon = "\uD83D\uDC8A"
         ),
         Expenses(
             title = "Одежда",
-            amount = 100,
+            amount = "100.00",
             account = "Сбербанк",
             date = "08.06.2025",
             icon = "\uD83D\uDC57"
@@ -120,7 +120,7 @@ fun ExpensesScreen() {
                         .height(56.dp),
                     title = "Всего:",
                     subTitle = null,
-                    trailingText = "${formatNumber(list.sumOf { it.amount })} $",
+                    trailingText = "${formatNumber(list.sumOf { it.amount.toDouble() }.toString())} $",
                     subTrailingText = null,
                     showArrow = false,
                     containerColor = MaterialTheme.colorScheme.secondary

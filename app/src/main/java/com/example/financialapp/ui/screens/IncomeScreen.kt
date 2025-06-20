@@ -33,13 +33,13 @@ fun IncomeScreen() {
     val list = listOf<Income>(
         Income(
             title = "Заплата",
-            amount = 100000,
+            amount = "100000.00",
             account = "Сбербанк",
             date = "08.06.2025",
         ),
         Income(
             title = "Подработка",
-            amount = 100,
+            amount = "100.00",
             account = "Сбербанк",
             date = "08.06.2025"
         )
@@ -80,7 +80,7 @@ fun IncomeScreen() {
                         .height(56.dp),
                     title = "Всего:",
                     subTitle = null,
-                    trailingText = "${formatNumber(list.sumOf { it.amount })} $",
+                    trailingText = "${formatNumber(list.sumOf { it.amount.toDouble() }.toString())} $",
                     subTrailingText = null,
                     showArrow = false,
                     containerColor = MaterialTheme.colorScheme.secondary

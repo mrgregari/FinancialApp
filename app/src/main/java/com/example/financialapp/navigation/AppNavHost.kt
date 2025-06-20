@@ -6,6 +6,7 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.example.financialapp.ui.screens.*
+import com.example.financialapp.ui.screens.account.AccountScreen
 import com.example.financialapp.ui.screens.categories.CategoriesScreen
 
 @Composable
