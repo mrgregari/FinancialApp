@@ -19,12 +19,17 @@ class CategoriesViewModel @Inject constructor(
     private val _uiState = MutableStateFlow<CategoriesUiState>(CategoriesUiState.Loading)
     val uiState: StateFlow<CategoriesUiState> = _uiState
 
-    fun loadCategories() {
+    init {
+        loadCategories()
+    }
+    // сделать прайват
+    private fun loadCategories() {
         _uiState.value = CategoriesUiState.Loading
         viewModelScope.launch {
             val result = getCategoriesUseCase()
             _uiState.value = result.fold(
                 onSuccess = { CategoriesUiState.Success(it) },
+                // в онфейлр показать снекбар
                 onFailure = { CategoriesUiState.Error(it) }
             )
         }

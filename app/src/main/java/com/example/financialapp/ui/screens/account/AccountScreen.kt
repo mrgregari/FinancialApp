@@ -27,6 +27,7 @@ import com.example.financialapp.R
 import com.example.financialapp.ui.components.CustomFab
 import com.example.financialapp.ui.components.CustomListItem
 import com.example.financialapp.ui.utils.formatNumber
+import com.example.financialapp.ui.utils.getCurrencySymbol
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -35,10 +36,6 @@ fun AccountScreen(
 ) {
 
     val uiState by viewModel.uiState.collectAsState()
-
-    LaunchedEffect(Unit) {
-        viewModel.loadAccount()
-    }
 
     Scaffold(
         topBar = {
@@ -80,7 +77,7 @@ fun AccountScreen(
                             emoji = "\uD83D\uDCB0",
                             emojiBackgroundColor = Color.White,
                             title = "Баланс",
-                            trailingText = "${formatNumber(account.balance)} ${account.currency}",
+                            trailingText = "${formatNumber(account.balance)} ${getCurrencySymbol(account.currency)}",
                             containerColor = MaterialTheme.colorScheme.secondary,
                             showArrow = true
                         )
@@ -93,7 +90,7 @@ fun AccountScreen(
                         CustomListItem(
                             modifier = Modifier.height(56.dp),
                             title = "Валюта",
-                            trailingText = account.currency,
+                            trailingText = getCurrencySymbol(account.currency),
                             containerColor = MaterialTheme.colorScheme.secondary,
                             showArrow = true
                         )

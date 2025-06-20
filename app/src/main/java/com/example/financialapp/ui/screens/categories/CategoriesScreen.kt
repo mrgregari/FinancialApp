@@ -32,9 +32,7 @@ fun CategoriesScreen(
 ) {
     val uiState by viewModel.uiState.collectAsState()
 
-    LaunchedEffect(Unit) {
-        viewModel.loadCategories()
-    }
+
 
     Scaffold(
         topBar = {

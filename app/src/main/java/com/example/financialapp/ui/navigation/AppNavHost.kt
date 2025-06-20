@@ -1,4 +1,4 @@
-package com.example.financialapp.navigation
+package com.example.financialapp.ui.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -8,6 +8,7 @@ import androidx.navigation.compose.composable
 import com.example.financialapp.ui.screens.*
 import com.example.financialapp.ui.screens.account.AccountScreen
 import com.example.financialapp.ui.screens.categories.CategoriesScreen
+import com.example.financialapp.ui.screens.expenses.ExpensesScreen
 
 @Composable
 fun AppNavHost(navController: NavHostController, modifier: Modifier = Modifier) {

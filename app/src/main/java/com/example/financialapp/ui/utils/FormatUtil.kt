@@ -10,3 +10,14 @@ fun formatNumber(number: String): String {
         integerPart
     }
 }
+
+fun getCurrencySymbol(currency: String): String = when (currency) {
+    "RUB" -> "₽"
+    "EUR" -> "€"
+    "USD" -> "$"
+    else -> "₽"
+}
+
+fun formatAmountWithCurrency(amount: Double, currency: String): String {
+    return "${formatNumber(amount.toString())} ${getCurrencySymbol(currency)}"
+}

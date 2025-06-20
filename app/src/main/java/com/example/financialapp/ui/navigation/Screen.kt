@@ -1,4 +1,4 @@
-package com.example.financialapp.navigation
+package com.example.financialapp.ui.navigation
 
 import com.example.financialapp.R
 

@@ -18,7 +18,11 @@ class AccountViewModel @Inject constructor(
     private val _uiState = MutableStateFlow<AccountUiState>(AccountUiState.Loading)
     val uiState: StateFlow<AccountUiState> = _uiState
 
-    fun loadAccount() {
+    init {
+        loadAccount()
+    }
+
+    private fun loadAccount() {
         _uiState.value = AccountUiState.Loading
         viewModelScope.launch {
             val result = getAccountUseCase()

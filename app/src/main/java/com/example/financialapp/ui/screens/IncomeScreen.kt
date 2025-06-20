@@ -25,6 +25,7 @@ import com.example.financialapp.domain.models.Income
 import com.example.financialapp.ui.components.CustomListItem
 import com.example.financialapp.ui.components.CustomFab
 import com.example.financialapp.ui.utils.formatNumber
+import kotlin.math.exp
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
@@ -36,12 +37,16 @@ fun IncomeScreen() {
             amount = "100000.00",
             account = "Сбербанк",
             date = "08.06.2025",
+            icon = "\uD83D\uDC4D",
+            currency = "RUB"
         ),
         Income(
             title = "Подработка",
             amount = "100.00",
             account = "Сбербанк",
-            date = "08.06.2025"
+            date = "08.06.2025",
+            icon = "\uD83D\uDC4D",
+            currency = "RUB"
         )
     )
 
@@ -93,13 +98,14 @@ fun IncomeScreen() {
                 )
             }
 
-            items(list) { expense ->
+            items(list) { income ->
                 CustomListItem(
                     modifier = Modifier
                         .height(70.dp),
-                    title = expense.title,
-                    subTitle = expense.comment,
-                    trailingText = "${formatNumber(expense.amount)} $",
+                    title = income.title,
+                    emoji = income.icon,
+                    subTitle = income.comment,
+                    trailingText = "${formatNumber(income.amount)} $",
                     subTrailingText = null,
                     showArrow = true,
                 )

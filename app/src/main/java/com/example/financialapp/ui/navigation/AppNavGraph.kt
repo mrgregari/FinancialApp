@@ -1,4 +1,4 @@
-package com.example.financialapp.navigation
+package com.example.financialapp.ui.navigation
 
 import androidx.compose.animation.Crossfade
 import androidx.compose.runtime.*

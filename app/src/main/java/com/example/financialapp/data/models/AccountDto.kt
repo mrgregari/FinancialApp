@@ -1,6 +1,6 @@
 package com.example.financialapp.data.models
 
-data class AccountDTO (
+data class AccountDto (
     val id: Int,
     val userId: Int,
     val name: String,

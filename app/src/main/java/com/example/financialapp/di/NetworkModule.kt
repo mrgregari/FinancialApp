@@ -1,20 +1,17 @@
 package com.example.financialapp.di
 
+import android.content.Context
 import com.example.financialapp.data.api.AuthInterceptor
 import com.example.financialapp.data.api.FinancialApi
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
+import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Singleton
-import android.content.Context
-import dagger.hilt.android.qualifiers.ApplicationContext
-import com.example.financialapp.data.mappers.CategoryMapper
-import com.example.financialapp.data.repositories.CategoryRepositoryImpl
-import com.example.financialapp.domain.repositories.CategoryRepository
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -36,6 +33,7 @@ object NetworkModule {
             .build()
     }
 
+    // добавить параметр интервала 2 сек
     @Provides
     @Singleton
     fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit {

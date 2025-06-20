@@ -5,7 +5,7 @@ import com.example.financialapp.data.mappers.CategoryMapper
 import com.example.financialapp.domain.models.Category
 import com.example.financialapp.domain.repositories.CategoryRepository
 import javax.inject.Inject
-
+// посмотреть куда ставить маппер
 class CategoryRepositoryImpl @Inject constructor(
     private val api: FinancialApi,
     private val mapper: CategoryMapper
@@ -20,3 +20,5 @@ class CategoryRepositoryImpl @Inject constructor(
         }
     }
 }
+
+// получить ошибку 500
