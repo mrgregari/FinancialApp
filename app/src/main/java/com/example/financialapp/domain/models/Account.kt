@@ -1,10 +1,10 @@
-package com.example.financialapp.domain.model
+package com.example.financialapp.domain.models
 
-data class Category(
+data class Account(
     val id: Int = UNDEFINED_ID,
     val name: String,
-    val icon: String,
-    val isIncome: Boolean
+    val balance: Int,
+    val currency: String
 ) {
     companion object {
         const val UNDEFINED_ID = 0

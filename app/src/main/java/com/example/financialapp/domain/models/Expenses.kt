@@ -1,4 +1,4 @@
-package com.example.financialapp.domain.model
+package com.example.financialapp.domain.models
 
 data class Expenses(
     val id: Int = UNDEFINED_ID,
