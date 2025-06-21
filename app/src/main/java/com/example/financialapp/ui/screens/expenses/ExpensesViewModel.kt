@@ -1,0 +1,80 @@
+package com.example.financialapp.ui.screens.expenses
+
+import androidx.lifecycle.viewModelScope
+import com.example.financialapp.data.network.NetworkResult
+import com.example.financialapp.data.network.NetworkState
+import com.example.financialapp.data.network.ErrorHandler
+import com.example.financialapp.domain.models.Expense
+import com.example.financialapp.domain.usecases.GetAccountUseCase
+import com.example.financialapp.domain.usecases.GetExpensesUseCase
+import com.example.financialapp.ui.base.BaseViewModel
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
+import java.util.Calendar
+import java.util.Date
+import javax.inject.Inject
+
+@HiltViewModel
+class ExpensesViewModel @Inject constructor(
+    private val getExpensesUseCase: GetExpensesUseCase,
+    private val getAccountUseCase: GetAccountUseCase,
+    networkState: NetworkState,
+    errorHandler: ErrorHandler
+) : BaseViewModel() {
+
+    init {
+        this.networkState = networkState
+        this.errorHandler = errorHandler
+        initializeNetworkState()
+    }
+
+    private val _expenses = MutableStateFlow<List<Expense>>(emptyList())
+    val expenses: StateFlow<List<Expense>> = _expenses.asStateFlow()
+
+    init {
+        val calendar = Calendar.getInstance()
+        calendar.set(Calendar.HOUR_OF_DAY, 0)
+        calendar.set(Calendar.MINUTE, 0)
+        calendar.set(Calendar.SECOND, 0)
+        calendar.set(Calendar.MILLISECOND, 0)
+        val startDate = calendar.time
+        loadExpenses(startDate = startDate)
+    }
+
+    fun retry() {
+        val calendar = Calendar.getInstance()
+        calendar.set(Calendar.HOUR_OF_DAY, 0)
+        calendar.set(Calendar.MINUTE, 0)
+        calendar.set(Calendar.SECOND, 0)
+        calendar.set(Calendar.MILLISECOND, 0)
+        val startDate = calendar.time
+        loadExpenses(startDate = startDate)
+    }
+
+    private fun loadExpenses(startDate: Date? = null, endDate: Date? = null) {
+        safeApiCall(
+            apiCall = {
+            val accountsResult = getAccountUseCase.invoke()
+                when (accountsResult) {
+                    is NetworkResult.Success -> {
+                        val account = accountsResult.data.firstOrNull()
+                    val accountId = account?.id
+                    if (accountId != null && accountId != 0) {
+                            getExpensesUseCase(accountId, startDate, endDate)
+                    } else {
+                            NetworkResult.Error(Throwable("Нет доступного счёта"))
+                        }
+                    }
+                    is NetworkResult.Error -> accountsResult
+                    is NetworkResult.Loading -> NetworkResult.Loading
+                    }
+                },
+            onSuccess = { expenses ->
+                _expenses.value = expenses
+                }
+            )
+    }
+} 
