@@ -1,5 +1,6 @@
 package com.example.financialapp.domain.usecases
 
+import com.example.financialapp.data.network.NetworkResult
 import com.example.financialapp.domain.models.Account
 import com.example.financialapp.domain.repositories.AccountRepository
 import javax.inject.Inject
@@ -7,8 +8,7 @@ import javax.inject.Inject
 class GetAccountUseCase @Inject constructor(
     private val repository: AccountRepository
 ) {
-
-    suspend operator fun invoke() : Result<List<Account>> {
-        return repository.getAllAccounts()
+    suspend operator fun invoke(): NetworkResult<List<Account>> {
+        return repository.getAccounts()
     }
 }

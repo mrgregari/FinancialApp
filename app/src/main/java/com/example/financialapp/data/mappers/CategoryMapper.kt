@@ -6,7 +6,7 @@ import javax.inject.Inject
 
 class CategoryMapper @Inject constructor() {
 
-    fun fromDto(dto: CategoryDto) = Category(
+    fun fromDtoToCategory(dto: CategoryDto) = Category(
         id = dto.id,
         name = dto.name,
         icon = dto.emoji,

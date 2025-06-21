@@ -1,5 +1,6 @@
 package com.example.financialapp.domain.usecases
 
+import com.example.financialapp.data.network.NetworkResult
 import com.example.financialapp.domain.models.Income
 import com.example.financialapp.domain.repositories.TransactionRepository
 import java.util.Date
@@ -12,7 +13,7 @@ class GetIncomesUseCase @Inject constructor(
         accountId: Int,
         startDate: Date? = null,
         endDate: Date? = null
-    ): Result<List<Income>> {
+    ): NetworkResult<List<Income>> {
         return repository.getIncomes(accountId, startDate, endDate)
     }
 

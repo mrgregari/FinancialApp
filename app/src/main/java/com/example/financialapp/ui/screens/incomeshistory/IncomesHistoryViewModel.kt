@@ -1,12 +1,17 @@
 package com.example.financialapp.ui.screens.incomeshistory
 
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.financialapp.data.network.NetworkResult
+import com.example.financialapp.data.network.NetworkState
+import com.example.financialapp.data.network.ErrorHandler
+import com.example.financialapp.domain.models.Income
 import com.example.financialapp.domain.usecases.GetAccountUseCase
 import com.example.financialapp.domain.usecases.GetIncomesUseCase
+import com.example.financialapp.ui.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import java.util.Calendar
 import java.util.Date
@@ -15,30 +20,45 @@ import javax.inject.Inject
 @HiltViewModel
 class IncomesHistoryViewModel @Inject constructor(
     private val getIncomesUseCase: GetIncomesUseCase,
-    private val getAccountUseCase: GetAccountUseCase
-) : ViewModel() {
+    private val getAccountUseCase: GetAccountUseCase,
+    networkState: NetworkState,
+    errorHandler: ErrorHandler
+) : BaseViewModel() {
 
-    private val _uiState = MutableStateFlow<IncomesHistoryUiState>(IncomesHistoryUiState.Loading)
-    val uiState: StateFlow<IncomesHistoryUiState> = _uiState
+    init {
+        this.networkState = networkState
+        this.errorHandler = errorHandler
+        initializeNetworkState()
+    }
 
-    private var currentStartDate: Date?
-    private var currentEndDate: Date?
+    private val _incomes = MutableStateFlow<List<Income>>(emptyList())
+    val incomes: StateFlow<List<Income>> = _incomes.asStateFlow()
+
+    private val _startDate = MutableStateFlow<Date?>(null)
+    val startDate: StateFlow<Date?> = _startDate.asStateFlow()
+
+    private val _endDate = MutableStateFlow<Date?>(null)
+    val endDate: StateFlow<Date?> = _endDate.asStateFlow()
 
     init {
         val calendar = Calendar.getInstance()
-        currentEndDate = calendar.time
+        _endDate.value = calendar.time
         calendar.set(Calendar.DAY_OF_MONTH, 1)
-        currentStartDate = calendar.time
+        _startDate.value = calendar.time
         loadAllIncomes()
     }
 
     fun updateStartDate(date: Date?) {
-        currentStartDate = date
+        _startDate.value = date
         loadIncomesWithFilter()
     }
 
     fun updateEndDate(date: Date?) {
-        currentEndDate = date
+        _endDate.value = date
+        loadIncomesWithFilter()
+    }
+
+    fun retry() {
         loadIncomesWithFilter()
     }
 
@@ -47,27 +67,26 @@ class IncomesHistoryViewModel @Inject constructor(
     }
 
     private fun loadIncomesWithFilter() {
-        _uiState.value = IncomesHistoryUiState.Loading
-        viewModelScope.launch {
-            val accountsResult = getAccountUseCase.invoke()
-            accountsResult.fold(
-                onSuccess = { accounts ->
-                    val account = accounts.firstOrNull()
-                    val accountId = account?.id
-                    if (accountId != null && accountId != 0) {
-                        val result = getIncomesUseCase(accountId, currentStartDate, currentEndDate)
-                        _uiState.value = result.fold(
-                            onSuccess = { IncomesHistoryUiState.Success(it, currentStartDate, currentEndDate) },
-                            onFailure = { IncomesHistoryUiState.Error(it) }
-                        )
-                    } else {
-                        _uiState.value = IncomesHistoryUiState.Error(Throwable("Нет доступного счёта"))
+        safeApiCall(
+            apiCall = {
+                val accountsResult = getAccountUseCase.invoke()
+                when (accountsResult) {
+                    is NetworkResult.Success -> {
+                        val account = accountsResult.data.firstOrNull()
+                        val accountId = account?.id
+                        if (accountId != null && accountId != 0) {
+                            getIncomesUseCase(accountId, _startDate.value, _endDate.value)
+                        } else {
+                            NetworkResult.Error(Throwable("Нет доступного счёта"))
+                        }
                     }
-                },
-                onFailure = { error ->
-                    _uiState.value = IncomesHistoryUiState.Error(error)
+                    is NetworkResult.Error -> accountsResult
+                    is NetworkResult.Loading -> NetworkResult.Loading
                 }
-            )
-        }
+            },
+            onSuccess = { incomes ->
+                _incomes.value = incomes
+            }
+        )
     }
 } 

@@ -1,35 +1,47 @@
 package com.example.financialapp.ui.screens.account
 
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import com.example.financialapp.data.network.ErrorHandler
+import com.example.financialapp.data.network.NetworkState
+import com.example.financialapp.domain.models.Account
 import com.example.financialapp.domain.usecases.GetAccountUseCase
+import com.example.financialapp.ui.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.asStateFlow
 import javax.inject.Inject
 
 
 @HiltViewModel
 class AccountViewModel @Inject constructor(
-    private val getAccountUseCase: GetAccountUseCase
-) : ViewModel() {
+    private val getAccountUseCase: GetAccountUseCase,
+    networkState: NetworkState,
+    errorHandler: ErrorHandler
+) : BaseViewModel() {
 
-    private val _uiState = MutableStateFlow<AccountUiState>(AccountUiState.Loading)
-    val uiState: StateFlow<AccountUiState> = _uiState
+    init {
+        this.networkState = networkState
+        this.errorHandler = errorHandler
+        initializeNetworkState()
+    }
+
+    private val _accounts = MutableStateFlow<List<Account>>(emptyList())
+    val accounts: StateFlow<List<Account>> = _accounts.asStateFlow()
 
     init {
         loadAccount()
     }
 
+    fun retry() {
+        loadAccount()
+    }
+
     private fun loadAccount() {
-        _uiState.value = AccountUiState.Loading
-        viewModelScope.launch {
-            val result = getAccountUseCase()
-            _uiState.value = result.fold(
-                onSuccess = { AccountUiState.Success(it.firstOrNull()) },
-                onFailure = { AccountUiState.Error(it) }
-            )
-        }
+        safeApiCall(
+            apiCall = { getAccountUseCase() },
+            onSuccess = { accounts ->
+                _accounts.value = accounts
+            }
+        )
     }
 }

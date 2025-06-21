@@ -1,36 +1,46 @@
 package com.example.financialapp.ui.screens.categories
 
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import com.example.financialapp.data.network.ErrorHandler
+import com.example.financialapp.data.network.NetworkState
 import com.example.financialapp.domain.models.Category
 import com.example.financialapp.domain.usecases.GetCategoriesUseCase
+import com.example.financialapp.ui.base.BaseViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.asStateFlow
 import javax.inject.Inject
-import com.example.financialapp.ui.screens.categories.CategoriesUiState
 
 @HiltViewModel
 class CategoriesViewModel @Inject constructor(
-    private val getCategoriesUseCase: GetCategoriesUseCase
-) : ViewModel() {
+    private val getCategoriesUseCase: GetCategoriesUseCase,
+    networkState: NetworkState,
+    errorHandler: ErrorHandler
+) : BaseViewModel() {
 
-    private val _uiState = MutableStateFlow<CategoriesUiState>(CategoriesUiState.Loading)
-    val uiState: StateFlow<CategoriesUiState> = _uiState
+    init {
+        this.networkState = networkState
+        this.errorHandler = errorHandler
+        initializeNetworkState()
+    }
+
+    private val _categories = MutableStateFlow<List<Category>>(emptyList())
+    val categories: StateFlow<List<Category>> = _categories.asStateFlow()
 
     init {
         loadCategories()
     }
+
+    fun retry() {
+        loadCategories()
+    }
+
     private fun loadCategories() {
-        _uiState.value = CategoriesUiState.Loading
-        viewModelScope.launch {
-            val result = getCategoriesUseCase()
-            _uiState.value = result.fold(
-                onSuccess = { CategoriesUiState.Success(it) },
-                // в онфейлр показать снекбар
-                onFailure = { CategoriesUiState.Error(it) }
+        safeApiCall(
+            apiCall = { getCategoriesUseCase() },
+            onSuccess = { categories ->
+                _categories.value = categories
+            }
             )
-        }
     }
 }

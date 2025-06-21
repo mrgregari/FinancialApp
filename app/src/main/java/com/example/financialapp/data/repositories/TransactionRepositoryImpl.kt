@@ -3,6 +3,7 @@ package com.example.financialapp.data.repositories
 import android.annotation.SuppressLint
 import com.example.financialapp.data.api.FinancialApi
 import com.example.financialapp.data.mappers.TransactionMapper
+import com.example.financialapp.data.network.NetworkResult
 import com.example.financialapp.domain.models.Expense
 import com.example.financialapp.domain.models.Income
 import com.example.financialapp.domain.repositories.TransactionRepository
@@ -36,7 +37,7 @@ class TransactionRepositoryImpl @Inject constructor(
         accountId: Int,
         startDate: Date?,
         endDate: Date?
-    ): Result<List<Expense>> {
+    ): NetworkResult<List<Expense>> {
         return try {
             val (defaultStart, defaultEnd) = getDefaultPeriod()
             val start = startDate ?: defaultStart
@@ -50,9 +51,9 @@ class TransactionRepositoryImpl @Inject constructor(
                 .filter { it.category.isIncome == false }
                 .map { mapper.fromDtoToExpense(it) }
                 .sortedByDescending { it.date }
-            Result.success(expenses)
+            NetworkResult.Success(expenses)
         } catch (e: Exception) {
-            Result.failure(e)
+            NetworkResult.Error(e)
         }
     }
 
@@ -60,7 +61,7 @@ class TransactionRepositoryImpl @Inject constructor(
         accountId: Int,
         startDate: Date?,
         endDate: Date?
-    ): Result<List<Income>> {
+    ): NetworkResult<List<Income>> {
         return try {
             val (defaultStart, defaultEnd) = getDefaultPeriod()
             val start = startDate ?: defaultStart
@@ -74,9 +75,9 @@ class TransactionRepositoryImpl @Inject constructor(
                 .filter { it.category.isIncome == true }
                 .map { mapper.fromDtoToIncome(it) }
                 .sortedByDescending { it.date }
-            Result.success(incomes)
+            NetworkResult.Success(incomes)
         } catch (e: Exception) {
-            Result.failure(e)
+            NetworkResult.Error(e)
         }
     }
 }
