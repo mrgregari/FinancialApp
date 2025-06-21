@@ -1,9 +1,9 @@
-package com.example.financialapp.ui.screens.expenses
+package com.example.financialapp.ui.screens.incomes
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.financialapp.domain.usecases.GetAccountUseCase
-import com.example.financialapp.domain.usecases.GetExpensesUseCase
+import com.example.financialapp.domain.usecases.GetIncomesUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -13,13 +13,13 @@ import java.util.Date
 import javax.inject.Inject
 
 @HiltViewModel
-class ExpensesViewModel @Inject constructor(
-    private val getExpensesUseCase: GetExpensesUseCase,
-    private val getAccountUseCase: GetAccountUseCase
-) : ViewModel() {
+class IncomesViewModel @Inject constructor(
+    private val getAccountUseCase: GetAccountUseCase,
+    private val getIncomesUseCase: GetIncomesUseCase
+): ViewModel() {
 
-    private val _uiState = MutableStateFlow<ExpensesUiState>(ExpensesUiState.Loading)
-    val uiState: StateFlow<ExpensesUiState> = _uiState
+    private val _uiState = MutableStateFlow<IncomesUiState>(IncomesUiState.Loading)
+    val uiState: StateFlow<IncomesUiState> = _uiState
 
     init {
         val calendar = Calendar.getInstance()
@@ -28,11 +28,11 @@ class ExpensesViewModel @Inject constructor(
         calendar.set(Calendar.SECOND, 0)
         calendar.set(Calendar.MILLISECOND, 0)
         val startDate = calendar.time
-        loadExpenses(startDate = startDate)
+        loadIncomes(startDate = startDate)
     }
 
-    private fun loadExpenses(startDate: Date? = null, endDate: Date? = null) {
-        _uiState.value = ExpensesUiState.Loading
+    private fun loadIncomes(startDate: Date? = null, endDate: Date? = null) {
+        _uiState.value = IncomesUiState.Loading
         viewModelScope.launch {
             val accountsResult = getAccountUseCase.invoke()
             accountsResult.fold(
@@ -40,19 +40,19 @@ class ExpensesViewModel @Inject constructor(
                     val account = accounts.firstOrNull()
                     val accountId = account?.id
                     if (accountId != null && accountId != 0) {
-                        val result = getExpensesUseCase(accountId, startDate, endDate)
+                        val result = getIncomesUseCase(accountId, startDate, endDate)
                         _uiState.value = result.fold(
-                            onSuccess = { ExpensesUiState.Success(it) },
-                            onFailure = { ExpensesUiState.Error(it) }
+                            onSuccess = { IncomesUiState.Success(it) },
+                            onFailure = { IncomesUiState.Error(it) }
                         )
                     } else {
-                        _uiState.value = ExpensesUiState.Error(Throwable("Нет доступного счёта"))
+                        _uiState.value = IncomesUiState.Error(Throwable("Нет доступного счёта"))
                     }
                 },
                 onFailure = { error ->
-                    _uiState.value = ExpensesUiState.Error(error)
+                    _uiState.value = IncomesUiState.Error(error)
                 }
             )
         }
     }
-} 
+}

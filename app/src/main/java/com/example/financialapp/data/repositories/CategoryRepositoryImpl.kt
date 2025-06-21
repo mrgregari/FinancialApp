@@ -20,5 +20,4 @@ class CategoryRepositoryImpl @Inject constructor(
         }
     }
 }
-
 // получить ошибку 500

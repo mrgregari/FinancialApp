@@ -36,4 +36,16 @@ sealed class Screen(
         title = "Настройки",
         icon = R.drawable.settings
     )
+
+    object ExpensesHistory : Screen(
+        route = "expenses_history",
+        title = "История расходов",
+        icon = R.drawable.history
+    )
+
+    object IncomesHistory : Screen(
+        route = "incomes_history",
+        title = "История доходов",
+        icon = R.drawable.history
+    )
 }

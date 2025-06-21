@@ -3,6 +3,7 @@ package com.example.financialapp.data.mappers
 import com.example.financialapp.data.models.TransactionDto
 import com.example.financialapp.domain.models.Expense
 import com.example.financialapp.domain.models.Income
+import com.example.financialapp.ui.utils.getCurrencySymbol
 import javax.inject.Inject
 
 class TransactionMapper @Inject constructor() {
@@ -15,7 +16,7 @@ class TransactionMapper @Inject constructor() {
         account = dto.account.name,
         comment = dto.comment,
         date = dto.transactionDate,
-        currency = dto.account.currency
+        currency = getCurrencySymbol(dto.account.currency)
     )
 
     fun fromDtoToIncome(dto: TransactionDto) = Income(
@@ -26,6 +27,6 @@ class TransactionMapper @Inject constructor() {
         account = dto.account.name,
         comment = dto.comment,
         date = dto.transactionDate,
-        currency = dto.account.currency
+        currency = getCurrencySymbol(dto.account.currency)
     )
 }

@@ -15,7 +15,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -24,7 +23,6 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.financialapp.R
-import com.example.financialapp.ui.components.CustomFab
 import com.example.financialapp.ui.components.CustomListItem
 import com.example.financialapp.ui.utils.formatNumber
 import com.example.financialapp.ui.utils.getCurrencySymbol
@@ -57,9 +55,12 @@ fun AccountScreen(
                 }
             )
         },
+/*
         floatingActionButton = {
             CustomFab(onClick = { })
         }
+
+ */
     ) { innerPadding ->
         when(uiState) {
             is AccountUiState.Loading -> {

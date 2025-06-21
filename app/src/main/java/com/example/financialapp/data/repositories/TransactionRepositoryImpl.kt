@@ -46,8 +46,11 @@ class TransactionRepositoryImpl @Inject constructor(
                 startDate = start.toApiString(),
                 endDate = end.toApiString()
             )
-            val transactions = dtos.map { mapper.fromDtoToExpense(it) }
-            Result.success(transactions)
+            val expenses = dtos
+                .filter { it.category.isIncome == false }
+                .map { mapper.fromDtoToExpense(it) }
+                .sortedByDescending { it.date }
+            Result.success(expenses)
         } catch (e: Exception) {
             Result.failure(e)
         }
@@ -67,7 +70,10 @@ class TransactionRepositoryImpl @Inject constructor(
                 startDate = start.toApiString(),
                 endDate = end.toApiString()
             )
-            val incomes = dtos.map { mapper.fromDtoToIncome(it) }
+            val incomes = dtos
+                .filter { it.category.isIncome == true }
+                .map { mapper.fromDtoToIncome(it) }
+                .sortedByDescending { it.date }
             Result.success(incomes)
         } catch (e: Exception) {
             Result.failure(e)

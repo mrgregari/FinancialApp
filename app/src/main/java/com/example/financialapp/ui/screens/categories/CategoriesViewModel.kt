@@ -22,7 +22,6 @@ class CategoriesViewModel @Inject constructor(
     init {
         loadCategories()
     }
-    // сделать прайват
     private fun loadCategories() {
         _uiState.value = CategoriesUiState.Loading
         viewModelScope.launch {
