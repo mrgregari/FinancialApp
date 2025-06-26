@@ -8,14 +8,16 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.financialapp.ui.components.*
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
 fun CategoriesScreen(
-    viewModel: CategoriesViewModel = hiltViewModel()
+    viewModelFactory: ViewModelProvider.Factory
 ) {
+    val viewModel : CategoriesViewModel = viewModel(factory = viewModelFactory)
     val categories by viewModel.categories.collectAsState()
     val isLoading by viewModel.isLoading.collectAsState()
     val errorMessage by viewModel.errorMessage.collectAsState()

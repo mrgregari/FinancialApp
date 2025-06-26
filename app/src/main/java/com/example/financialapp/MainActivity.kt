@@ -3,29 +3,24 @@ package com.example.financialapp
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.ViewModelProvider
 import com.example.financialapp.ui.navigation.AppNavGraph
 import com.example.financialapp.ui.theme.FinancialAppTheme
-import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
-@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
+
+    @Inject
+    lateinit var viewModelFactory: ViewModelProvider.Factory
+
     override fun onCreate(savedInstanceState: Bundle?) {
+        (application as FinanceApp).component.inject(this)
         super.onCreate(savedInstanceState)
         setContent {
             FinancialAppTheme(dynamicColor = false) {
-                AppNavGraph()
+                AppNavGraph(viewModelFactory = viewModelFactory)
             }
 
         }
-    }
-}
-
-@Preview
-@Composable
-fun PreviewAppNavGraph() {
-    FinancialAppTheme(dynamicColor = false) {
-        AppNavGraph()
     }
 }

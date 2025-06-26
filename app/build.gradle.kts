@@ -5,7 +5,7 @@ plugins {
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     id("com.google.devtools.ksp")
-    id("com.google.dagger.hilt.android")
+    id("kotlin-kapt")
 }
 
 
@@ -78,9 +78,6 @@ dependencies {
     implementation(libs.converter.gson)
     implementation(libs.okhttp)
 
-    implementation(libs.hilt.android)
-
-    ksp(libs.hilt.android.compiler)
-
-    implementation(libs.androidx.hilt.navigation.compose)
+    implementation("com.google.dagger:dagger:2.56.2")
+    kapt("com.google.dagger:dagger-compiler:2.56.2")
 }

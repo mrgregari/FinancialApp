@@ -3,7 +3,6 @@ package com.example.financialapp.data.network
 import okhttp3.Interceptor
 import okhttp3.Response
 import java.io.IOException
-import kotlin.math.pow
 
 class RetryInterceptor : Interceptor {
     

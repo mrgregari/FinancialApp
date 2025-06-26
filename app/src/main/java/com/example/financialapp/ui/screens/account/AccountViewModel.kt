@@ -5,14 +5,12 @@ import com.example.financialapp.data.network.NetworkState
 import com.example.financialapp.domain.models.Account
 import com.example.financialapp.domain.usecases.GetAccountUseCase
 import com.example.financialapp.ui.base.BaseViewModel
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import javax.inject.Inject
 
 
-@HiltViewModel
 class AccountViewModel @Inject constructor(
     private val getAccountUseCase: GetAccountUseCase,
     networkState: NetworkState,

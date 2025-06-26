@@ -1,6 +1,5 @@
 package com.example.financialapp.ui.screens.incomeshistory
 
-import androidx.lifecycle.viewModelScope
 import com.example.financialapp.data.network.NetworkResult
 import com.example.financialapp.data.network.NetworkState
 import com.example.financialapp.data.network.ErrorHandler
@@ -8,16 +7,14 @@ import com.example.financialapp.domain.models.Income
 import com.example.financialapp.domain.usecases.GetAccountUseCase
 import com.example.financialapp.domain.usecases.GetIncomesUseCase
 import com.example.financialapp.ui.base.BaseViewModel
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.launch
 import java.util.Calendar
 import java.util.Date
 import javax.inject.Inject
 
-@HiltViewModel
+
 class IncomesHistoryViewModel @Inject constructor(
     private val getIncomesUseCase: GetIncomesUseCase,
     private val getAccountUseCase: GetAccountUseCase,

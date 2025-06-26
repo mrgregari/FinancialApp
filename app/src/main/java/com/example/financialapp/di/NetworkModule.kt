@@ -7,41 +7,36 @@ import com.example.financialapp.data.network.NetworkState
 import com.example.financialapp.data.network.RetryInterceptor
 import dagger.Module
 import dagger.Provides
-import dagger.hilt.InstallIn
-import dagger.hilt.android.qualifiers.ApplicationContext
-import dagger.hilt.components.SingletonComponent
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
-import javax.inject.Singleton
 
 @Module
-@InstallIn(SingletonComponent::class)
 object NetworkModule {
 
     private const val BASE_URL = "https://shmr-finance.ru/api/v1/"
 
     @Provides
-    @Singleton
-    fun provideAuthInterceptor(@ApplicationContext context: Context): AuthInterceptor {
+    @ApplicationScope
+    fun provideAuthInterceptor(context: Context): AuthInterceptor {
         return AuthInterceptor(context)
     }
 
     @Provides
-    @Singleton
+    @ApplicationScope
     fun provideRetryInterceptor(): RetryInterceptor {
         return RetryInterceptor()
     }
 
     @Provides
-    @Singleton
-    fun provideNetworkState(@ApplicationContext context: Context): NetworkState {
+    @ApplicationScope
+    fun provideNetworkState(context: Context): NetworkState {
         return NetworkState(context)
     }
 
     @Provides
-    @Singleton
+    @ApplicationScope
     fun provideOkHttpClient(
         authInterceptor: AuthInterceptor,
         retryInterceptor: RetryInterceptor
@@ -56,7 +51,7 @@ object NetworkModule {
     }
 
     @Provides
-    @Singleton
+    @ApplicationScope
     fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit {
         return Retrofit.Builder()
             .baseUrl(BASE_URL)
@@ -66,8 +61,9 @@ object NetworkModule {
     }
 
     @Provides
-    @Singleton
+    @ApplicationScope
     fun provideFinancialApi(retrofit: Retrofit): FinancialApi {
         return retrofit.create(FinancialApi::class.java)
     }
 }
+

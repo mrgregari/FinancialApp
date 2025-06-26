@@ -5,13 +5,11 @@ import com.example.financialapp.data.network.NetworkState
 import com.example.financialapp.domain.models.Category
 import com.example.financialapp.domain.usecases.GetCategoriesUseCase
 import com.example.financialapp.ui.base.BaseViewModel
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import javax.inject.Inject
 
-@HiltViewModel
 class CategoriesViewModel @Inject constructor(
     private val getCategoriesUseCase: GetCategoriesUseCase,
     networkState: NetworkState,

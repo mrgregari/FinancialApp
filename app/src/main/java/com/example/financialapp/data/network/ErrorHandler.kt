@@ -1,7 +1,6 @@
 package com.example.financialapp.data.network
 
-import android.content.Context
-import dagger.hilt.android.qualifiers.ApplicationContext
+import com.example.financialapp.di.ApplicationScope
 import retrofit2.HttpException
 import java.io.IOException
 import java.net.SocketTimeoutException
@@ -9,9 +8,8 @@ import java.net.UnknownHostException
 import javax.inject.Inject
 import javax.inject.Singleton
 
-@Singleton
+@ApplicationScope
 class ErrorHandler @Inject constructor(
-    @ApplicationContext private val context: Context
 ) {
     
     fun handleException(throwable: Throwable): String {

@@ -9,7 +9,8 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.financialapp.R
 import com.example.financialapp.ui.components.*
@@ -19,9 +20,10 @@ import com.example.financialapp.ui.utils.formatAmountWithCurrency
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
 fun IncomeScreen(
-    viewModel: IncomesViewModel = hiltViewModel(),
+    viewModelFactory: ViewModelProvider.Factory,
     navController: NavController
 ) {
+    val viewModel : IncomesViewModel = viewModel(factory = viewModelFactory)
     val incomes by viewModel.incomes.collectAsState()
     val isLoading by viewModel.isLoading.collectAsState()
     val errorMessage by viewModel.errorMessage.collectAsState()

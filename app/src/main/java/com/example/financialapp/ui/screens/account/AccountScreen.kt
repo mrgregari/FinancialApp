@@ -7,7 +7,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.financialapp.R
 import com.example.financialapp.ui.components.*
 import com.example.financialapp.ui.utils.formatNumber
@@ -16,8 +17,11 @@ import com.example.financialapp.ui.utils.getCurrencySymbol
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AccountScreen(
-    viewModel: AccountViewModel = hiltViewModel()
+    viewModelFactory: ViewModelProvider.Factory
 ) {
+
+    val viewModel: AccountViewModel = viewModel(factory = viewModelFactory)
+
     val accounts by viewModel.accounts.collectAsState()
     val isLoading by viewModel.isLoading.collectAsState()
     val errorMessage by viewModel.errorMessage.collectAsState()

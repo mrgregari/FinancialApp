@@ -1,7 +1,16 @@
 package com.example.financialapp
 
 import android.app.Application
-import dagger.hilt.android.HiltAndroidApp
+import com.example.financialapp.di.ApplicationComponent
+import com.example.financialapp.di.DaggerApplicationComponent
 
-@HiltAndroidApp
-class FinanceApp : Application() 
+class FinanceApp : Application() {
+
+    lateinit var component: ApplicationComponent
+
+    override fun onCreate() {
+        super.onCreate()
+        component =  DaggerApplicationComponent.factory().create(this)
+    }
+
+}
