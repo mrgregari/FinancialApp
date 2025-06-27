@@ -6,13 +6,13 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.example.financialapp.ui.screens.SettingsScreen
+import com.example.financialapp.ui.screens.settings.SettingsScreen
 import com.example.financialapp.ui.screens.account.AccountScreen
 import com.example.financialapp.ui.screens.categories.CategoriesScreen
 import com.example.financialapp.ui.screens.expenses.ExpensesScreen
-import com.example.financialapp.ui.screens.expenseshistory.ExpensesHistoryScreen
+import com.example.financialapp.ui.screens.expensesHistory.ExpensesHistoryScreen
 import com.example.financialapp.ui.screens.incomes.IncomeScreen
-import com.example.financialapp.ui.screens.incomeshistory.IncomesHistoryScreen
+import com.example.financialapp.ui.screens.incomesHistory.IncomesHistoryScreen
 
 @Composable
 fun AppNavHost(

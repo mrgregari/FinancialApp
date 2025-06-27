@@ -23,6 +23,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -47,13 +48,13 @@ fun ExpensesScreen(
     val viewModel : ExpensesViewModel = viewModel(factory = viewModelFactory)
     val expenses by viewModel.expenses.collectAsState()
     val isLoading by viewModel.isLoading.collectAsState()
-    val errorMessage by viewModel.errorMessage.collectAsState()
+    val errorResId by viewModel.errorResId.collectAsState()
     val isNetworkAvailable by viewModel.isNetworkAvailable.collectAsState()
 
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
-                title = { Text("Расходы сегодня") },
+                title = { Text(stringResource(R.string.expenses_today)) },
                 colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
                     containerColor = MaterialTheme.colorScheme.primary,
                     titleContentColor = MaterialTheme.colorScheme.onSurface
@@ -64,7 +65,7 @@ fun ExpensesScreen(
                     }) {
                         Icon(
                             painter = painterResource(R.drawable.history),
-                            contentDescription = "History",
+                            contentDescription = stringResource(R.string.history),
                             tint = MaterialTheme.colorScheme.onSurfaceVariant
                         )
                     }
@@ -81,15 +82,14 @@ fun ExpensesScreen(
                 .padding(innerPadding)
         ) {
             NetworkErrorBanner(
-                isVisible = !isNetworkAvailable,
-                onDismiss = {  }
+                isVisible = !isNetworkAvailable
             )
 
             if (isLoading) {
                 LoadingScreen()
-            } else if (errorMessage != null) {
+            } else if (errorResId != null) {
                 ErrorScreen(
-                    error = errorMessage!!,
+                    error = stringResource(errorResId!!),
                     onRetry = { viewModel.retry() }
                 )
             } else {
@@ -111,7 +111,7 @@ private fun ExpensesContent(
         stickyHeader {
             CustomListItem(
                 modifier = Modifier.height(56.dp),
-                title = "Всего",
+                title = stringResource(R.string.total),
                 subTitle = null,
                 trailingText = formatAmountWithCurrency(
                     expenses.sumOf { it.amount.toDouble() },

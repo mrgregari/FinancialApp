@@ -7,6 +7,8 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.res.stringResource
+import com.example.financialapp.R
 
 @Composable
 fun ErrorScreen(
@@ -20,7 +22,7 @@ fun ErrorScreen(
         verticalArrangement = Arrangement.Center
     ) {
         Text(
-            text = "Ошибка",
+            text = stringResource(R.string.error_title),
             style = MaterialTheme.typography.headlineMedium,
             color = MaterialTheme.colorScheme.error
         )
@@ -42,7 +44,7 @@ fun ErrorScreen(
                 containerColor = MaterialTheme.colorScheme.primary
             )
         ) {
-            Text("Повторить")
+            Text(stringResource(R.string.retry))
         }
     }
 }
@@ -50,7 +52,6 @@ fun ErrorScreen(
 @Composable
 fun NetworkErrorBanner(
     isVisible: Boolean,
-    onDismiss: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     if (isVisible) {
@@ -70,7 +71,7 @@ fun NetworkErrorBanner(
                 verticalAlignment = Alignment.CenterVertically
             ) {
                 Text(
-                    text = "Нет подключения к интернету",
+                    text = stringResource(R.string.no_internet),
                     style = MaterialTheme.typography.bodyMedium,
                     color = MaterialTheme.colorScheme.onErrorContainer
                 )

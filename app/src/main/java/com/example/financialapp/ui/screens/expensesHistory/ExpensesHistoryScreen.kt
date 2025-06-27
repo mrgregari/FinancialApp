@@ -1,4 +1,4 @@
-package com.example.financialapp.ui.screens.expenseshistory
+package com.example.financialapp.ui.screens.expensesHistory
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Column
@@ -24,6 +24,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -49,7 +50,7 @@ fun ExpensesHistoryScreen(
     val startDate by viewModel.startDate.collectAsState()
     val endDate by viewModel.endDate.collectAsState()
     val isLoading by viewModel.isLoading.collectAsState()
-    val errorMessage by viewModel.errorMessage.collectAsState()
+    val errorResId by viewModel.errorResId.collectAsState()
     val isNetworkAvailable by viewModel.isNetworkAvailable.collectAsState()
     
     var showStartDatePicker by remember { mutableStateOf(false) }
@@ -58,7 +59,7 @@ fun ExpensesHistoryScreen(
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
-                title = { Text("Моя история") },
+                title = { Text(stringResource(R.string.expenses_history_title)) },
                 colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
                     containerColor = MaterialTheme.colorScheme.primary,
                     titleContentColor = MaterialTheme.colorScheme.onSurface
@@ -67,7 +68,7 @@ fun ExpensesHistoryScreen(
                     IconButton(onClick = { navController.navigateUp() }) {
                         Icon(
                             painter = painterResource(R.drawable.leading_icon),
-                            contentDescription = "Назад",
+                            contentDescription = stringResource(R.string.back),
                             tint = MaterialTheme.colorScheme.onSurfaceVariant
                         )
                     }
@@ -76,7 +77,7 @@ fun ExpensesHistoryScreen(
                     IconButton(onClick = { }) {
                         Icon(
                             painter = painterResource(R.drawable.analytics),
-                            contentDescription = "Analytics",
+                            contentDescription = stringResource(R.string.analytics),
                             tint = MaterialTheme.colorScheme.onSurfaceVariant
                         )
                     }
@@ -90,14 +91,13 @@ fun ExpensesHistoryScreen(
                 .padding(innerPadding)
         ) {
             NetworkErrorBanner(
-                isVisible = !isNetworkAvailable,
-                onDismiss = { }
+                isVisible = !isNetworkAvailable
             )
             
             when {
                 isLoading -> LoadingScreen()
-                errorMessage != null -> ErrorScreen(
-                    error = errorMessage!!,
+                errorResId != null -> ErrorScreen(
+                    error = stringResource(errorResId!!),
                     onRetry = { viewModel.retry() }
                 )
                 else -> {
@@ -106,8 +106,9 @@ fun ExpensesHistoryScreen(
                             Column {
                                 CustomListItem(
                                     modifier = Modifier.height(56.dp),
-                                    title = "Начало",
-                                    trailingText = startDate?.let { formatDate(it) } ?: "Выберите дату",
+                                    title = stringResource(R.string.start),
+                                    trailingText =
+                                        startDate?.let { formatDate(it) } ?: stringResource(R.string.choose_date),
                                     containerColor = MaterialTheme.colorScheme.secondary,
                                     onClick = { showStartDatePicker = true }
                                 )

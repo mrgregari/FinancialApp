@@ -4,13 +4,19 @@ import okhttp3.Interceptor
 import okhttp3.Response
 import java.io.IOException
 
+/**
+ * OkHttp Interceptor that automatically retries failed network requests.
+ *
+ * Retries requests with a delay between attempts if a network error or HTTP 500 occurs
+ */
+
 class RetryInterceptor : Interceptor {
     
     companion object {
         private const val MAX_RETRIES = 3
-        private const val RETRY_DELAY_MS = 2000L // 2 секунды
+        private const val RETRY_DELAY_MS = 2000L // 2 seconds
     }
-    
+
     override fun intercept(chain: Interceptor.Chain): Response {
         val request = chain.request()
         var response: Response? = null

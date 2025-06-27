@@ -7,9 +7,11 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.financialapp.R
 import com.example.financialapp.ui.components.*
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
@@ -20,13 +22,13 @@ fun CategoriesScreen(
     val viewModel : CategoriesViewModel = viewModel(factory = viewModelFactory)
     val categories by viewModel.categories.collectAsState()
     val isLoading by viewModel.isLoading.collectAsState()
-    val errorMessage by viewModel.errorMessage.collectAsState()
+    val errorResId by viewModel.errorResId.collectAsState()
     val isNetworkAvailable by viewModel.isNetworkAvailable.collectAsState()
 
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
-                title = { Text("Мои статьи") },
+                title = { Text(stringResource(R.string.categories_title)) },
                 colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
                     containerColor = MaterialTheme.colorScheme.primary,
                     titleContentColor = MaterialTheme.colorScheme.onSurface
@@ -40,15 +42,14 @@ fun CategoriesScreen(
                 .padding(innerPadding)
         ) {
             NetworkErrorBanner(
-                isVisible = !isNetworkAvailable,
-                onDismiss = { }
+                isVisible = !isNetworkAvailable
             )
 
             if (isLoading) {
                 LoadingScreen()
-            } else if (errorMessage != null) {
+            } else if (errorResId != null) {
                 ErrorScreen(
-                    error = errorMessage!!,
+                    error = stringResource(errorResId!!),
                     onRetry = { viewModel.retry() }
                 )
             } else {

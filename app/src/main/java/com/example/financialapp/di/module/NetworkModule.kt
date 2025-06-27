@@ -1,10 +1,11 @@
-package com.example.financialapp.di
+package com.example.financialapp.di.module
 
 import android.content.Context
 import com.example.financialapp.data.api.AuthInterceptor
 import com.example.financialapp.data.api.FinancialApi
 import com.example.financialapp.data.network.NetworkState
 import com.example.financialapp.data.network.RetryInterceptor
+import com.example.financialapp.di.ApplicationScope
 import dagger.Module
 import dagger.Provides
 import okhttp3.OkHttpClient
@@ -66,4 +67,3 @@ object NetworkModule {
         return retrofit.create(FinancialApi::class.java)
     }
 }
-

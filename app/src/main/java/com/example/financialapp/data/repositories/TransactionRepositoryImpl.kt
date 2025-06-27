@@ -2,6 +2,7 @@ package com.example.financialapp.data.repositories
 
 import android.annotation.SuppressLint
 import com.example.financialapp.data.api.FinancialApi
+import com.example.financialapp.data.datasources.remote.TransactionRemoteDataSource
 import com.example.financialapp.data.mappers.TransactionMapper
 import com.example.financialapp.data.network.NetworkResult
 import com.example.financialapp.domain.models.Expense
@@ -15,7 +16,7 @@ import javax.inject.Inject
 import java.util.TimeZone
 
 class TransactionRepositoryImpl @Inject constructor(
-    private val api: FinancialApi,
+    private val transactionRemoteDataSource: TransactionRemoteDataSource,
     private val mapper: TransactionMapper
 ) : TransactionRepository {
 
@@ -42,7 +43,7 @@ class TransactionRepositoryImpl @Inject constructor(
             val (defaultStart, defaultEnd) = getDefaultPeriod()
             val start = startDate ?: defaultStart
             val end = endDate ?: defaultEnd
-            val dtos = api.getTransactions(
+            val dtos = transactionRemoteDataSource.getTransactions(
                 accountId = accountId,
                 startDate = start.toApiString(),
                 endDate = end.toApiString()
@@ -66,7 +67,7 @@ class TransactionRepositoryImpl @Inject constructor(
             val (defaultStart, defaultEnd) = getDefaultPeriod()
             val start = startDate ?: defaultStart
             val end = endDate ?: defaultEnd
-            val dtos = api.getTransactions(
+            val dtos = transactionRemoteDataSource.getTransactions(
                 accountId = accountId,
                 startDate = start.toApiString(),
                 endDate = end.toApiString()

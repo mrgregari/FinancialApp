@@ -1,8 +1,9 @@
-package com.example.financialapp.di
+package com.example.financialapp.di.module
 
 import com.example.financialapp.data.repositories.AccountRepositoryImpl
 import com.example.financialapp.data.repositories.CategoryRepositoryImpl
 import com.example.financialapp.data.repositories.TransactionRepositoryImpl
+import com.example.financialapp.di.ApplicationScope
 import com.example.financialapp.domain.repositories.AccountRepository
 import com.example.financialapp.domain.repositories.CategoryRepository
 import com.example.financialapp.domain.repositories.TransactionRepository
@@ -29,4 +30,3 @@ abstract class RepositoryModule {
         impl: TransactionRepositoryImpl
     ): TransactionRepository
 }
-
