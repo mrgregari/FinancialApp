@@ -1,4 +1,4 @@
-package com.example.financialapp.ui.screens
+package com.example.financialapp.ui.screens.settings
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
@@ -18,6 +18,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import com.example.financialapp.R
 import com.example.financialapp.ui.components.CustomListItem
 
@@ -27,20 +28,20 @@ fun SettingsScreen() {
     var isDarkTheme by remember { mutableStateOf(false) }
     
     val settings = listOf(
-        "Тёмная тема" to true,
-        "Основной цвет" to false,
-        "Звуки" to false,
-        "Хаптики" to false,
-        "Код пароль" to false,
-        "Синхронизация" to false,
-        "Язык" to false,
-        "О программе" to false
+        R.string.dark_theme to true,
+        R.string.main_color to false,
+        R.string.sounds to false,
+        R.string.haptics to false,
+        R.string.code_password to false,
+        R.string.sync to false,
+        R.string.language to false,
+        R.string.about to false
     )
 
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
-                title = { Text("Настройки") },
+                title = { Text(stringResource(R.string.settings_title)) },
                 colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
                     containerColor = MaterialTheme.colorScheme.primary,
                     titleContentColor = MaterialTheme.colorScheme.onSurface
@@ -51,7 +52,8 @@ fun SettingsScreen() {
         Column(
             modifier = Modifier.padding(innerPadding)
         ) {
-            settings.forEach { (title, isSwitch) ->
+            settings.forEach { (titleRes, isSwitch) ->
+                val title = stringResource(titleRes)
                 if (isSwitch) {
                     ListItem(
                         headlineContent = { Text(title) },

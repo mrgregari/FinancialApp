@@ -8,6 +8,7 @@ import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.navigation.NavHostController
 
@@ -33,7 +34,7 @@ fun AppBottomBar(navController: NavHostController, currentRoute: String?) {
                 },
                 label = {
                     Text(
-                        text = screen.title,
+                        text = stringResource(screen.titleResId),
                         style = MaterialTheme.typography.labelMedium,
                         fontWeight = if (selected) FontWeight.Bold else FontWeight.Normal,
                         maxLines = 1

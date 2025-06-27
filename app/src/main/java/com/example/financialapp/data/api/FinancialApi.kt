@@ -7,6 +7,10 @@ import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
 
+/**
+ * API interface for financial data.
+ * Defines network endpoints for accounts, categories and transactions.
+ */
 interface FinancialApi {
 
     @GET("categories")

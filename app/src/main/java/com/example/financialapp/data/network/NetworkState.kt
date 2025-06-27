@@ -12,11 +12,16 @@ import kotlinx.coroutines.flow.distinctUntilChanged
 import javax.inject.Inject
 import javax.inject.Singleton
 
+/**
+ * Observes and provides information about the current network connection state.
+ *
+ */
+
 @Singleton
 class NetworkState @Inject constructor(
     private val context: Context
 ) {
-    
+
     fun isNetworkAvailable(): Boolean {
         val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         val network = connectivityManager.activeNetwork ?: return false
@@ -25,7 +30,7 @@ class NetworkState @Inject constructor(
         return activeNetwork.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET) &&
                 activeNetwork.hasCapability(NetworkCapabilities.NET_CAPABILITY_VALIDATED)
     }
-    
+
     fun observeNetworkState(): Flow<Boolean> = callbackFlow {
         val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         

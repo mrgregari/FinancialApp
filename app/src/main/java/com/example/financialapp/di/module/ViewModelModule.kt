@@ -1,19 +1,18 @@
-package com.example.financialapp.di
+package com.example.financialapp.di.module
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.example.financialapp.di.ViewModelFactory
-import com.example.financialapp.ui.base.BaseViewModel
+import com.example.financialapp.di.ViewModelKey
 import com.example.financialapp.ui.screens.account.AccountViewModel
 import com.example.financialapp.ui.screens.categories.CategoriesViewModel
 import com.example.financialapp.ui.screens.expenses.ExpensesViewModel
-import com.example.financialapp.ui.screens.expenseshistory.ExpensesHistoryViewModel
+import com.example.financialapp.ui.screens.expensesHistory.ExpensesHistoryViewModel
 import com.example.financialapp.ui.screens.incomes.IncomesViewModel
-import com.example.financialapp.ui.screens.incomeshistory.IncomesHistoryViewModel
+import com.example.financialapp.ui.screens.incomesHistory.IncomesHistoryViewModel
 import dagger.Binds
 import dagger.Module
 import dagger.multibindings.IntoMap
-
 
 @Module
 interface ViewModelModule {

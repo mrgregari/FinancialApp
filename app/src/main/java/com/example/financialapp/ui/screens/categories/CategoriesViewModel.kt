@@ -10,24 +10,20 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import javax.inject.Inject
 
+
 class CategoriesViewModel @Inject constructor(
     private val getCategoriesUseCase: GetCategoriesUseCase,
     networkState: NetworkState,
     errorHandler: ErrorHandler
-) : BaseViewModel() {
+) : BaseViewModel(networkState, errorHandler) {
 
     init {
-        this.networkState = networkState
-        this.errorHandler = errorHandler
+        loadCategories()
         initializeNetworkState()
     }
 
     private val _categories = MutableStateFlow<List<Category>>(emptyList())
     val categories: StateFlow<List<Category>> = _categories.asStateFlow()
-
-    init {
-        loadCategories()
-    }
 
     fun retry() {
         loadCategories()
@@ -39,6 +35,6 @@ class CategoriesViewModel @Inject constructor(
             onSuccess = { categories ->
                 _categories.value = categories
             }
-            )
+        )
     }
 }

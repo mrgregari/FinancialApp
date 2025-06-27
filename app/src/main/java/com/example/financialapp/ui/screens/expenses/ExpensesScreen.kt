@@ -23,6 +23,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -44,27 +45,27 @@ fun ExpensesScreen(
     navController: NavController
 ) {
 
-    val viewModel : ExpensesViewModel = viewModel(factory = viewModelFactory)
+    val viewModel: ExpensesViewModel = viewModel(factory = viewModelFactory)
     val expenses by viewModel.expenses.collectAsState()
     val isLoading by viewModel.isLoading.collectAsState()
-    val errorMessage by viewModel.errorMessage.collectAsState()
+    val errorResId by viewModel.errorResId.collectAsState()
     val isNetworkAvailable by viewModel.isNetworkAvailable.collectAsState()
 
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
-                title = { Text("Расходы сегодня") },
+                title = { Text(stringResource(R.string.expenses_today)) },
                 colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
                     containerColor = MaterialTheme.colorScheme.primary,
                     titleContentColor = MaterialTheme.colorScheme.onSurface
                 ),
                 actions = {
-                    IconButton(onClick = { 
+                    IconButton(onClick = {
                         navController.navigate(Screen.ExpensesHistory.route)
                     }) {
                         Icon(
                             painter = painterResource(R.drawable.history),
-                            contentDescription = "History",
+                            contentDescription = stringResource(R.string.history),
                             tint = MaterialTheme.colorScheme.onSurfaceVariant
                         )
                     }
@@ -81,23 +82,24 @@ fun ExpensesScreen(
                 .padding(innerPadding)
         ) {
             NetworkErrorBanner(
-                isVisible = !isNetworkAvailable,
-                onDismiss = {  }
+                isVisible = !isNetworkAvailable
             )
 
-            if (isLoading) {
-                LoadingScreen()
-            } else if (errorMessage != null) {
-                ErrorScreen(
-                    error = errorMessage!!,
-                    onRetry = { viewModel.retry() }
-                )
-            } else {
-                ExpensesContent(
-                    expenses = expenses,
-                    modifier = Modifier.fillMaxSize()
-                )
+            when {
+                isLoading -> LoadingScreen()
+                errorResId != null ->
+                    ErrorScreen(
+                        error = stringResource(errorResId!!),
+                        onRetry = { viewModel.retry() }
+                    )
+
+                else ->
+                    ExpensesContent(
+                        expenses = expenses,
+                        modifier = Modifier.fillMaxSize()
+                    )
             }
+
         }
     }
 }
@@ -111,7 +113,7 @@ private fun ExpensesContent(
         stickyHeader {
             CustomListItem(
                 modifier = Modifier.height(56.dp),
-                title = "Всего",
+                title = stringResource(R.string.total),
                 subTitle = null,
                 trailingText = formatAmountWithCurrency(
                     expenses.sumOf { it.amount.toDouble() },
@@ -121,27 +123,22 @@ private fun ExpensesContent(
                 showArrow = false,
                 containerColor = MaterialTheme.colorScheme.secondary
             )
-            HorizontalDivider(
-                modifier = Modifier.fillMaxWidth(),
-                thickness = 1.dp,
-                color = MaterialTheme.colorScheme.outlineVariant
-            )
+            HorizontalDivider()
         }
-        
+
         items(expenses) { expense ->
             CustomListItem(
                 modifier = Modifier.height(70.dp),
                 emoji = expense.icon,
                 title = expense.title,
                 subTitle = expense.comment,
-                trailingText = formatAmountWithCurrency(expense.amount.toDouble(), expense.currency),
+                trailingText = formatAmountWithCurrency(
+                    expense.amount.toDouble(),
+                    expense.currency
+                ),
                 showArrow = true,
             )
-            HorizontalDivider(
-                modifier = Modifier.fillMaxWidth(),
-                thickness = 1.dp,
-                color = MaterialTheme.colorScheme.outlineVariant
-            )
+            HorizontalDivider()
         }
     }
 }

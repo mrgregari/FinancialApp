@@ -1,12 +1,17 @@
-package com.example.financialapp.di
+package com.example.financialapp.di.module
 
 import android.content.Context
 import com.example.financialapp.data.api.AuthInterceptor
 import com.example.financialapp.data.api.FinancialApi
 import com.example.financialapp.data.network.NetworkState
 import com.example.financialapp.data.network.RetryInterceptor
+import com.example.financialapp.di.ApplicationScope
+import com.example.financialapp.di.DefaultDispatcher
+import com.example.financialapp.di.IODispatcher
+import com.example.financialapp.di.MainDispatcher
 import dagger.Module
 import dagger.Provides
+import kotlinx.coroutines.Dispatchers
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
@@ -16,6 +21,21 @@ import java.util.concurrent.TimeUnit
 object NetworkModule {
 
     private const val BASE_URL = "https://shmr-finance.ru/api/v1/"
+
+    @Provides
+    @ApplicationScope
+    @IODispatcher
+    fun provideIoDispatcher() = Dispatchers.IO
+
+    @Provides
+    @ApplicationScope
+    @DefaultDispatcher
+    fun provideDefaultDispatcher() = Dispatchers.Default
+
+    @Provides
+    @ApplicationScope
+    @MainDispatcher
+    fun provideMainDispatcher() = Dispatchers.Main
 
     @Provides
     @ApplicationScope
@@ -66,4 +86,3 @@ object NetworkModule {
         return retrofit.create(FinancialApi::class.java)
     }
 }
-

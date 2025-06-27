@@ -6,8 +6,7 @@ import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.compose.currentBackStackEntryAsState
-import com.example.financialapp.di.ViewModelFactory
-import com.example.financialapp.ui.screens.SplashScreen
+import com.example.financialapp.ui.screens.splash.SplashScreen
 
 @Composable
 fun AppNavGraph(viewModelFactory: ViewModelProvider.Factory) {

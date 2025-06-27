@@ -15,20 +15,15 @@ class AccountViewModel @Inject constructor(
     private val getAccountUseCase: GetAccountUseCase,
     networkState: NetworkState,
     errorHandler: ErrorHandler
-) : BaseViewModel() {
+) : BaseViewModel(networkState, errorHandler) {
 
     init {
-        this.networkState = networkState
-        this.errorHandler = errorHandler
         initializeNetworkState()
+        loadAccount()
     }
 
     private val _accounts = MutableStateFlow<List<Account>>(emptyList())
     val accounts: StateFlow<List<Account>> = _accounts.asStateFlow()
-
-    init {
-        loadAccount()
-    }
 
     fun retry() {
         loadAccount()

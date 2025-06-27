@@ -2,6 +2,9 @@ package com.example.financialapp.di
 
 import android.content.Context
 import com.example.financialapp.MainActivity
+import com.example.financialapp.di.module.NetworkModule
+import com.example.financialapp.di.module.RepositoryModule
+import com.example.financialapp.di.module.ViewModelModule
 import dagger.BindsInstance
 import dagger.Component
 

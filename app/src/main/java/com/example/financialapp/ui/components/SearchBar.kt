@@ -18,11 +18,12 @@ import androidx.compose.material3.TextFieldDefaults
 import com.example.financialapp.R
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.res.stringResource
 
 @Composable
 fun SearchBar(
     modifier: Modifier = Modifier,
-    placeholder: String = "Найти статью"
+    placeholder: String = stringResource(R.string.search_placeholder)
 ) {
     var text by remember { mutableStateOf(TextFieldValue("")) }
 

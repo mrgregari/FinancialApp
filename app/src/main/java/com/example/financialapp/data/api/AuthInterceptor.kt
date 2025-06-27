@@ -5,6 +5,10 @@ import okhttp3.Response
 import android.content.Context
 import com.example.financialapp.R
 
+/**
+ * OkHttp Interceptor that adds an authorization token to every HTTP request
+ */
+
 class AuthInterceptor(private val context: Context) : Interceptor {
     override fun intercept(chain: Interceptor.Chain): Response {
         val token = context.getString(R.string.api_token)
