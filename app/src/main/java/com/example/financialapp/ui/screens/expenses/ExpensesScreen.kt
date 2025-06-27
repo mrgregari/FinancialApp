@@ -45,7 +45,7 @@ fun ExpensesScreen(
     navController: NavController
 ) {
 
-    val viewModel : ExpensesViewModel = viewModel(factory = viewModelFactory)
+    val viewModel: ExpensesViewModel = viewModel(factory = viewModelFactory)
     val expenses by viewModel.expenses.collectAsState()
     val isLoading by viewModel.isLoading.collectAsState()
     val errorResId by viewModel.errorResId.collectAsState()
@@ -60,7 +60,7 @@ fun ExpensesScreen(
                     titleContentColor = MaterialTheme.colorScheme.onSurface
                 ),
                 actions = {
-                    IconButton(onClick = { 
+                    IconButton(onClick = {
                         navController.navigate(Screen.ExpensesHistory.route)
                     }) {
                         Icon(
@@ -85,19 +85,21 @@ fun ExpensesScreen(
                 isVisible = !isNetworkAvailable
             )
 
-            if (isLoading) {
-                LoadingScreen()
-            } else if (errorResId != null) {
-                ErrorScreen(
-                    error = stringResource(errorResId!!),
-                    onRetry = { viewModel.retry() }
-                )
-            } else {
-                ExpensesContent(
-                    expenses = expenses,
-                    modifier = Modifier.fillMaxSize()
-                )
+            when {
+                isLoading -> LoadingScreen()
+                errorResId != null ->
+                    ErrorScreen(
+                        error = stringResource(errorResId!!),
+                        onRetry = { viewModel.retry() }
+                    )
+
+                else ->
+                    ExpensesContent(
+                        expenses = expenses,
+                        modifier = Modifier.fillMaxSize()
+                    )
             }
+
         }
     }
 }
@@ -121,27 +123,22 @@ private fun ExpensesContent(
                 showArrow = false,
                 containerColor = MaterialTheme.colorScheme.secondary
             )
-            HorizontalDivider(
-                modifier = Modifier.fillMaxWidth(),
-                thickness = 1.dp,
-                color = MaterialTheme.colorScheme.outlineVariant
-            )
+            HorizontalDivider()
         }
-        
+
         items(expenses) { expense ->
             CustomListItem(
                 modifier = Modifier.height(70.dp),
                 emoji = expense.icon,
                 title = expense.title,
                 subTitle = expense.comment,
-                trailingText = formatAmountWithCurrency(expense.amount.toDouble(), expense.currency),
+                trailingText = formatAmountWithCurrency(
+                    expense.amount.toDouble(),
+                    expense.currency
+                ),
                 showArrow = true,
             )
-            HorizontalDivider(
-                modifier = Modifier.fillMaxWidth(),
-                thickness = 1.dp,
-                color = MaterialTheme.colorScheme.outlineVariant
-            )
+            HorizontalDivider()
         }
     }
 }

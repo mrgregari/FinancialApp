@@ -57,15 +57,13 @@ fun AccountScreen(
                 isVisible = !isNetworkAvailable
             )
 
-            if (isLoading) {
-                LoadingScreen()
-            } else if (errorResId != null) {
-                ErrorScreen(
+            when {
+                isLoading -> LoadingScreen()
+                errorResId != null -> ErrorScreen(
                     error = stringResource(errorResId!!),
                     onRetry = { viewModel.retry() }
                 )
-            } else {
-                AccountContent(
+                else -> AccountContent(
                     accounts = accounts,
                     modifier = Modifier.fillMaxSize()
                 )
@@ -92,11 +90,7 @@ private fun AccountContent(
                 containerColor = MaterialTheme.colorScheme.secondary,
                 showArrow = true
             )
-            HorizontalDivider(
-                modifier = Modifier.fillMaxWidth(),
-                thickness = 1.dp,
-                color = MaterialTheme.colorScheme.outlineVariant
-            )
+            HorizontalDivider()
             CustomListItem(
                 modifier = Modifier.height(56.dp),
                 title = stringResource(R.string.currency),

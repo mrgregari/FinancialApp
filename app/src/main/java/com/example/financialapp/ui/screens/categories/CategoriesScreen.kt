@@ -12,6 +12,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.financialapp.R
+import com.example.financialapp.domain.models.Category
 import com.example.financialapp.ui.components.*
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
@@ -19,7 +20,7 @@ import com.example.financialapp.ui.components.*
 fun CategoriesScreen(
     viewModelFactory: ViewModelProvider.Factory
 ) {
-    val viewModel : CategoriesViewModel = viewModel(factory = viewModelFactory)
+    val viewModel: CategoriesViewModel = viewModel(factory = viewModelFactory)
     val categories by viewModel.categories.collectAsState()
     val isLoading by viewModel.isLoading.collectAsState()
     val errorResId by viewModel.errorResId.collectAsState()
@@ -45,15 +46,15 @@ fun CategoriesScreen(
                 isVisible = !isNetworkAvailable
             )
 
-            if (isLoading) {
-                LoadingScreen()
-            } else if (errorResId != null) {
-                ErrorScreen(
-                    error = stringResource(errorResId!!),
-                    onRetry = { viewModel.retry() }
-                )
-            } else {
-                CategoriesContent(
+            when {
+                isLoading -> LoadingScreen()
+                errorResId != null ->
+                    ErrorScreen(
+                        error = stringResource(errorResId!!),
+                        onRetry = { viewModel.retry() }
+                    )
+
+                else -> CategoriesContent(
                     categories = categories,
                     modifier = Modifier.fillMaxSize()
                 )
@@ -64,19 +65,15 @@ fun CategoriesScreen(
 
 @Composable
 private fun CategoriesContent(
-    categories: List<com.example.financialapp.domain.models.Category>,
+    categories: List<Category>,
     modifier: Modifier = Modifier
 ) {
     LazyColumn(modifier = modifier) {
         stickyHeader {
             SearchBar()
-            HorizontalDivider(
-                modifier = Modifier.fillMaxWidth(),
-                thickness = 1.dp,
-                color = MaterialTheme.colorScheme.outlineVariant
-            )
+            HorizontalDivider()
         }
-        
+
         items(
             items = categories,
             key = { it.id }
@@ -86,11 +83,7 @@ private fun CategoriesContent(
                 emoji = category.icon,
                 title = category.name
             )
-            HorizontalDivider(
-                modifier = Modifier.fillMaxWidth(),
-                thickness = 1.dp,
-                color = MaterialTheme.colorScheme.outlineVariant
-            )
+            HorizontalDivider()
         }
     }
 }

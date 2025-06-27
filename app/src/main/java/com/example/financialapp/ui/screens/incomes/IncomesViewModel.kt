@@ -21,13 +21,8 @@ class IncomesViewModel @Inject constructor(
     private val getIncomesUseCase: GetIncomesUseCase,
     networkState: NetworkState,
     errorHandler: ErrorHandler
-): BaseViewModel() {
+) : BaseViewModel(networkState, errorHandler) {
 
-    init {
-        this.networkState = networkState
-        this.errorHandler = errorHandler
-        initializeNetworkState()
-    }
 
     private val _incomes = MutableStateFlow<List<Income>>(emptyList())
     val incomes: StateFlow<List<Income>> = _incomes.asStateFlow()
@@ -40,6 +35,7 @@ class IncomesViewModel @Inject constructor(
         calendar.set(Calendar.MILLISECOND, 0)
         val startDate = calendar.time
         loadIncomes(startDate = startDate)
+        initializeNetworkState()
     }
 
     fun retry() {

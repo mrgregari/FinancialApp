@@ -2,6 +2,7 @@ package com.example.financialapp.ui.base
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.financialapp.R
 import com.example.financialapp.data.network.ErrorHandler
 import com.example.financialapp.data.network.NetworkResult
 import com.example.financialapp.data.network.NetworkState
@@ -11,13 +12,12 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-abstract class BaseViewModel : ViewModel() {
-    
-    @Inject
-    lateinit var networkState: NetworkState
-    
-    @Inject
-    lateinit var errorHandler: ErrorHandler
+abstract class BaseViewModel(
+    private val networkState: NetworkState,
+    private val errorHandler: ErrorHandler
+): ViewModel() {
+
+
     
     private val _isNetworkAvailable = MutableStateFlow(true)
     val isNetworkAvailable: StateFlow<Boolean> = _isNetworkAvailable.asStateFlow()
@@ -37,7 +37,7 @@ abstract class BaseViewModel : ViewModel() {
             networkState.observeNetworkState().collect { isAvailable ->
                 _isNetworkAvailable.value = isAvailable
                 if (!isAvailable) {
-                    showError(com.example.financialapp.R.string.no_internet)
+                    showError(R.string.no_internet)
                 }
             }
         }

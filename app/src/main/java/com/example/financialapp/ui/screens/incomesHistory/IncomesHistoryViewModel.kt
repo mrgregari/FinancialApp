@@ -1,8 +1,8 @@
 package com.example.financialapp.ui.screens.incomesHistory
 
+import com.example.financialapp.data.network.ErrorHandler
 import com.example.financialapp.data.network.NetworkResult
 import com.example.financialapp.data.network.NetworkState
-import com.example.financialapp.data.network.ErrorHandler
 import com.example.financialapp.domain.models.Income
 import com.example.financialapp.domain.usecases.GetAccountUseCase
 import com.example.financialapp.domain.usecases.GetIncomesUseCase
@@ -20,13 +20,8 @@ class IncomesHistoryViewModel @Inject constructor(
     private val getAccountUseCase: GetAccountUseCase,
     networkState: NetworkState,
     errorHandler: ErrorHandler
-) : BaseViewModel() {
+) : BaseViewModel(networkState, errorHandler) {
 
-    init {
-        this.networkState = networkState
-        this.errorHandler = errorHandler
-        initializeNetworkState()
-    }
 
     private val _incomes = MutableStateFlow<List<Income>>(emptyList())
     val incomes: StateFlow<List<Income>> = _incomes.asStateFlow()
@@ -43,6 +38,7 @@ class IncomesHistoryViewModel @Inject constructor(
         calendar.set(Calendar.DAY_OF_MONTH, 1)
         _startDate.value = calendar.time
         loadAllIncomes()
+        initializeNetworkState()
     }
 
     fun updateStartDate(date: Date?) {

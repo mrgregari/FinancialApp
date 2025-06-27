@@ -14,6 +14,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.financialapp.R
+import com.example.financialapp.domain.models.Income
 import com.example.financialapp.ui.components.*
 import com.example.financialapp.ui.navigation.Screen
 import com.example.financialapp.ui.utils.formatAmountWithCurrency
@@ -24,7 +25,7 @@ fun IncomeScreen(
     viewModelFactory: ViewModelProvider.Factory,
     navController: NavController
 ) {
-    val viewModel : IncomesViewModel = viewModel(factory = viewModelFactory)
+    val viewModel: IncomesViewModel = viewModel(factory = viewModelFactory)
     val incomes by viewModel.incomes.collectAsState()
     val isLoading by viewModel.isLoading.collectAsState()
     val errorResId by viewModel.errorResId.collectAsState()
@@ -62,18 +63,19 @@ fun IncomeScreen(
                 isVisible = !isNetworkAvailable
             )
 
-            if (isLoading) {
-                LoadingScreen()
-            } else if (errorResId != null) {
-                ErrorScreen(
-                    error = stringResource(errorResId!!),
-                    onRetry = { viewModel.retry() }
-                )
-            } else {
-                IncomesContent(
-                    incomes = incomes,
-                    modifier = Modifier.fillMaxSize()
-                )
+            when {
+                isLoading -> LoadingScreen()
+                errorResId != null ->
+                    ErrorScreen(
+                        error = stringResource(errorResId!!),
+                        onRetry = { viewModel.retry() }
+                    )
+
+                else ->
+                    IncomesContent(
+                        incomes = incomes,
+                        modifier = Modifier.fillMaxSize()
+                    )
             }
         }
     }
@@ -81,7 +83,7 @@ fun IncomeScreen(
 
 @Composable
 private fun IncomesContent(
-    incomes: List<com.example.financialapp.domain.models.Income>,
+    incomes: List<Income>,
     modifier: Modifier = Modifier
 ) {
     LazyColumn(modifier = modifier) {
@@ -98,13 +100,9 @@ private fun IncomesContent(
                 showArrow = false,
                 containerColor = MaterialTheme.colorScheme.secondary
             )
-            HorizontalDivider(
-                modifier = Modifier.fillMaxWidth(),
-                thickness = 1.dp,
-                color = MaterialTheme.colorScheme.outlineVariant
-            )
+            HorizontalDivider()
         }
-        
+
         items(incomes) { income ->
             CustomListItem(
                 modifier = Modifier.height(70.dp),
@@ -115,11 +113,7 @@ private fun IncomesContent(
                 subTrailingText = null,
                 showArrow = true,
             )
-            HorizontalDivider(
-                modifier = Modifier.fillMaxWidth(),
-                thickness = 1.dp,
-                color = MaterialTheme.colorScheme.outlineVariant
-            )
+            HorizontalDivider()
         }
     }
 }
