@@ -8,6 +8,10 @@ import com.example.financialapp.ui.navigation.AppNavGraph
 import com.example.financialapp.ui.theme.FinancialAppTheme
 import javax.inject.Inject
 
+/**
+ * Main activity of the application.
+ * Sets up Compose UI and navigation.
+ */
 class MainActivity : ComponentActivity() {
 
     @Inject

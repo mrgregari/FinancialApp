@@ -2,50 +2,58 @@ package com.example.financialapp.ui.navigation
 
 import com.example.financialapp.R
 
+/**
+ * Sealed class representing navigation screens in the app.
+ * Defines route, title and icon for each screen.
+ * 
+ * @param route Navigation route identifier
+ * @param titleResId Resource ID for screen title
+ * @param icon Resource ID for screen icon
+ */
 sealed class Screen(
     val route: String,
-    val title: String,
+    val titleResId: Int,
     val icon: Int
 ) {
     object Expenses : Screen(
         route = "expenses",
-        title = "Расходы",
+        titleResId = R.string.expenses,
         icon = R.drawable.downtrend
     )
 
     object Income : Screen(
         route = "income",
-        title = "Доходы",
+        titleResId = R.string.incomes,
         icon = R.drawable.uptrend
     )
 
     object Account : Screen(
         route = "account",
-        title = "Счета",
+        titleResId = R.string.accounts,
         icon = R.drawable.calculator
     )
 
     object Categories : Screen(
         route = "categories",
-        title = "Статьи",
+        titleResId = R.string.categories,
         icon = R.drawable.categories
     )
 
     object Settings : Screen(
         route = "settings",
-        title = "Настройки",
+        titleResId = R.string.settings,
         icon = R.drawable.settings
     )
 
     object ExpensesHistory : Screen(
         route = "expenses_history",
-        title = "История расходов",
+        titleResId = R.string.expenses_history_title,
         icon = R.drawable.history
     )
 
     object IncomesHistory : Screen(
         route = "incomes_history",
-        title = "История доходов",
+        titleResId = R.string.incomes_history_title,
         icon = R.drawable.history
     )
 }

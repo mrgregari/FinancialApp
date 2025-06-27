@@ -10,7 +10,20 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import javax.inject.Inject
+
+/**
+ * Base ViewModel that provides network state observation,
+ * error handling functionality, and common UI state management.
+ * 
+ * This abstract class should be extended by other ViewModels to inherit:
+ * - Network availability monitoring
+ * - Loading state management  
+ * - Error handling with resource IDs
+ * - Safe API call execution
+ * 
+ * @param networkState Network state observer for connectivity monitoring
+ * @param errorHandler Handler for converting exceptions to user-friendly error messages
+ */
 
 abstract class BaseViewModel(
     private val networkState: NetworkState,

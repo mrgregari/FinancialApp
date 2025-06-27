@@ -40,4 +40,9 @@
     <string name="history">История</string>
     <string name="back">Назад</string>
     <string name="analytics">Аналитика</string>
+    <string name="expenses">Расходы</string>
+    <string name="incomes">Доходы</string>
+    <string name="accounts">Счета</string>
+    <string name="categories">Статьи</string>
+    <string name="settings">Настройки</string>
 </resources>

@@ -10,6 +10,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import javax.inject.Inject
 
+
 class CategoriesViewModel @Inject constructor(
     private val getCategoriesUseCase: GetCategoriesUseCase,
     networkState: NetworkState,
@@ -34,6 +35,6 @@ class CategoriesViewModel @Inject constructor(
             onSuccess = { categories ->
                 _categories.value = categories
             }
-            )
+        )
     }
 }
