@@ -1,8 +1,8 @@
 package com.example.financialapp.di.module
 
 import android.content.Context
-import com.example.financialapp.data.api.AuthInterceptor
-import com.example.financialapp.data.api.FinancialApi
+import com.example.financialapp.data.remote.api.AuthInterceptor
+import com.example.financialapp.data.remote.api.FinancialApi
 import com.example.financialapp.data.network.NetworkState
 import com.example.financialapp.data.network.RetryInterceptor
 import com.example.financialapp.di.ApplicationScope

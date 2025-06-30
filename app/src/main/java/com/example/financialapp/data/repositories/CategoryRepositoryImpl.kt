@@ -1,6 +1,6 @@
 package com.example.financialapp.data.repositories
 
-import com.example.financialapp.data.datasources.remote.CategoryRemoteDataSource
+import com.example.financialapp.data.remote.remoteDataSource.CategoryRemoteDataSource
 import com.example.financialapp.data.mappers.CategoryMapper
 import com.example.financialapp.data.network.NetworkResult
 import com.example.financialapp.domain.models.Category

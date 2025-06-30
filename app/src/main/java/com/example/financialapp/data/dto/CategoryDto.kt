@@ -1,4 +1,4 @@
-package com.example.financialapp.data.models
+package com.example.financialapp.data.dto
 
 data class CategoryDto(
     val id: Int,

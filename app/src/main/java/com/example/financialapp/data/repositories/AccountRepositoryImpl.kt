@@ -1,6 +1,6 @@
 package com.example.financialapp.data.repositories
 
-import com.example.financialapp.data.datasources.remote.AccountRemoteDataSource
+import com.example.financialapp.data.remote.remoteDataSource.AccountRemoteDataSource
 import com.example.financialapp.data.mappers.AccountMapper
 import com.example.financialapp.data.network.NetworkResult
 import com.example.financialapp.domain.models.Account

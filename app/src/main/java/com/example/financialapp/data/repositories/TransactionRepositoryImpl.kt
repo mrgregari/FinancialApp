@@ -1,7 +1,7 @@
 package com.example.financialapp.data.repositories
 
 import android.annotation.SuppressLint
-import com.example.financialapp.data.datasources.remote.TransactionRemoteDataSource
+import com.example.financialapp.data.remote.remoteDataSource.TransactionRemoteDataSource
 import com.example.financialapp.data.mappers.TransactionMapper
 import com.example.financialapp.data.network.NetworkResult
 import com.example.financialapp.di.IODispatcher

@@ -1,7 +1,7 @@
-package com.example.financialapp.data.datasources.remote
+package com.example.financialapp.data.remote.remoteDataSource
 
-import com.example.financialapp.data.api.FinancialApi
-import com.example.financialapp.data.models.TransactionDto
+import com.example.financialapp.data.remote.api.FinancialApi
+import com.example.financialapp.data.dto.TransactionDto
 import javax.inject.Inject
 
 /**
