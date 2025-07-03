@@ -1,4 +1,4 @@
-package com.example.financialapp.data.dto
+package com.example.financialapp.data.remote.dto
 
 data class TransactionDto(
     val id: Int,

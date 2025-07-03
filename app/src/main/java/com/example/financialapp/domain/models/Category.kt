@@ -6,6 +6,17 @@ data class Category(
     val icon: String,
     val isIncome: Boolean
 ) {
+
+    fun doesMatchSearchQuery(query: String) : Boolean {
+        val matchingStringsCombinations = listOf(
+            name,
+            "${name.first()}"
+        )
+        return matchingStringsCombinations.any {
+            it.contains(query, ignoreCase = true)
+        }
+    }
+
     companion object {
         const val UNDEFINED_ID = 0
     }

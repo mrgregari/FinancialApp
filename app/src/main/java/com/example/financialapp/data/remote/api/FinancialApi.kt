@@ -1,8 +1,8 @@
 package com.example.financialapp.data.remote.api
 
-import com.example.financialapp.data.dto.AccountDto
-import com.example.financialapp.data.dto.CategoryDto
-import com.example.financialapp.data.dto.TransactionDto
+import com.example.financialapp.data.remote.dto.AccountDto
+import com.example.financialapp.data.remote.dto.CategoryDto
+import com.example.financialapp.data.remote.dto.TransactionDto
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query

@@ -1,7 +1,7 @@
 package com.example.financialapp.data.remote.remoteDataSource
 
 import com.example.financialapp.data.remote.api.FinancialApi
-import com.example.financialapp.data.dto.CategoryDto
+import com.example.financialapp.data.remote.dto.CategoryDto
 import javax.inject.Inject
 
 /**

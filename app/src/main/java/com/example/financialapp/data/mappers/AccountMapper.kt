@@ -1,6 +1,6 @@
 package com.example.financialapp.data.mappers
 
-import com.example.financialapp.data.dto.AccountDto
+import com.example.financialapp.data.remote.dto.AccountDto
 import com.example.financialapp.domain.models.Account
 import javax.inject.Inject
 
