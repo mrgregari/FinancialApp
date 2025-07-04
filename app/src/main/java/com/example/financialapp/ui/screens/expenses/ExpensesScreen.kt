@@ -4,7 +4,6 @@ package com.example.financialapp.ui.screens.expenses
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -50,6 +49,7 @@ fun ExpensesScreen(
     val isLoading by viewModel.isLoading.collectAsState()
     val errorResId by viewModel.errorResId.collectAsState()
     val isNetworkAvailable by viewModel.isNetworkAvailable.collectAsState()
+    val currency by viewModel.currency.collectAsState()
 
     Scaffold(
         topBar = {
@@ -96,6 +96,7 @@ fun ExpensesScreen(
                 else ->
                     ExpensesContent(
                         expenses = expenses,
+                        currency = currency,
                         modifier = Modifier.fillMaxSize()
                     )
             }
@@ -107,6 +108,7 @@ fun ExpensesScreen(
 @Composable
 private fun ExpensesContent(
     expenses: List<Expense>,
+    currency: String,
     modifier: Modifier = Modifier
 ) {
     LazyColumn(modifier = modifier) {
@@ -117,7 +119,7 @@ private fun ExpensesContent(
                 subTitle = null,
                 trailingText = formatAmountWithCurrency(
                     expenses.sumOf { it.amount.toDouble() },
-                    expenses.firstOrNull()?.currency ?: "RUB"
+                    currency = currency
                 ),
                 subTrailingText = null,
                 showArrow = false,

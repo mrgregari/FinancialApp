@@ -38,6 +38,7 @@ import com.example.financialapp.ui.components.NetworkErrorBanner
 import com.example.financialapp.ui.utils.formatAmountWithCurrency
 import com.example.financialapp.ui.utils.formatDate
 import com.example.financialapp.ui.utils.formatDateTime
+import com.example.financialapp.ui.utils.getCurrencySymbol
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
@@ -52,6 +53,7 @@ fun ExpensesHistoryScreen(
     val isLoading by viewModel.isLoading.collectAsState()
     val errorResId by viewModel.errorResId.collectAsState()
     val isNetworkAvailable by viewModel.isNetworkAvailable.collectAsState()
+    val currency by viewModel.currency.collectAsState()
     
     var showStartDatePicker by remember { mutableStateOf(false) }
     var showEndDatePicker by remember { mutableStateOf(false) }
@@ -126,7 +128,7 @@ fun ExpensesHistoryScreen(
                                     title = "Сумма",
                                     trailingText = formatAmountWithCurrency(
                                         expenses.sumOf { it.amount.toDouble() },
-                                        expenses.firstOrNull()?.currency ?: "₽"
+                                        getCurrencySymbol(currency)
                                     ),
                                     showArrow = false,
                                     containerColor = MaterialTheme.colorScheme.secondary

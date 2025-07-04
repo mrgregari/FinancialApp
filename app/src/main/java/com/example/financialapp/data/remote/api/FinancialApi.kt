@@ -3,7 +3,11 @@ package com.example.financialapp.data.remote.api
 import com.example.financialapp.data.remote.dto.AccountDto
 import com.example.financialapp.data.remote.dto.CategoryDto
 import com.example.financialapp.data.remote.dto.TransactionDto
+import com.example.financialapp.data.remote.dto.UpdateAccountDto
+import retrofit2.Response
+import retrofit2.http.Body
 import retrofit2.http.GET
+import retrofit2.http.PUT
 import retrofit2.http.Path
 import retrofit2.http.Query
 
@@ -25,5 +29,12 @@ interface FinancialApi {
         @Query("startDate") startDate: String? = null,
         @Query("endDate") endDate: String? = null
     ): List<TransactionDto>
+
+    @PUT("accounts/{id}")
+    suspend fun updateAccount(
+        @Path("id") accountId: Int,
+        @Body update: UpdateAccountDto
+    ): Response<Unit>
+
 
 }

@@ -5,7 +5,7 @@ import com.example.financialapp.R
 /**
  * Sealed class representing navigation screens in the app.
  * Defines route, title and icon for each screen.
- * 
+ *
  * @param route Navigation route identifier
  * @param titleResId Resource ID for screen title
  * @param icon Resource ID for screen icon
@@ -56,4 +56,12 @@ sealed class Screen(
         titleResId = R.string.incomes_history_title,
         icon = R.drawable.history
     )
+
+    object EditAccount : Screen(
+        route = "edit_account/{accountId}",
+        titleResId = R.string.edit_account,
+        icon = R.drawable.edit
+    ) {
+        fun routeWithIdAccount(accountId: Int) = "edit_account/$accountId"
+    }
 }

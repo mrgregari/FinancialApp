@@ -27,7 +27,7 @@ import kotlinx.coroutines.launch
 
 abstract class BaseViewModel(
     private val networkState: NetworkState,
-    private val errorHandler: ErrorHandler
+    protected val errorHandler: ErrorHandler
 ): ViewModel() {
 
 
