@@ -36,6 +36,7 @@ import com.example.financialapp.ui.components.LoadingScreen
 import com.example.financialapp.ui.components.NetworkErrorBanner
 import com.example.financialapp.ui.navigation.Screen
 import com.example.financialapp.ui.utils.formatAmountWithCurrency
+import com.example.financialapp.ui.utils.getCurrencySymbol
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
@@ -119,7 +120,7 @@ private fun ExpensesContent(
                 subTitle = null,
                 trailingText = formatAmountWithCurrency(
                     expenses.sumOf { it.amount.toDouble() },
-                    currency = currency
+                    currency = getCurrencySymbol(currency)
                 ),
                 subTrailingText = null,
                 showArrow = false,

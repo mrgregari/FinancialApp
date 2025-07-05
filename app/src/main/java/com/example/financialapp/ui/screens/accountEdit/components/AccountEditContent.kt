@@ -14,6 +14,7 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.example.financialapp.ui.components.CustomListItem
+import com.example.financialapp.ui.utils.getCurrencySymbol
 
 @Composable
 fun AccountEditContent(
@@ -65,7 +66,7 @@ fun AccountEditContent(
         }
         CustomListItem(
             title = "Валюта",
-            trailingText = currency,
+            trailingText = getCurrencySymbol(currency),
             showArrow = true,
             onClick = onCurrencyClick
         )

@@ -18,6 +18,7 @@ import com.example.financialapp.domain.models.Income
 import com.example.financialapp.ui.components.*
 import com.example.financialapp.ui.navigation.Screen
 import com.example.financialapp.ui.utils.formatAmountWithCurrency
+import com.example.financialapp.ui.utils.getCurrencySymbol
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
@@ -97,7 +98,7 @@ private fun IncomesContent(
                 subTitle = null,
                 trailingText = formatAmountWithCurrency(
                     incomes.sumOf { it.amount.toDouble() },
-                    currency = currency
+                    currency = getCurrencySymbol(currency)
                 ),
                 subTrailingText = null,
                 showArrow = false,
