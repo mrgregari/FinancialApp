@@ -27,6 +27,9 @@ class IncomesViewModel @Inject constructor(
     private val _incomes = MutableStateFlow<List<Income>>(emptyList())
     val incomes: StateFlow<List<Income>> = _incomes.asStateFlow()
 
+    private val _currency = MutableStateFlow<String>("")
+    val currency: StateFlow<String> = _currency.asStateFlow()
+
     init {
         val calendar = Calendar.getInstance()
         calendar.set(Calendar.HOUR_OF_DAY, 0)
@@ -57,6 +60,7 @@ class IncomesViewModel @Inject constructor(
                         val account = accountsResult.data.firstOrNull()
                         val accountId = account?.id
                         if (accountId != null && accountId != 0) {
+                            _currency.value = account.currency
                             getIncomesUseCase(accountId, startDate, endDate)
                         } else {
                             NetworkResult.Error(Throwable("Нет доступного счёта"))

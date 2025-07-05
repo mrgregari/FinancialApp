@@ -82,12 +82,12 @@ fun CustomListItem(
             }
         } else null,
         headlineContent = {
-            Row (
+            Row(
                 modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween
             ) {
-                Column (
+                Column(
                 ) {
                     Text(
                         text = title,
@@ -103,7 +103,7 @@ fun CustomListItem(
                     }
                 }
 
-                Column (
+                Column(
                     horizontalAlignment = Alignment.End
                 ) {
                     if (trailingText != null) {
@@ -111,7 +111,7 @@ fun CustomListItem(
                             text = trailingText,
                             style = MaterialTheme.typography.bodyLarge,
                             color = MaterialTheme.colorScheme.onSurface,
-                            )
+                        )
                     }
                     if (subTrailingText != null) {
                         Text(
@@ -126,15 +126,14 @@ fun CustomListItem(
 
         },
         trailingContent = if (showArrow) {
-             {
+            {
                 Icon(
                     painter = arrowIcon,
                     contentDescription = "Arrow",
                     tint = Color.Unspecified,
                 )
             }
-        }
-        else null
+        } else null
 
     )
 }

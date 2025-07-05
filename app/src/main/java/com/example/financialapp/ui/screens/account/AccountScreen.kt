@@ -44,6 +44,7 @@ fun AccountScreen(
                     IconButton(onClick = {
                         val account = accounts.firstOrNull()
                         account?.let {
+                            navController.popBackStack(Screen.Account.route, inclusive = true)
                             navController.navigate(Screen.EditAccount.routeWithIdAccount(it.id))
                         }
                     }) {

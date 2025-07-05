@@ -30,6 +30,7 @@ fun IncomeScreen(
     val isLoading by viewModel.isLoading.collectAsState()
     val errorResId by viewModel.errorResId.collectAsState()
     val isNetworkAvailable by viewModel.isNetworkAvailable.collectAsState()
+    val currency by viewModel.currency.collectAsState()
 
     Scaffold(
         topBar = {
@@ -74,7 +75,8 @@ fun IncomeScreen(
                 else ->
                     IncomesContent(
                         incomes = incomes,
-                        modifier = Modifier.fillMaxSize()
+                        modifier = Modifier.fillMaxSize(),
+                        currency = currency
                     )
             }
         }
@@ -84,7 +86,8 @@ fun IncomeScreen(
 @Composable
 private fun IncomesContent(
     incomes: List<Income>,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    currency: String
 ) {
     LazyColumn(modifier = modifier) {
         stickyHeader {
@@ -94,7 +97,7 @@ private fun IncomesContent(
                 subTitle = null,
                 trailingText = formatAmountWithCurrency(
                     incomes.sumOf { it.amount.toDouble() },
-                    incomes.firstOrNull()?.currency ?: "RUB"
+                    currency = currency
                 ),
                 subTrailingText = null,
                 showArrow = false,

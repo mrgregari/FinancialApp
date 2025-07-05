@@ -32,6 +32,9 @@ class IncomesHistoryViewModel @Inject constructor(
     private val _endDate = MutableStateFlow<Date?>(null)
     val endDate: StateFlow<Date?> = _endDate.asStateFlow()
 
+    private val _currency = MutableStateFlow<String>("")
+    val currency: StateFlow<String> = _currency.asStateFlow()
+
     init {
         val calendar = Calendar.getInstance()
         _endDate.value = calendar.time
@@ -68,6 +71,7 @@ class IncomesHistoryViewModel @Inject constructor(
                         val account = accountsResult.data.firstOrNull()
                         val accountId = account?.id
                         if (accountId != null && accountId != 0) {
+                            _currency.value = account.currency
                             getIncomesUseCase(accountId, _startDate.value, _endDate.value)
                         } else {
                             NetworkResult.Error(Throwable("Нет доступного счёта"))
