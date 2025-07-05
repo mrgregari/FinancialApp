@@ -5,12 +5,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.height
 import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.material3.Text
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -18,25 +12,26 @@ import androidx.compose.material3.TextFieldDefaults
 import com.example.financialapp.R
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 
 @Composable
 fun SearchBar(
+    query: String,
+    onQueryChanged: (String) -> Unit,
     modifier: Modifier = Modifier,
     placeholder: String = stringResource(R.string.search_placeholder)
 ) {
-    var text by remember { mutableStateOf(TextFieldValue("")) }
-
     TextField(
-        value = text,
-        onValueChange = { text = it },
+        value = query,
+        onValueChange = onQueryChanged,
         modifier = modifier
             .fillMaxWidth()
             .height(56.dp),
-        placeholder = { 
+        placeholder = {
             Text(
                 text = placeholder
-            ) 
+            )
         },
         trailingIcon = {
             Icon(

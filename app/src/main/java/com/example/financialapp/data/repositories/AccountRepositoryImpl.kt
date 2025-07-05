@@ -3,6 +3,7 @@ package com.example.financialapp.data.repositories
 import com.example.financialapp.data.remote.remoteDataSource.AccountRemoteDataSource
 import com.example.financialapp.data.mappers.AccountMapper
 import com.example.financialapp.data.network.NetworkResult
+import com.example.financialapp.data.remote.dto.UpdateAccountDto
 import com.example.financialapp.domain.models.Account
 import com.example.financialapp.domain.repositories.AccountRepository
 import com.example.financialapp.di.IODispatcher
@@ -22,6 +23,25 @@ class AccountRepositoryImpl @Inject constructor(
                 val dtos = accountRemoteDataSource.getAccounts()
                 val accounts = dtos.map { mapper.fromDtoToAccount(it) }
                 NetworkResult.Success(accounts)
+            } catch (e: Exception) {
+                NetworkResult.Error(e)
+            }
+        }
+    }
+
+    override suspend fun updateAccount(
+        id: Int,
+        name: String,
+        balance: String,
+        currency: String
+    ): NetworkResult<Unit> {
+        return withContext(ioDispatcher) {
+            try {
+                accountRemoteDataSource.updateAccount(
+                    id,
+                    UpdateAccountDto(name, balance, currency)
+                )
+                NetworkResult.Success(Unit)
             } catch (e: Exception) {
                 NetworkResult.Error(e)
             }

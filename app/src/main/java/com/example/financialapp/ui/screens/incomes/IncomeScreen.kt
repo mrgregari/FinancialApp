@@ -18,6 +18,7 @@ import com.example.financialapp.domain.models.Income
 import com.example.financialapp.ui.components.*
 import com.example.financialapp.ui.navigation.Screen
 import com.example.financialapp.ui.utils.formatAmountWithCurrency
+import com.example.financialapp.ui.utils.getCurrencySymbol
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
@@ -30,6 +31,7 @@ fun IncomeScreen(
     val isLoading by viewModel.isLoading.collectAsState()
     val errorResId by viewModel.errorResId.collectAsState()
     val isNetworkAvailable by viewModel.isNetworkAvailable.collectAsState()
+    val currency by viewModel.currency.collectAsState()
 
     Scaffold(
         topBar = {
@@ -74,7 +76,8 @@ fun IncomeScreen(
                 else ->
                     IncomesContent(
                         incomes = incomes,
-                        modifier = Modifier.fillMaxSize()
+                        modifier = Modifier.fillMaxSize(),
+                        currency = currency
                     )
             }
         }
@@ -84,7 +87,8 @@ fun IncomeScreen(
 @Composable
 private fun IncomesContent(
     incomes: List<Income>,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    currency: String
 ) {
     LazyColumn(modifier = modifier) {
         stickyHeader {
@@ -94,7 +98,7 @@ private fun IncomesContent(
                 subTitle = null,
                 trailingText = formatAmountWithCurrency(
                     incomes.sumOf { it.amount.toDouble() },
-                    incomes.firstOrNull()?.currency ?: "RUB"
+                    currency = getCurrencySymbol(currency)
                 ),
                 subTrailingText = null,
                 showArrow = false,

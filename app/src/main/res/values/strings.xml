@@ -26,11 +26,13 @@
     <string name="balance">Баланс</string>
     <string name="currency">Валюта</string>
     <string name="no_account">Нет доступного счёта</string>
+    <string name="account_not_found">Аккаунт не найден</string>
     <string name="expenses_today">Расходы сегодня</string>
     <string name="total">Всего</string>
     <string name="categories_title">Мои статьи</string>
     <string name="expenses_history_title">Моя история</string>
     <string name="incomes_history_title">История доходов</string>
+    <string name="edit_account">Изменить аккаунт</string>
     <string name="start">Начало</string>
     <string name="end">Конец</string>
     <string name="choose_date">Выберите дату</string>
@@ -45,4 +47,5 @@
     <string name="accounts">Счета</string>
     <string name="categories">Статьи</string>
     <string name="settings">Настройки</string>
+    <string name="account_name">Название счета</string>
 </resources>

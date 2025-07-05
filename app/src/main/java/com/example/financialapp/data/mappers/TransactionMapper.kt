@@ -1,6 +1,6 @@
 package com.example.financialapp.data.mappers
 
-import com.example.financialapp.data.dto.TransactionDto
+import com.example.financialapp.data.remote.dto.TransactionDto
 import com.example.financialapp.domain.models.Expense
 import com.example.financialapp.domain.models.Income
 import com.example.financialapp.ui.utils.getCurrencySymbol

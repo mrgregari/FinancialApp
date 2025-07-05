@@ -10,15 +10,19 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import com.example.financialapp.R
+import com.example.financialapp.domain.models.Account
 import com.example.financialapp.ui.components.*
+import com.example.financialapp.ui.navigation.Screen
 import com.example.financialapp.ui.utils.formatNumber
 import com.example.financialapp.ui.utils.getCurrencySymbol
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AccountScreen(
-    viewModelFactory: ViewModelProvider.Factory
+    viewModelFactory: ViewModelProvider.Factory,
+    navController: NavController
 ) {
 
     val viewModel: AccountViewModel = viewModel(factory = viewModelFactory)
@@ -37,7 +41,13 @@ fun AccountScreen(
                     titleContentColor = MaterialTheme.colorScheme.onSurface
                 ),
                 actions = {
-                    IconButton(onClick = { }) {
+                    IconButton(onClick = {
+                        val account = accounts.firstOrNull()
+                        account?.let {
+                            navController.popBackStack(Screen.Account.route, inclusive = true)
+                            navController.navigate(Screen.EditAccount.routeWithIdAccount(it.id))
+                        }
+                    }) {
                         Icon(
                             painter = painterResource(R.drawable.edit),
                             contentDescription = "Edit",
@@ -63,6 +73,7 @@ fun AccountScreen(
                     error = stringResource(errorResId!!),
                     onRetry = { viewModel.retry() }
                 )
+
                 else -> AccountContent(
                     accounts = accounts,
                     modifier = Modifier.fillMaxSize()
@@ -74,13 +85,20 @@ fun AccountScreen(
 
 @Composable
 private fun AccountContent(
-    accounts: List<com.example.financialapp.domain.models.Account>,
+    accounts: List<Account>,
     modifier: Modifier = Modifier
 ) {
     val account = accounts.firstOrNull()
-    
+
     if (account != null) {
         Column(modifier = modifier) {
+            CustomListItem(
+                modifier = Modifier.height(56.dp),
+                title = stringResource(R.string.account_name),
+                trailingText = account.name,
+                containerColor = MaterialTheme.colorScheme.secondary,
+            )
+            HorizontalDivider()
             CustomListItem(
                 modifier = Modifier.height(56.dp),
                 emoji = "\uD83D\uDCB0",
@@ -88,7 +106,6 @@ private fun AccountContent(
                 title = stringResource(R.string.balance),
                 trailingText = "${formatNumber(account.balance)} ${getCurrencySymbol(account.currency)}",
                 containerColor = MaterialTheme.colorScheme.secondary,
-                showArrow = true
             )
             HorizontalDivider()
             CustomListItem(
@@ -96,7 +113,6 @@ private fun AccountContent(
                 title = stringResource(R.string.currency),
                 trailingText = getCurrencySymbol(account.currency),
                 containerColor = MaterialTheme.colorScheme.secondary,
-                showArrow = true
             )
         }
     } else {

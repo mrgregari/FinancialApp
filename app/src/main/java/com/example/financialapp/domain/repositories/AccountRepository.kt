@@ -10,8 +10,15 @@ import com.example.financialapp.domain.models.Account
 interface AccountRepository {
     /**
      * Retrieves all user accounts.
-     * 
+     *
      * @return List of accounts wrapped in NetworkResult
      */
     suspend fun getAccounts(): NetworkResult<List<Account>>
+
+    suspend fun updateAccount(
+        id: Int,
+        name: String,
+        balance: String,
+        currency: String
+    ): NetworkResult<Unit>
 }

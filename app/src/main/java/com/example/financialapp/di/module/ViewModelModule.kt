@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.financialapp.di.ViewModelFactory
 import com.example.financialapp.di.ViewModelKey
 import com.example.financialapp.ui.screens.account.AccountViewModel
+import com.example.financialapp.ui.screens.accountEdit.AccountEditViewModel
 import com.example.financialapp.ui.screens.categories.CategoriesViewModel
 import com.example.financialapp.ui.screens.expenses.ExpensesViewModel
 import com.example.financialapp.ui.screens.expensesHistory.ExpensesHistoryViewModel
@@ -19,6 +20,11 @@ interface ViewModelModule {
 
     @Binds
     fun bindViewModelFactory(factory: ViewModelFactory): ViewModelProvider.Factory
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(AccountEditViewModel::class)
+    fun bindEditAccountViewModel(viewModel: AccountEditViewModel) : ViewModel
 
     @Binds
     @IntoMap

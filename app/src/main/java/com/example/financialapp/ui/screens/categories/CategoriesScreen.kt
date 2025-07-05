@@ -21,10 +21,11 @@ fun CategoriesScreen(
     viewModelFactory: ViewModelProvider.Factory
 ) {
     val viewModel: CategoriesViewModel = viewModel(factory = viewModelFactory)
-    val categories by viewModel.categories.collectAsState()
     val isLoading by viewModel.isLoading.collectAsState()
     val errorResId by viewModel.errorResId.collectAsState()
     val isNetworkAvailable by viewModel.isNetworkAvailable.collectAsState()
+    val searchText by viewModel.searchText.collectAsState()
+    val filteredCategories by viewModel.filteredCategories.collectAsState()
 
     Scaffold(
         topBar = {
@@ -55,8 +56,10 @@ fun CategoriesScreen(
                     )
 
                 else -> CategoriesContent(
-                    categories = categories,
-                    modifier = Modifier.fillMaxSize()
+                    categories = filteredCategories,
+                    modifier = Modifier.fillMaxSize(),
+                    searchText = searchText,
+                    onSearchTextChanged = { viewModel.onSearchTextChange(it) }
                 )
             }
         }
@@ -66,11 +69,16 @@ fun CategoriesScreen(
 @Composable
 private fun CategoriesContent(
     categories: List<Category>,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    searchText: String,
+    onSearchTextChanged: (String) -> Unit
 ) {
     LazyColumn(modifier = modifier) {
         stickyHeader {
-            SearchBar()
+            SearchBar(
+                query = searchText,
+                onQueryChanged = onSearchTextChanged
+            )
             HorizontalDivider()
         }
 
