@@ -4,7 +4,9 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -65,6 +67,7 @@ fun AccountEditContent(
             )
         }
         CustomListItem(
+            modifier = Modifier.height(71.dp),
             title = "Валюта",
             trailingText = getCurrencySymbol(currency),
             showArrow = true,
@@ -78,5 +81,6 @@ fun AccountEditContent(
                 modifier = Modifier.padding(start = 16.dp, top = 4.dp)
             )
         }
+        HorizontalDivider()
     }
 }

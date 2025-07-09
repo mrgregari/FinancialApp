@@ -3,7 +3,6 @@ package com.example.financialapp.ui.screens.expensesHistory
 import com.example.financialapp.data.network.ErrorHandler
 import com.example.financialapp.data.network.NetworkResult
 import com.example.financialapp.data.network.NetworkState
-import com.example.financialapp.domain.models.Expense
 import com.example.financialapp.domain.usecases.GetAccountUseCase
 import com.example.financialapp.domain.usecases.GetExpensesUseCase
 import com.example.financialapp.ui.base.BaseViewModel
@@ -22,9 +21,6 @@ class ExpensesHistoryViewModel @Inject constructor(
 ) : BaseViewModel(networkState, errorHandler) {
 
 
-    private val _expenses = MutableStateFlow<List<Expense>>(emptyList())
-    val expenses: StateFlow<List<Expense>> = _expenses.asStateFlow()
-
     private val _startDate = MutableStateFlow<Date?>(null)
     val startDate: StateFlow<Date?> = _startDate.asStateFlow()
 
@@ -33,6 +29,9 @@ class ExpensesHistoryViewModel @Inject constructor(
 
     private val _currency = MutableStateFlow<String>("")
     val currency: StateFlow<String> = _currency.asStateFlow()
+
+    private val _uiState = MutableStateFlow<ExpensesHistoryUiState>(ExpensesHistoryUiState.Loading)
+    val uiState: StateFlow<ExpensesHistoryUiState> = _uiState.asStateFlow()
 
     init {
         val calendar = Calendar.getInstance()
@@ -62,6 +61,7 @@ class ExpensesHistoryViewModel @Inject constructor(
     }
 
     private fun loadExpensesWithFilter() {
+        _uiState.value = ExpensesHistoryUiState.Loading
         safeApiCall(
             apiCall = {
                 val accountsResult = getAccountUseCase.invoke()
@@ -82,7 +82,15 @@ class ExpensesHistoryViewModel @Inject constructor(
                 }
             },
             onSuccess = { expenses ->
-                _expenses.value = expenses
+                _uiState.value = ExpensesHistoryUiState.Success(
+                    expenses = expenses,
+                    startDate = _startDate.value,
+                    endDate = _endDate.value,
+                    currency = _currency.value
+                )
+            },
+            onError = { errorResId ->
+                _uiState.value = ExpensesHistoryUiState.Error(errorResId)
             }
         )
     }

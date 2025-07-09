@@ -1,24 +1,32 @@
 package com.example.financialapp.ui.screens.incomes
 
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.CenterAlignedTopAppBar
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import com.example.financialapp.R
-import com.example.financialapp.domain.models.Income
-import com.example.financialapp.ui.components.*
+import com.example.financialapp.ui.components.CustomFab
+import com.example.financialapp.ui.components.ErrorScreen
+import com.example.financialapp.ui.components.LoadingScreen
+import com.example.financialapp.ui.components.NetworkErrorBanner
 import com.example.financialapp.ui.navigation.Screen
-import com.example.financialapp.ui.utils.formatAmountWithCurrency
-import com.example.financialapp.ui.utils.getCurrencySymbol
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
@@ -27,11 +35,8 @@ fun IncomeScreen(
     navController: NavController
 ) {
     val viewModel: IncomesViewModel = viewModel(factory = viewModelFactory)
-    val incomes by viewModel.incomes.collectAsState()
-    val isLoading by viewModel.isLoading.collectAsState()
-    val errorResId by viewModel.errorResId.collectAsState()
     val isNetworkAvailable by viewModel.isNetworkAvailable.collectAsState()
-    val currency by viewModel.currency.collectAsState()
+    val uiState by viewModel.uiState.collectAsState()
 
     Scaffold(
         topBar = {
@@ -65,59 +70,24 @@ fun IncomeScreen(
                 isVisible = !isNetworkAvailable
             )
 
-            when {
-                isLoading -> LoadingScreen()
-                errorResId != null ->
+            when (uiState) {
+                is IncomesUiState.Loading -> LoadingScreen()
+                is IncomesUiState.Error -> {
+                    val errorResId = (uiState as IncomesUiState.Error).errorResId
                     ErrorScreen(
-                        error = stringResource(errorResId!!),
+                        error = stringResource(errorResId),
                         onRetry = { viewModel.retry() }
                     )
-
-                else ->
+                }
+                is IncomesUiState.Success -> {
+                    val state = uiState as IncomesUiState.Success
                     IncomesContent(
-                        incomes = incomes,
+                        incomes = state.incomes,
                         modifier = Modifier.fillMaxSize(),
-                        currency = currency
+                        currency = state.currency
                     )
+                }
             }
-        }
-    }
-}
-
-@Composable
-private fun IncomesContent(
-    incomes: List<Income>,
-    modifier: Modifier = Modifier,
-    currency: String
-) {
-    LazyColumn(modifier = modifier) {
-        stickyHeader {
-            CustomListItem(
-                modifier = Modifier.height(56.dp),
-                title = stringResource(R.string.total),
-                subTitle = null,
-                trailingText = formatAmountWithCurrency(
-                    incomes.sumOf { it.amount.toDouble() },
-                    currency = getCurrencySymbol(currency)
-                ),
-                subTrailingText = null,
-                showArrow = false,
-                containerColor = MaterialTheme.colorScheme.secondary
-            )
-            HorizontalDivider()
-        }
-
-        items(incomes) { income ->
-            CustomListItem(
-                modifier = Modifier.height(70.dp),
-                title = income.title,
-                emoji = income.icon,
-                subTitle = income.comment,
-                trailingText = formatAmountWithCurrency(income.amount.toDouble(), income.currency),
-                subTrailingText = null,
-                showArrow = true,
-            )
-            HorizontalDivider()
         }
     }
 }

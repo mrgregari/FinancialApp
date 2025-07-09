@@ -1,9 +1,8 @@
 package com.example.financialapp.ui.screens.incomes
 
-import androidx.lifecycle.viewModelScope
+import com.example.financialapp.data.network.ErrorHandler
 import com.example.financialapp.data.network.NetworkResult
 import com.example.financialapp.data.network.NetworkState
-import com.example.financialapp.data.network.ErrorHandler
 import com.example.financialapp.domain.models.Income
 import com.example.financialapp.domain.usecases.GetAccountUseCase
 import com.example.financialapp.domain.usecases.GetIncomesUseCase
@@ -23,6 +22,9 @@ class IncomesViewModel @Inject constructor(
     errorHandler: ErrorHandler
 ) : BaseViewModel(networkState, errorHandler) {
 
+
+    private val _uiState = MutableStateFlow<IncomesUiState>(IncomesUiState.Loading)
+    val uiState: StateFlow<IncomesUiState> = _uiState.asStateFlow()
 
     private val _incomes = MutableStateFlow<List<Income>>(emptyList())
     val incomes: StateFlow<List<Income>> = _incomes.asStateFlow()
@@ -52,6 +54,7 @@ class IncomesViewModel @Inject constructor(
     }
 
     private fun loadIncomes(startDate: Date? = null, endDate: Date? = null) {
+        _uiState.value = IncomesUiState.Loading
         safeApiCall(
             apiCall = {
                 val accountsResult = getAccountUseCase.invoke()
@@ -72,6 +75,13 @@ class IncomesViewModel @Inject constructor(
             },
             onSuccess = { incomes ->
                 _incomes.value = incomes
+                _uiState.value = IncomesUiState.Success(
+                    incomes = incomes,
+                    currency = _currency.value
+                )
+            },
+            onError = { errorResId ->
+                _uiState.value = IncomesUiState.Error(errorResId)
             }
         )
     }

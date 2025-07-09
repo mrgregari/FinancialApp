@@ -148,6 +148,7 @@ fun AccountEditScreen(
 
                 is AccountEditUiState.Updated -> {
                     navController.navigate(Screen.Account.route) {
+                        popUpTo(Screen.EditAccount.route) { inclusive = true }
                         launchSingleTop = true
                     }
                 }

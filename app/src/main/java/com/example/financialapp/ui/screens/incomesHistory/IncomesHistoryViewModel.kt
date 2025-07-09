@@ -3,7 +3,6 @@ package com.example.financialapp.ui.screens.incomesHistory
 import com.example.financialapp.data.network.ErrorHandler
 import com.example.financialapp.data.network.NetworkResult
 import com.example.financialapp.data.network.NetworkState
-import com.example.financialapp.domain.models.Income
 import com.example.financialapp.domain.usecases.GetAccountUseCase
 import com.example.financialapp.domain.usecases.GetIncomesUseCase
 import com.example.financialapp.ui.base.BaseViewModel
@@ -23,8 +22,8 @@ class IncomesHistoryViewModel @Inject constructor(
 ) : BaseViewModel(networkState, errorHandler) {
 
 
-    private val _incomes = MutableStateFlow<List<Income>>(emptyList())
-    val incomes: StateFlow<List<Income>> = _incomes.asStateFlow()
+    private val _uiState = MutableStateFlow<IncomesHistoryUiState>(IncomesHistoryUiState.Loading)
+    val uiState: StateFlow<IncomesHistoryUiState> = _uiState.asStateFlow()
 
     private val _startDate = MutableStateFlow<Date?>(null)
     val startDate: StateFlow<Date?> = _startDate.asStateFlow()
@@ -63,6 +62,7 @@ class IncomesHistoryViewModel @Inject constructor(
     }
 
     private fun loadIncomesWithFilter() {
+        _uiState.value = IncomesHistoryUiState.Loading
         safeApiCall(
             apiCall = {
                 val accountsResult = getAccountUseCase.invoke()
@@ -82,7 +82,15 @@ class IncomesHistoryViewModel @Inject constructor(
                 }
             },
             onSuccess = { incomes ->
-                _incomes.value = incomes
+                _uiState.value = IncomesHistoryUiState.Success(
+                    incomes = incomes,
+                    startDate = _startDate.value,
+                    endDate = _endDate.value,
+                    currency = _currency.value
+                )
+            },
+            onError = { errorResId ->
+                _uiState.value = IncomesHistoryUiState.Error(errorResId)
             }
         )
     }

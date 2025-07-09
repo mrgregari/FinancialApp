@@ -1,19 +1,26 @@
 package com.example.financialapp.ui.screens.categories
 
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.*
-import androidx.compose.runtime.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.CenterAlignedTopAppBar
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.financialapp.R
-import com.example.financialapp.domain.models.Category
-import com.example.financialapp.ui.components.*
+import com.example.financialapp.ui.components.ErrorScreen
+import com.example.financialapp.ui.components.LoadingScreen
+import com.example.financialapp.ui.components.NetworkErrorBanner
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
@@ -21,11 +28,8 @@ fun CategoriesScreen(
     viewModelFactory: ViewModelProvider.Factory
 ) {
     val viewModel: CategoriesViewModel = viewModel(factory = viewModelFactory)
-    val isLoading by viewModel.isLoading.collectAsState()
-    val errorResId by viewModel.errorResId.collectAsState()
     val isNetworkAvailable by viewModel.isNetworkAvailable.collectAsState()
-    val searchText by viewModel.searchText.collectAsState()
-    val filteredCategories by viewModel.filteredCategories.collectAsState()
+    val uiState by viewModel.uiState.collectAsState()
 
     Scaffold(
         topBar = {
@@ -47,52 +51,30 @@ fun CategoriesScreen(
                 isVisible = !isNetworkAvailable
             )
 
-            when {
-                isLoading -> LoadingScreen()
-                errorResId != null ->
+            when (uiState) {
+                is CategoriesUiState.Loading -> LoadingScreen()
+                is CategoriesUiState.Error -> {
+                    val errorResId = (uiState as CategoriesUiState.Error).errorResId
                     ErrorScreen(
-                        error = stringResource(errorResId!!),
-                        onRetry = { viewModel.retry() }
+                        error = stringResource(errorResId),
+                        onRetry = { viewModel.loadCategories() }
                     )
-
-                else -> CategoriesContent(
-                    categories = filteredCategories,
-                    modifier = Modifier.fillMaxSize(),
-                    searchText = searchText,
-                    onSearchTextChanged = { viewModel.onSearchTextChange(it) }
-                )
+                }
+                is CategoriesUiState.Success -> {
+                    val categories = (uiState as CategoriesUiState.Success).categories
+                    val searchText = (uiState as CategoriesUiState.Success).searchText
+                    CategoriesContent(
+                        categories = categories,
+                        modifier = Modifier.fillMaxSize(),
+                        searchText = searchText,
+                        onSearchTextChanged = { viewModel.onSearchTextChange(it) }
+                    )
+                }
             }
+
         }
     }
 }
 
-@Composable
-private fun CategoriesContent(
-    categories: List<Category>,
-    modifier: Modifier = Modifier,
-    searchText: String,
-    onSearchTextChanged: (String) -> Unit
-) {
-    LazyColumn(modifier = modifier) {
-        stickyHeader {
-            SearchBar(
-                query = searchText,
-                onQueryChanged = onSearchTextChanged
-            )
-            HorizontalDivider()
-        }
 
-        items(
-            items = categories,
-            key = { it.id }
-        ) { category ->
-            CustomListItem(
-                modifier = Modifier.height(70.dp),
-                emoji = category.icon,
-                title = category.name
-            )
-            HorizontalDivider()
-        }
-    }
-}
 

@@ -3,12 +3,10 @@ package com.example.financialapp.ui.screens.expenses
 import com.example.financialapp.data.network.ErrorHandler
 import com.example.financialapp.data.network.NetworkResult
 import com.example.financialapp.data.network.NetworkState
-import com.example.financialapp.domain.models.Expense
 import com.example.financialapp.domain.usecases.GetAccountUseCase
 import com.example.financialapp.domain.usecases.GetExpensesUseCase
 import com.example.financialapp.ui.base.BaseViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import java.util.Calendar
 import java.util.Date
@@ -33,11 +31,10 @@ class ExpensesViewModel @Inject constructor(
         loadExpenses(startDate = startDate)
     }
 
-    private val _expenses = MutableStateFlow<List<Expense>>(emptyList())
-    val expenses: StateFlow<List<Expense>> = _expenses.asStateFlow()
+    private val _uiState = MutableStateFlow<ExpensesUiState>(ExpensesUiState.Loading)
+    val uiState = _uiState.asStateFlow()
 
     private val _currency = MutableStateFlow<String>("")
-    val currency: StateFlow<String> = _currency.asStateFlow()
 
 
     fun retry() {
@@ -71,7 +68,10 @@ class ExpensesViewModel @Inject constructor(
                 }
             },
             onSuccess = { expenses ->
-                _expenses.value = expenses
+                _uiState.value = ExpensesUiState.Success(expenses, _currency.value)
+            },
+            onError = { errorResId ->
+                _uiState.value = ExpensesUiState.Error(errorResId)
             }
         )
     }
