@@ -19,7 +19,7 @@ import javax.inject.Singleton
  *
  */
 
-@Singleton
+
 class NetworkState @Inject constructor(
     private val context: Context
 ) {

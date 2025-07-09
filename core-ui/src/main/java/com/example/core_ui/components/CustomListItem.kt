@@ -23,10 +23,8 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.example.financialapp.R
-import com.example.financialapp.ui.theme.FinancialAppTheme
+import com.example.core_ui.R
 
 
 @Composable
@@ -136,21 +134,4 @@ fun CustomListItem(
         } else null
 
     )
-}
-
-@Preview
-@Composable
-fun CustomListItemPreview() {
-    FinancialAppTheme(dynamicColor = false) {
-        CustomListItem(
-            Modifier,
-            emoji = "\uD83C\uDFE0",
-            title = "Ремонт квартиры",
-            subTitle = "Ремонт - фурнитура для дверей",
-            trailingText = "100 000$",
-            subTrailingText = "80%",
-            showArrow = true
-        )
-    }
-
 }

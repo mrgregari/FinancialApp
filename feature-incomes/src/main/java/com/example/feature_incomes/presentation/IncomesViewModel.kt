@@ -26,11 +26,8 @@ class IncomesViewModel @Inject constructor(
     private val _uiState = MutableStateFlow<IncomesUiState>(IncomesUiState.Loading)
     val uiState: StateFlow<IncomesUiState> = _uiState.asStateFlow()
 
-    private val _incomes = MutableStateFlow<List<Income>>(emptyList())
-    val incomes: StateFlow<List<Income>> = _incomes.asStateFlow()
 
     private val _currency = MutableStateFlow<String>("")
-    val currency: StateFlow<String> = _currency.asStateFlow()
 
     init {
         val calendar = Calendar.getInstance()
@@ -74,7 +71,6 @@ class IncomesViewModel @Inject constructor(
                 }
             },
             onSuccess = { incomes ->
-                _incomes.value = incomes
                 _uiState.value = IncomesUiState.Success(
                     incomes = incomes,
                     currency = _currency.value

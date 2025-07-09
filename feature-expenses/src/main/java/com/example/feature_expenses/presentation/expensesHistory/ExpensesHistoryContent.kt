@@ -1,5 +1,6 @@
 package com.example.financialapp.ui.screens.expensesHistory
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
@@ -12,14 +13,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import com.example.core_data.domain.models.Expense
-import com.example.financialapp.R
-import com.example.financialapp.ui.components.CustomDatePickerDialog
-import com.example.financialapp.ui.components.CustomListItem
-import com.example.financialapp.ui.utils.formatAmountWithCurrency
-import com.example.financialapp.ui.utils.formatDate
-import com.example.financialapp.ui.utils.formatDateTime
-import com.example.financialapp.ui.utils.getCurrencySymbol
+import com.example.core_ui.R
+import com.example.core_ui.components.CustomDatePickerDialog
+import com.example.core_ui.components.CustomListItem
+import com.example.core_ui.utils.formatAmountWithCurrency
+import com.example.core_ui.utils.formatDate
+import com.example.core_ui.utils.formatDateTime
+import com.example.core_ui.utils.getCurrencySymbol
 
+
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun ExpensesHistoryContent(
     expenses: List<Expense>,

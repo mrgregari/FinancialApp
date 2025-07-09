@@ -1,10 +1,9 @@
 package com.example.financialapp
 
 import android.app.Application
-import com.example.financialapp.di.ApplicationComponent
-import com.example.financialapp.di.DaggerApplicationComponent
-import com.example.core_data.di.DataComponent
 import com.example.core_data.di.DaggerDataComponent
+import com.example.financialapp.di.ApplicationComponent
+import com.example.core_data.di.DataComponent
 
 /**
  * Main application class.
@@ -12,12 +11,12 @@ import com.example.core_data.di.DaggerDataComponent
  */
 class FinanceApp : Application() {
 
-    lateinit var appComponent: ApplicationComponent
     lateinit var dataComponent: DataComponent
+    lateinit var appComponent: ApplicationComponent
 
     override fun onCreate() {
         super.onCreate()
-        appComponent = DaggerApplicationComponent.factory().create(this)
-        dataComponent = DaggerDataComponent.factory().create(appComponent)
+        appComponent =  DaggerApplicationComponent.factory().create(this)
+        dataComponent = DaggerDataComponent.factory().create(this)
     }
 }

@@ -23,11 +23,11 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
-import androidx.navigation.NavController
-import com.example.financialapp.R
-import com.example.financialapp.ui.components.ErrorScreen
-import com.example.financialapp.ui.components.LoadingScreen
-import com.example.financialapp.ui.components.NetworkErrorBanner
+import com.example.core_ui.R
+import com.example.core_ui.components.ErrorScreen
+import com.example.core_ui.components.LoadingScreen
+import com.example.core_ui.components.NetworkErrorBanner
+
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable

@@ -1,3 +1,5 @@
+import java.util.Properties
+
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
@@ -8,11 +10,14 @@ android {
     namespace = "com.example.core_data"
     compileSdk = 35
 
+    val properties = Properties()
+    properties.load(project.rootProject.file("local.properties").reader())
+
     defaultConfig {
         minSdk = 26
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        consumerProguardFiles("consumer-rules.pro")
+        resValue("string", "api_token", properties.getProperty("api_token") ?: "")
     }
 
     buildTypes {

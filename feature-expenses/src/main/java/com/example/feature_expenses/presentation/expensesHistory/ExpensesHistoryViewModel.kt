@@ -1,4 +1,4 @@
-package com.example.financialapp.ui.screens.expensesHistory
+package com.example.feature_expenses.presentation.expensesHistory
 
 import com.example.core_data.network.ErrorHandler
 import com.example.core_data.network.NetworkResult

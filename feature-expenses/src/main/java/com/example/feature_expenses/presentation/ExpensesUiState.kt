@@ -1,4 +1,4 @@
-package com.example.financialapp.ui.screens.expenses
+package com.example.feature_expenses.presentation
 
 import com.example.core_data.domain.models.Expense
 
