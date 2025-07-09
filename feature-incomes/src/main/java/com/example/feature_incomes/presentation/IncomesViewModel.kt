@@ -1,0 +1,88 @@
+package com.example.feature_incomes.presentation
+
+import com.example.core_data.domain.models.Income
+import com.example.core_data.network.ErrorHandler
+import com.example.core_data.network.NetworkResult
+import com.example.core_data.network.NetworkState
+import com.example.core_data.usecases.GetAccountUseCase
+import com.example.core_ui.base.BaseViewModel
+import com.example.financialapp.domain.usecases.GetIncomesUseCase
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import java.util.Calendar
+import java.util.Date
+import javax.inject.Inject
+
+
+class IncomesViewModel @Inject constructor(
+    private val getAccountUseCase: GetAccountUseCase,
+    private val getIncomesUseCase: GetIncomesUseCase,
+    networkState: NetworkState,
+    errorHandler: ErrorHandler
+) : BaseViewModel(networkState, errorHandler) {
+
+
+    private val _uiState = MutableStateFlow<IncomesUiState>(IncomesUiState.Loading)
+    val uiState: StateFlow<IncomesUiState> = _uiState.asStateFlow()
+
+    private val _incomes = MutableStateFlow<List<Income>>(emptyList())
+    val incomes: StateFlow<List<Income>> = _incomes.asStateFlow()
+
+    private val _currency = MutableStateFlow<String>("")
+    val currency: StateFlow<String> = _currency.asStateFlow()
+
+    init {
+        val calendar = Calendar.getInstance()
+        calendar.set(Calendar.HOUR_OF_DAY, 0)
+        calendar.set(Calendar.MINUTE, 0)
+        calendar.set(Calendar.SECOND, 0)
+        calendar.set(Calendar.MILLISECOND, 0)
+        val startDate = calendar.time
+        loadIncomes(startDate = startDate)
+        initializeNetworkState()
+    }
+
+    fun retry() {
+        val calendar = Calendar.getInstance()
+        calendar.set(Calendar.HOUR_OF_DAY, 0)
+        calendar.set(Calendar.MINUTE, 0)
+        calendar.set(Calendar.SECOND, 0)
+        calendar.set(Calendar.MILLISECOND, 0)
+        val startDate = calendar.time
+        loadIncomes(startDate = startDate)
+    }
+
+    private fun loadIncomes(startDate: Date? = null, endDate: Date? = null) {
+        _uiState.value = IncomesUiState.Loading
+        safeApiCall(
+            apiCall = {
+                val accountsResult = getAccountUseCase.invoke()
+                when (accountsResult) {
+                    is NetworkResult.Success -> {
+                        val account = accountsResult.data.firstOrNull()
+                        val accountId = account?.id
+                        if (accountId != null && accountId != 0) {
+                            _currency.value = account.currency
+                            getIncomesUseCase(accountId, startDate, endDate)
+                        } else {
+                            NetworkResult.Error(Throwable("Нет доступного счёта"))
+                        }
+                    }
+                    is NetworkResult.Error -> accountsResult
+                    is NetworkResult.Loading -> NetworkResult.Loading
+                }
+            },
+            onSuccess = { incomes ->
+                _incomes.value = incomes
+                _uiState.value = IncomesUiState.Success(
+                    incomes = incomes,
+                    currency = _currency.value
+                )
+            },
+            onError = { errorResId ->
+                _uiState.value = IncomesUiState.Error(errorResId)
+            }
+        )
+    }
+}

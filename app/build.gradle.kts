@@ -80,4 +80,12 @@ dependencies {
 
     implementation("com.google.dagger:dagger:2.56.2")
     kapt("com.google.dagger:dagger-compiler:2.56.2")
+
+    implementation(project(":core-data"))
+    implementation(project(":core-ui"))
+    implementation(project(":feature-account"))
+    implementation(project(":feature-expenses"))
+    implementation(project(":feature-incomes"))
+    implementation(project(":feature-categories"))
+    implementation(project(":feature-settings"))
 }

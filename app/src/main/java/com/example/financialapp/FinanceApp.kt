@@ -3,6 +3,8 @@ package com.example.financialapp
 import android.app.Application
 import com.example.financialapp.di.ApplicationComponent
 import com.example.financialapp.di.DaggerApplicationComponent
+import com.example.core_data.di.DataComponent
+import com.example.core_data.di.DaggerDataComponent
 
 /**
  * Main application class.
@@ -10,11 +12,12 @@ import com.example.financialapp.di.DaggerApplicationComponent
  */
 class FinanceApp : Application() {
 
-    lateinit var component: ApplicationComponent
+    lateinit var appComponent: ApplicationComponent
+    lateinit var dataComponent: DataComponent
 
     override fun onCreate() {
         super.onCreate()
-        component =  DaggerApplicationComponent.factory().create(this)
+        appComponent = DaggerApplicationComponent.factory().create(this)
+        dataComponent = DaggerDataComponent.factory().create(appComponent)
     }
-
 }

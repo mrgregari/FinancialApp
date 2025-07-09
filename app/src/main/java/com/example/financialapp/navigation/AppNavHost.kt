@@ -1,0 +1,90 @@
+package com.example.financialapp.navigation
+
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.NavHostController
+import androidx.navigation.NavType
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.navArgument
+import com.example.feature_account.presentation.AccountScreen
+import com.example.feature_account.presentation.accountEdit.AccountEditScreen
+import com.example.feature_categories.presentation.CategoriesScreen
+import com.example.feature_incomes.presentation.IncomeScreen
+import com.example.feature_incomes.presentation.incomesHistory.IncomesHistoryScreen
+import com.example.feature_settings.presentation.SettingsScreen
+import com.example.financialapp.ui.screens.expenses.ExpensesScreen
+import com.example.financialapp.ui.screens.expensesHistory.ExpensesHistoryScreen
+
+@Composable
+fun AppNavHost(
+    viewModelFactory: ViewModelProvider.Factory,
+    navController: NavHostController,
+    modifier: Modifier = Modifier
+) {
+    NavHost(
+        navController = navController,
+        startDestination = Screen.Expenses.route,
+        modifier = modifier
+    ) {
+        composable(Screen.Expenses.route) {
+            ExpensesScreen(
+                viewModelFactory = viewModelFactory,
+                onHistoryClick = {
+                    navController.navigate(Screen.ExpensesHistory.route)
+                }
+            )
+        }
+        composable(Screen.ExpensesHistory.route) {
+            ExpensesHistoryScreen(
+                viewModelFactory = viewModelFactory,
+                onNavigateUp = { navController.navigateUp() }
+            )
+        }
+        composable(Screen.IncomesHistory.route) {
+            IncomesHistoryScreen(
+                viewModelFactory = viewModelFactory,
+                onNavigateUp = { navController.navigateUp() }
+            )
+        }
+        composable(Screen.Income.route) {
+            IncomeScreen(
+                viewModelFactory = viewModelFactory,
+                onHistoryClick = {
+                    navController.navigate(Screen.IncomesHistory.route)
+                }
+            )
+        }
+        composable(Screen.Account.route) {
+            AccountScreen(
+                viewModelFactory = viewModelFactory,
+                onEditAccount = { id ->
+                    navController.popBackStack(Screen.Account.route, inclusive = true)
+                    navController.navigate(Screen.EditAccount.routeWithIdAccount(id))
+                }
+            )
+        }
+        composable(Screen.Categories.route) {
+            CategoriesScreen(viewModelFactory = viewModelFactory)
+        }
+        composable(Screen.Settings.route) { SettingsScreen() }
+
+        composable(
+            Screen.EditAccount.route,
+            arguments = listOf(navArgument("accountId") { type = NavType.IntType })
+        ) { backStackEntry ->
+            val accountId = backStackEntry.arguments?.getInt("accountId") ?: return@composable
+            AccountEditScreen(
+                viewModelFactory = viewModelFactory,
+                onNavigateBack = {
+                    navController.navigate(Screen.Account.route) {
+                        popUpTo(Screen.EditAccount.route) { inclusive = true }
+                        launchSingleTop = true
+                    }
+                },
+                accountId = accountId
+            )
+        }
+    }
+}
