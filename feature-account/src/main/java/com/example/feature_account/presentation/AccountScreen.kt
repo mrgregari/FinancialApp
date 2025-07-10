@@ -12,7 +12,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.core_data.di.DataComponentProvider
-import com.example.core_data.domain.models.Account
+import com.example.core_domain.models.Account
 import com.example.core_ui.components.CustomListItem
 import com.example.core_ui.components.ErrorScreen
 import com.example.core_ui.components.LoadingScreen

@@ -1,7 +1,8 @@
 package com.example.feature_incomes.domain
 
-import com.example.core_data.domain.models.Income
-import com.example.core_data.domain.repositories.TransactionRepository
+
+import com.example.core_domain.models.Income
+import com.example.core_domain.repositories.TransactionRepository
 import com.example.core_network.network.NetworkResult
 import java.util.Date
 import javax.inject.Inject

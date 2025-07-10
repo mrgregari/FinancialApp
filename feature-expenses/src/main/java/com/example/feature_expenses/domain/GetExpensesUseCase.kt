@@ -1,7 +1,7 @@
 package com.example.feature_expenses.domain
 
-import com.example.core_data.domain.models.Expense
-import com.example.core_data.domain.repositories.TransactionRepository
+import com.example.core_domain.models.Expense
+import com.example.core_domain.repositories.TransactionRepository
 import com.example.core_network.network.NetworkResult
 import java.util.Date
 import javax.inject.Inject

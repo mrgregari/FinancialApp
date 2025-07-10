@@ -1,18 +1,17 @@
-package com.example.financialapp.ui.screens.expensesHistory
+package com.example.feature_expenses.presentation.expensesHistory
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.example.core_data.domain.models.Expense
+import com.example.core_domain.models.Expense
 import com.example.core_ui.R
 import com.example.core_ui.components.CustomDatePickerDialog
 import com.example.core_ui.components.CustomListItem
@@ -20,14 +19,16 @@ import com.example.core_ui.utils.formatAmountWithCurrency
 import com.example.core_ui.utils.formatDate
 import com.example.core_ui.utils.formatDateTime
 import com.example.core_ui.utils.getCurrencySymbol
+import java.util.Date
+import androidx.compose.foundation.lazy.items
 
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun ExpensesHistoryContent(
     expenses: List<Expense>,
-    startDate: java.util.Date?,
-    endDate: java.util.Date?,
+    startDate: Date?,
+    endDate: Date?,
     currency: String,
     showStartDatePicker: Boolean,
     showEndDatePicker: Boolean,
@@ -35,8 +36,8 @@ fun ExpensesHistoryContent(
     onShowEndDatePicker: () -> Unit,
     onDismissStartDatePicker: () -> Unit,
     onDismissEndDatePicker: () -> Unit,
-    onStartDateSelected: (java.util.Date?) -> Unit,
-    onEndDateSelected: (java.util.Date?) -> Unit
+    onStartDateSelected: (Date?) -> Unit,
+    onEndDateSelected: (Date?) -> Unit
 ) {
     LazyColumn(modifier = Modifier.fillMaxSize()) {
         stickyHeader {

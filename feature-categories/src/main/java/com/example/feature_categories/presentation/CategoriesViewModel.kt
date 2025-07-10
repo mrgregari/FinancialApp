@@ -1,7 +1,8 @@
 package com.example.feature_categories.presentation
 
-import com.example.core_data.domain.models.Category
-import com.example.core_data.usecases.GetCategoriesUseCase
+
+import com.example.core_domain.models.Category
+import com.example.core_domain.usecases.GetCategoriesUseCase
 import com.example.core_network.network.ErrorHandler
 import com.example.core_network.network.NetworkState
 import com.example.core_ui.base.BaseViewModel

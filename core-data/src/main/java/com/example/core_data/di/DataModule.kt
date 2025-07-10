@@ -1,11 +1,11 @@
 package com.example.core_data.di
 
-import com.example.core_data.data.repositories.AccountRepositoryImpl
-import com.example.core_data.data.repositories.CategoryRepositoryImpl
-import com.example.core_data.data.repositories.TransactionRepositoryImpl
-import com.example.core_data.domain.repositories.AccountRepository
-import com.example.core_data.domain.repositories.CategoryRepository
-import com.example.core_data.domain.repositories.TransactionRepository
+import com.example.core_data.repositories.AccountRepositoryImpl
+import com.example.core_data.repositories.CategoryRepositoryImpl
+import com.example.core_data.repositories.TransactionRepositoryImpl
+import com.example.core_domain.repositories.AccountRepository
+import com.example.core_domain.repositories.CategoryRepository
+import com.example.core_domain.repositories.TransactionRepository
 import dagger.Binds
 import dagger.Module
 

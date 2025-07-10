@@ -6,7 +6,8 @@ digraph G {
 ":app" -> ":feature-incomes"
 ":app" -> ":feature-categories"
 ":app" -> ":feature-settings"
-":core-data" -> ":core-network" [color=red style=bold]
+":core-data" -> ":core-network"
+":core-data" -> ":core-domain" [color=red style=bold]
 ":core-ui" -> ":core-network"
 ":feature-account" -> ":core-data" [color=red style=bold]
 ":feature-account" -> ":core-ui"
@@ -17,4 +18,5 @@ digraph G {
 ":feature-categories" -> ":core-data"
 ":feature-categories" -> ":core-ui"
 ":feature-settings" -> ":core-ui"
+":core-domain" -> ":core-network" [color=red style=bold]
 }

@@ -1,7 +1,7 @@
 package com.example.feature_account.domain
 
 
-import com.example.core_data.domain.repositories.AccountRepository
+import com.example.core_domain.repositories.AccountRepository
 import com.example.core_network.network.NetworkResult
 import javax.inject.Inject
 

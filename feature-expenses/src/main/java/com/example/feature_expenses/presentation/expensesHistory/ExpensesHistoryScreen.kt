@@ -1,4 +1,4 @@
-package com.example.financialapp.ui.screens.expensesHistory
+package com.example.feature_expenses.presentation.expensesHistory
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Column
@@ -22,7 +22,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.core_data.di.DataComponentProvider
 import com.example.core_ui.R
@@ -30,8 +29,6 @@ import com.example.core_ui.components.ErrorScreen
 import com.example.core_ui.components.LoadingScreen
 import com.example.core_ui.components.NetworkErrorBanner
 import com.example.feature_expenses.di.DaggerExpensesComponent
-import com.example.feature_expenses.presentation.expensesHistory.ExpensesHistoryUiState
-import com.example.feature_expenses.presentation.expensesHistory.ExpensesHistoryViewModel
 
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)

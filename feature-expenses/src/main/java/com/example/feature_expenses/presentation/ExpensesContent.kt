@@ -1,4 +1,4 @@
-package com.example.financialapp.ui.screens.expenses
+package com.example.feature_expenses.presentation
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.height
@@ -10,7 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
-import com.example.core_data.domain.models.Expense
+import com.example.core_domain.models.Expense
 import com.example.core_ui.R
 import com.example.core_ui.components.CustomListItem
 import com.example.core_ui.utils.formatAmountWithCurrency

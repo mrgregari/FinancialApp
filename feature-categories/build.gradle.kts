@@ -45,9 +45,9 @@ dependencies {
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
 
-    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.6.1")
+    implementation(libs.lifecycle.viewmodel.compose)
     implementation(project(":core-data"))
     implementation(project(":core-ui"))
-    implementation("com.google.dagger:dagger:2.56.2")
-    kapt("com.google.dagger:dagger-compiler:2.56.2")
+    implementation(libs.google.dagger)
+    kapt(libs.google.dagger.compiler)
 }

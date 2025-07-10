@@ -1,6 +1,7 @@
 package com.example.feature_account.presentation.accountEdit
 
-import com.example.core_data.domain.models.Account
+import com.example.core_domain.models.Account
+
 
 sealed class AccountEditUiState {
     object Loading : AccountEditUiState()

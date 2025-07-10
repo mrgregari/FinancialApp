@@ -1,6 +1,6 @@
 package com.example.feature_incomes.presentation.incomesHistory
 
-import com.example.core_data.domain.models.Income
+import com.example.core_domain.models.Income
 import java.util.Date
 
 sealed class IncomesHistoryUiState {

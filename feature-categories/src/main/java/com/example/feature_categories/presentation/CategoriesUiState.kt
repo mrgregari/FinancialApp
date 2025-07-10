@@ -1,6 +1,7 @@
 package com.example.feature_categories.presentation
 
-import com.example.core_data.domain.models.Category
+import com.example.core_domain.models.Category
+
 
 sealed class CategoriesUiState {
     object Loading : CategoriesUiState()

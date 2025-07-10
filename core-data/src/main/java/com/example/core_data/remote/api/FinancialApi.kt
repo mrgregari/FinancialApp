@@ -1,9 +1,9 @@
 package com.example.core_data.remote.api
 
-import com.example.core_data.data.dto.AccountDto
-import com.example.core_data.data.dto.CategoryDto
-import com.example.core_data.data.dto.TransactionDto
-import com.example.core_data.data.dto.UpdateAccountDto
+import com.example.core_data.remote.dto.AccountDto
+import com.example.core_data.remote.dto.CategoryDto
+import com.example.core_data.remote.dto.TransactionDto
+import com.example.core_data.remote.dto.UpdateAccountDto
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET

@@ -1,4 +1,4 @@
-package com.example.financialapp.ui.screens.expenses
+package com.example.feature_expenses.presentation
 
 
 import androidx.compose.foundation.ExperimentalFoundationApi
@@ -29,8 +29,6 @@ import com.example.core_ui.components.ErrorScreen
 import com.example.core_ui.components.LoadingScreen
 import com.example.core_ui.components.NetworkErrorBanner
 import com.example.feature_expenses.di.DaggerExpensesComponent
-import com.example.feature_expenses.presentation.ExpensesUiState
-import com.example.feature_expenses.presentation.ExpensesViewModel
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable

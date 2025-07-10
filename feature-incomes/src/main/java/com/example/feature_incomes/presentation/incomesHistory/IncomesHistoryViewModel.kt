@@ -1,6 +1,7 @@
 package com.example.feature_incomes.presentation.incomesHistory
 
-import com.example.core_data.usecases.GetAccountUseCase
+
+import com.example.core_domain.usecases.GetAccountUseCase
 import com.example.core_network.network.NetworkState
 import com.example.core_ui.base.BaseViewModel
 import com.example.feature_incomes.domain.GetIncomesUseCase

@@ -1,6 +1,7 @@
 package com.example.feature_expenses.presentation
 
-import com.example.core_data.domain.models.Expense
+import com.example.core_domain.models.Expense
+
 
 sealed class ExpensesUiState {
     object Loading : ExpensesUiState()

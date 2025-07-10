@@ -1,6 +1,6 @@
 package com.example.feature_incomes.presentation
 
-import com.example.core_data.domain.models.Income
+import com.example.core_domain.models.Income
 
 sealed class IncomesUiState {
     object Loading : IncomesUiState()

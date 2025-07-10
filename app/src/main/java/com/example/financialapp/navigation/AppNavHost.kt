@@ -13,8 +13,8 @@ import com.example.feature_categories.presentation.CategoriesScreen
 import com.example.feature_incomes.presentation.IncomeScreen
 import com.example.feature_incomes.presentation.incomesHistory.IncomesHistoryScreen
 import com.example.feature_settings.presentation.SettingsScreen
-import com.example.financialapp.ui.screens.expenses.ExpensesScreen
-import com.example.financialapp.ui.screens.expensesHistory.ExpensesHistoryScreen
+import com.example.feature_expenses.presentation.ExpensesScreen
+import com.example.feature_expenses.presentation.expensesHistory.ExpensesHistoryScreen
 
 @Composable
 fun AppNavHost(

@@ -1,7 +1,7 @@
 package com.example.feature_incomes.presentation
 
 
-import com.example.core_data.usecases.GetAccountUseCase
+import com.example.core_domain.usecases.GetAccountUseCase
 import com.example.core_network.network.ErrorHandler
 import com.example.core_network.network.NetworkResult
 import com.example.core_network.network.NetworkState

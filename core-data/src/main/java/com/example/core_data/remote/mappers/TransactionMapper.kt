@@ -1,0 +1,34 @@
+package com.example.core_data.remote.mappers
+
+import com.example.core_data.remote.dto.TransactionDto
+import com.example.core_data.utils.getCurrencySymbol
+import com.example.core_domain.models.Expense
+import com.example.core_domain.models.Income
+
+
+import jakarta.inject.Inject
+
+class TransactionMapper @Inject constructor() {
+
+    fun fromDtoToExpense(dto: TransactionDto) = Expense(
+        id = dto.id,
+        title = dto.category.name,
+        icon = dto.category.emoji,
+        amount = dto.amount,
+        account = dto.account.name,
+        comment = dto.comment,
+        date = dto.transactionDate,
+        currency = getCurrencySymbol(dto.account.currency)
+    )
+
+    fun fromDtoToIncome(dto: TransactionDto) = Income(
+        id = dto.id,
+        title = dto.category.name,
+        icon = dto.category.emoji,
+        amount = dto.amount,
+        account = dto.account.name,
+        comment = dto.comment,
+        date = dto.transactionDate,
+        currency = getCurrencySymbol(dto.account.currency)
+    )
+}
