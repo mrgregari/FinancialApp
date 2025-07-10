@@ -1,7 +1,7 @@
 package com.example.core_data.domain.repositories
 
 import com.example.core_data.domain.models.Category
-import com.example.core_data.network.NetworkResult
+import com.example.core_network.network.NetworkResult
 
 /**
  * Repository for managing user categories data.

@@ -1,4 +1,4 @@
-package com.example.core_data.network
+package com.example.core_network.network
 
 /**
  * Sealed class representing the result of network operations.

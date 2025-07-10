@@ -47,5 +47,6 @@ dependencies {
     implementation("com.google.dagger:dagger:2.56.2")
     kapt("com.google.dagger:dagger-compiler:2.56.2")
 
-    implementation(project(":core-data"))
+    api(project(":core-network"))
+
 }

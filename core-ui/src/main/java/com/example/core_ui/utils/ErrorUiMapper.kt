@@ -1,6 +1,6 @@
 package com.example.core_ui.utils
 
-import com.example.core_data.network.NetworkErrorType
+import com.example.core_network.network.NetworkErrorType
 import com.example.core_ui.R
 
 fun getErrorResId(errorType: NetworkErrorType): Int = when (errorType) {

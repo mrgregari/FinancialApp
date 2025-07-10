@@ -1,4 +1,4 @@
-package com.example.core_data.network
+package com.example.core_network.network
 
 import android.Manifest
 import android.content.Context

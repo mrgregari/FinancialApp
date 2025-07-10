@@ -1,11 +1,12 @@
 package com.example.feature_expenses.presentation.expensesHistory
 
-import com.example.core_data.network.ErrorHandler
-import com.example.core_data.network.NetworkResult
-import com.example.core_data.network.NetworkState
+
 import com.example.core_data.usecases.GetAccountUseCase
+import com.example.core_network.network.ErrorHandler
+import com.example.core_network.network.NetworkResult
+import com.example.core_network.network.NetworkState
 import com.example.core_ui.base.BaseViewModel
-import com.example.financialapp.domain.usecases.GetExpensesUseCase
+import com.example.feature_expenses.domain.GetExpensesUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -22,13 +23,10 @@ class ExpensesHistoryViewModel @Inject constructor(
 
 
     private val _startDate = MutableStateFlow<Date?>(null)
-    val startDate: StateFlow<Date?> = _startDate.asStateFlow()
 
     private val _endDate = MutableStateFlow<Date?>(null)
-    val endDate: StateFlow<Date?> = _endDate.asStateFlow()
 
     private val _currency = MutableStateFlow<String>("")
-    val currency: StateFlow<String> = _currency.asStateFlow()
 
     private val _uiState = MutableStateFlow<ExpensesHistoryUiState>(ExpensesHistoryUiState.Loading)
     val uiState: StateFlow<ExpensesHistoryUiState> = _uiState.asStateFlow()

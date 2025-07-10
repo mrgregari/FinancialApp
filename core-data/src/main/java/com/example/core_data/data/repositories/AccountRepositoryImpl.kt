@@ -5,8 +5,8 @@ import com.example.core_data.data.mappers.AccountMapper
 import com.example.core_data.data.remoteDataSource.AccountRemoteDataSource
 import com.example.core_data.domain.models.Account
 import com.example.core_data.domain.repositories.AccountRepository
-import com.example.core_data.network.NetworkResult
 import com.example.core_data.di.IODispatcher
+import com.example.core_network.network.NetworkResult
 import jakarta.inject.Inject
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext

@@ -2,8 +2,8 @@ package com.example.core_data.usecases
 
 import com.example.core_data.domain.models.Category
 import com.example.core_data.domain.repositories.CategoryRepository
-import com.example.core_data.network.NetworkResult
 import jakarta.inject.Inject
+import com.example.core_network.network.NetworkResult
 
 class GetCategoriesUseCase @Inject constructor(
     private val repository: CategoryRepository

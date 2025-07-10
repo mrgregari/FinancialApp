@@ -7,7 +7,7 @@ import com.example.core_data.di.IODispatcher
 import com.example.core_data.domain.models.Expense
 import com.example.core_data.domain.models.Income
 import com.example.core_data.domain.repositories.TransactionRepository
-import com.example.core_data.network.NetworkResult
+import com.example.core_network.network.NetworkResult
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 import java.text.SimpleDateFormat

@@ -1,17 +1,17 @@
 package com.example.feature_incomes.presentation.incomesHistory
 
-import com.example.core_data.network.ErrorHandler
-import com.example.core_data.network.NetworkResult
-import com.example.core_data.network.NetworkState
 import com.example.core_data.usecases.GetAccountUseCase
+import com.example.core_network.network.NetworkState
 import com.example.core_ui.base.BaseViewModel
-import com.example.financialapp.domain.usecases.GetIncomesUseCase
+import com.example.feature_incomes.domain.GetIncomesUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import java.util.Calendar
 import java.util.Date
 import javax.inject.Inject
+import com.example.core_network.network.ErrorHandler
+import com.example.core_network.network.NetworkResult
 
 
 class IncomesHistoryViewModel @Inject constructor(
@@ -26,13 +26,10 @@ class IncomesHistoryViewModel @Inject constructor(
     val uiState: StateFlow<IncomesHistoryUiState> = _uiState.asStateFlow()
 
     private val _startDate = MutableStateFlow<Date?>(null)
-    val startDate: StateFlow<Date?> = _startDate.asStateFlow()
 
     private val _endDate = MutableStateFlow<Date?>(null)
-    val endDate: StateFlow<Date?> = _endDate.asStateFlow()
 
     private val _currency = MutableStateFlow<String>("")
-    val currency: StateFlow<String> = _currency.asStateFlow()
 
     init {
         val calendar = Calendar.getInstance()

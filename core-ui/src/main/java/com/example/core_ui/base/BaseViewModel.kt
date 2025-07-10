@@ -2,15 +2,15 @@ package com.example.core_ui.base
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.core_data.network.ErrorHandler
-import com.example.core_data.network.NetworkResult
+import com.example.core_network.network.ErrorHandler
+import com.example.core_network.network.NetworkResult
+import com.example.core_network.network.NetworkState
 import com.example.core_ui.R
+import com.example.core_ui.utils.getErrorResId
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import com.example.core_data.network.NetworkState
-import com.example.core_ui.utils.getErrorResId
 
 /**
  * Base ViewModel that provides network state observation,

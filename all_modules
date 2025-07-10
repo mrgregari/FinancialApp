@@ -1,0 +1,20 @@
+digraph G {
+":app" -> ":core-data"
+":app" -> ":core-ui"
+":app" -> ":feature-account" [color=red style=bold]
+":app" -> ":feature-expenses"
+":app" -> ":feature-incomes"
+":app" -> ":feature-categories"
+":app" -> ":feature-settings"
+":core-data" -> ":core-network" [color=red style=bold]
+":core-ui" -> ":core-network"
+":feature-account" -> ":core-data" [color=red style=bold]
+":feature-account" -> ":core-ui"
+":feature-expenses" -> ":core-data"
+":feature-expenses" -> ":core-ui"
+":feature-incomes" -> ":core-data"
+":feature-incomes" -> ":core-ui"
+":feature-categories" -> ":core-data"
+":feature-categories" -> ":core-ui"
+":feature-settings" -> ":core-ui"
+}

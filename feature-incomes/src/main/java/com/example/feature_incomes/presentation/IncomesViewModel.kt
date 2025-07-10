@@ -1,12 +1,12 @@
 package com.example.feature_incomes.presentation
 
-import com.example.core_data.domain.models.Income
-import com.example.core_data.network.ErrorHandler
-import com.example.core_data.network.NetworkResult
-import com.example.core_data.network.NetworkState
+
 import com.example.core_data.usecases.GetAccountUseCase
+import com.example.core_network.network.ErrorHandler
+import com.example.core_network.network.NetworkResult
+import com.example.core_network.network.NetworkState
 import com.example.core_ui.base.BaseViewModel
-import com.example.financialapp.domain.usecases.GetIncomesUseCase
+import com.example.feature_incomes.domain.GetIncomesUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow

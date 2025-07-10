@@ -1,9 +1,9 @@
 package com.example.feature_account.presentation.accountEdit
 
 import com.example.core_data.domain.models.Account
-import com.example.core_data.network.ErrorHandler
-import com.example.core_data.network.NetworkState
 import com.example.core_data.usecases.GetAccountUseCase
+import com.example.core_network.network.ErrorHandler
+import com.example.core_network.network.NetworkState
 import com.example.core_ui.R
 import com.example.core_ui.base.BaseViewModel
 import com.example.feature_account.domain.UpdateAccountUseCase

@@ -1,10 +1,10 @@
 package com.example.core_data.di
 
 import android.content.Context
-import com.example.core_data.network.NetworkState
-import com.example.core_data.network.RetryInterceptor
 import com.example.core_data.remote.api.AuthInterceptor
 import com.example.core_data.remote.api.FinancialApi
+import com.example.core_network.network.NetworkState
+import com.example.core_network.network.RetryInterceptor
 import dagger.Module
 import dagger.Provides
 import kotlinx.coroutines.Dispatchers

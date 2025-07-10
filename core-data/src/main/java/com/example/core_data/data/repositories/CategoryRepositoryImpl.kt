@@ -5,7 +5,7 @@ import com.example.core_data.data.remoteDataSource.CategoryRemoteDataSource
 import com.example.core_data.di.IODispatcher
 import com.example.core_data.domain.models.Category
 import com.example.core_data.domain.repositories.CategoryRepository
-import com.example.core_data.network.NetworkResult
+import com.example.core_network.network.NetworkResult
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 import javax.inject.Inject

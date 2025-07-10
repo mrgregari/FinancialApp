@@ -1,4 +1,4 @@
-package com.example.core_data.network
+package com.example.core_network.network
 
 import okhttp3.Interceptor
 import okhttp3.Response

@@ -1,5 +1,3 @@
-import java.util.Properties
-
 plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
@@ -7,17 +5,14 @@ plugins {
 }
 
 android {
-    namespace = "com.example.core_data"
+    namespace = "com.example.core_network"
     compileSdk = 35
-
-    val properties = Properties()
-    properties.load(project.rootProject.file("local.properties").reader())
 
     defaultConfig {
         minSdk = 26
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        resValue("string", "api_token", properties.getProperty("api_token") ?: "")
+        consumerProguardFiles("consumer-rules.pro")
     }
 
     buildTypes {
@@ -52,6 +47,4 @@ dependencies {
     implementation("com.squareup.okhttp3:logging-interceptor:4.9.3")
     implementation("com.google.dagger:dagger:2.56.2")
     kapt("com.google.dagger:dagger-compiler:2.56.2")
-
-    api(project(":core-network"))
 }

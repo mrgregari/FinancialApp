@@ -1,4 +1,4 @@
-package com.example.core_data.network
+package com.example.core_network.network
 
 import retrofit2.HttpException
 import java.io.IOException

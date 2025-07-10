@@ -1,7 +1,7 @@
 package com.example.core_data.domain.repositories
 import com.example.core_data.domain.models.Expense
 import com.example.core_data.domain.models.Income
-import com.example.core_data.network.NetworkResult
+import com.example.core_network.network.NetworkResult
 import java.util.Date
 
 /**
