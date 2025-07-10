@@ -9,13 +9,12 @@ import androidx.navigation.NavHostController
 
 @Composable
 fun MainScaffold(
-    viewModelFactory: ViewModelProvider.Factory,
     navController: NavHostController,
     currentRoute: String?
 ) {
     Scaffold(
         bottomBar = { AppBottomBar(navController, currentRoute) }
     ) { padding ->
-        AppNavHost(viewModelFactory, navController, Modifier.padding(padding))
+        AppNavHost(navController, Modifier.padding(padding))
     }
 }

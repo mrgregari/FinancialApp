@@ -6,11 +6,13 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.core_data.di.DataComponentProvider
 import com.example.core_data.domain.models.Account
 import com.example.core_ui.components.CustomListItem
 import com.example.core_ui.components.ErrorScreen
@@ -19,14 +21,20 @@ import com.example.core_ui.components.NetworkErrorBanner
 import com.example.core_ui.utils.formatNumber
 import com.example.core_ui.utils.getCurrencySymbol
 import com.example.core_ui.R
+import com.example.feature_account.di.DaggerAccountComponent
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AccountScreen(
-    viewModelFactory: ViewModelProvider.Factory,
     onEditAccount: (Int) -> Unit
 ) {
+    val app = LocalContext.current.applicationContext as DataComponentProvider
+    val accountComponent = remember {
+        DaggerAccountComponent.factory()
+            .create(app.dataComponent)
+    }
 
+    val viewModelFactory = accountComponent.viewModelFactory()
     val viewModel: AccountViewModel = viewModel(factory = viewModelFactory)
 
     val accounts by viewModel.accounts.collectAsState()

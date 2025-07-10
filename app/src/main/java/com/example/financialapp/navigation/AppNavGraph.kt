@@ -3,13 +3,12 @@ package com.example.financialapp.navigation
 import androidx.compose.animation.Crossfade
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.financialapp.splash.SplashScreen
 
 @Composable
-fun AppNavGraph(viewModelFactory: ViewModelProvider.Factory) {
+fun AppNavGraph() {
     val navController = rememberNavController()
     val splashFinished = rememberSaveable { mutableStateOf(false) }
     val currentRoute = navController.currentBackStackEntryAsState().value?.destination?.route
@@ -18,7 +17,7 @@ fun AppNavGraph(viewModelFactory: ViewModelProvider.Factory) {
         if (!finished) {
             SplashScreen { splashFinished.value = true }
         } else {
-            MainScaffold(viewModelFactory, navController, currentRoute)
+            MainScaffold(navController, currentRoute)
         }
     }
 }

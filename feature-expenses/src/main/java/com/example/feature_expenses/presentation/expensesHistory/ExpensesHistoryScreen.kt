@@ -19,14 +19,17 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.core_data.di.DataComponentProvider
 import com.example.core_ui.R
 import com.example.core_ui.components.ErrorScreen
 import com.example.core_ui.components.LoadingScreen
 import com.example.core_ui.components.NetworkErrorBanner
+import com.example.feature_expenses.di.DaggerExpensesComponent
 import com.example.feature_expenses.presentation.expensesHistory.ExpensesHistoryUiState
 import com.example.feature_expenses.presentation.expensesHistory.ExpensesHistoryViewModel
 
@@ -34,9 +37,17 @@ import com.example.feature_expenses.presentation.expensesHistory.ExpensesHistory
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
 fun ExpensesHistoryScreen(
-    viewModelFactory: ViewModelProvider.Factory,
     onNavigateUp: () -> Unit
 ) {
+
+    val app = LocalContext.current.applicationContext as DataComponentProvider
+    val expensesComponent = remember {
+        DaggerExpensesComponent.factory()
+            .create(app.dataComponent)
+    }
+
+    val viewModelFactory = expensesComponent.viewModelFactory()
+
     val viewModel : ExpensesHistoryViewModel = viewModel(factory = viewModelFactory)
     val isNetworkAvailable by viewModel.isNetworkAvailable.collectAsState()
     val uiState by viewModel.uiState.collectAsState()

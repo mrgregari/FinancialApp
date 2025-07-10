@@ -14,15 +14,11 @@ import javax.inject.Inject
  */
 class MainActivity : ComponentActivity() {
 
-    @Inject
-    lateinit var viewModelFactory: ViewModelProvider.Factory
-
     override fun onCreate(savedInstanceState: Bundle?) {
-        (application as FinanceApp).appComponent.inject(this)
         super.onCreate(savedInstanceState)
         setContent {
             FinancialAppTheme(dynamicColor = false) {
-                AppNavGraph(viewModelFactory = viewModelFactory)
+                AppNavGraph()
             }
         }
     }

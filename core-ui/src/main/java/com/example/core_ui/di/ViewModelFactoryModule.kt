@@ -1,12 +1,12 @@
-package com.example.financialapp.di
+package com.example.core_ui.di
 
 import androidx.lifecycle.ViewModelProvider
-import com.example.core_ui.di.ViewModelFactory
 import dagger.Binds
 import dagger.Module
 
 @Module
-interface ViewModelModule {
+interface ViewModelFactoryModule {
+
     @Binds
     fun bindViewModelFactory(factory: ViewModelFactory): ViewModelProvider.Factory
 }

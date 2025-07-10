@@ -14,20 +14,31 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.core_data.di.DataComponentProvider
 import com.example.core_ui.R
 import com.example.core_ui.components.ErrorScreen
 import com.example.core_ui.components.LoadingScreen
 import com.example.core_ui.components.NetworkErrorBanner
+import com.example.feature_categories.di.DaggerCategoriesComponent
+import androidx.compose.runtime.remember
 
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
 fun CategoriesScreen(
-    viewModelFactory: ViewModelProvider.Factory
 ) {
+    val app = LocalContext.current.applicationContext as DataComponentProvider
+    val categoriesComponent = remember {
+        DaggerCategoriesComponent.factory()
+            .create(app.dataComponent)
+    }
+
+    val viewModelFactory = categoriesComponent.viewModelFactory()
+
     val viewModel: CategoriesViewModel = viewModel(factory = viewModelFactory)
     val isNetworkAvailable by viewModel.isNetworkAvailable.collectAsState()
     val uiState by viewModel.uiState.collectAsState()

@@ -5,9 +5,6 @@ import com.example.core_data.network.NetworkState
 import com.example.core_data.network.RetryInterceptor
 import com.example.core_data.remote.api.AuthInterceptor
 import com.example.core_data.remote.api.FinancialApi
-import com.example.core_data.di.DefaultDispatcher
-import com.example.core_data.di.IODispatcher
-import com.example.core_data.di.MainDispatcher
 import dagger.Module
 import dagger.Provides
 import kotlinx.coroutines.Dispatchers

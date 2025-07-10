@@ -27,11 +27,13 @@ sealed class Screen(
         icon = R.drawable.uptrend
     )
 
+
     object Account : Screen(
         route = "account",
         titleResId = R.string.accounts,
         icon = R.drawable.calculator
     )
+
 
     object Categories : Screen(
         route = "categories",

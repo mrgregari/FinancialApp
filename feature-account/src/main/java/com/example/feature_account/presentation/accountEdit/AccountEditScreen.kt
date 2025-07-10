@@ -19,24 +19,34 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.core_data.di.DataComponentProvider
 import com.example.core_ui.R
 import com.example.core_ui.components.ErrorScreen
 import com.example.core_ui.components.LoadingScreen
 import com.example.core_ui.components.NetworkErrorBanner
+import com.example.feature_account.di.DaggerAccountComponent
 import com.example.feature_account.presentation.accountEdit.components.AccountEditContent
 import com.example.feature_account.presentation.accountEdit.components.CurrencyBottomSheet
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AccountEditScreen(
-    viewModelFactory: ViewModelProvider.Factory,
     onNavigateBack: () -> Unit,
     accountId: Int
 ) {
+    val app = LocalContext.current.applicationContext as DataComponentProvider
+    val accountComponent = remember {
+        DaggerAccountComponent.factory()
+            .create(app.dataComponent)
+    }
+
+    val viewModelFactory = accountComponent.viewModelFactory()
+
     val viewModel: AccountEditViewModel = viewModel(factory = viewModelFactory)
     val isNetworkAvailable by viewModel.isNetworkAvailable.collectAsState()
     val uiState by viewModel.uiState.collectAsState()

@@ -2,7 +2,6 @@ package com.example.financialapp.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.NavHostController
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -19,7 +18,6 @@ import com.example.financialapp.ui.screens.expensesHistory.ExpensesHistoryScreen
 
 @Composable
 fun AppNavHost(
-    viewModelFactory: ViewModelProvider.Factory,
     navController: NavHostController,
     modifier: Modifier = Modifier
 ) {
@@ -30,7 +28,6 @@ fun AppNavHost(
     ) {
         composable(Screen.Expenses.route) {
             ExpensesScreen(
-                viewModelFactory = viewModelFactory,
                 onHistoryClick = {
                     navController.navigate(Screen.ExpensesHistory.route)
                 }
@@ -38,27 +35,24 @@ fun AppNavHost(
         }
         composable(Screen.ExpensesHistory.route) {
             ExpensesHistoryScreen(
-                viewModelFactory = viewModelFactory,
                 onNavigateUp = { navController.navigateUp() }
             )
         }
         composable(Screen.IncomesHistory.route) {
             IncomesHistoryScreen(
-                viewModelFactory = viewModelFactory,
                 onNavigateUp = { navController.navigateUp() }
             )
         }
         composable(Screen.Income.route) {
             IncomeScreen(
-                viewModelFactory = viewModelFactory,
                 onHistoryClick = {
                     navController.navigate(Screen.IncomesHistory.route)
                 }
             )
         }
+
         composable(Screen.Account.route) {
             AccountScreen(
-                viewModelFactory = viewModelFactory,
                 onEditAccount = { id ->
                     navController.popBackStack(Screen.Account.route, inclusive = true)
                     navController.navigate(Screen.EditAccount.routeWithIdAccount(id))
@@ -66,7 +60,7 @@ fun AppNavHost(
             )
         }
         composable(Screen.Categories.route) {
-            CategoriesScreen(viewModelFactory = viewModelFactory)
+            CategoriesScreen()
         }
         composable(Screen.Settings.route) { SettingsScreen() }
 
@@ -76,7 +70,6 @@ fun AppNavHost(
         ) { backStackEntry ->
             val accountId = backStackEntry.arguments?.getInt("accountId") ?: return@composable
             AccountEditScreen(
-                viewModelFactory = viewModelFactory,
                 onNavigateBack = {
                     navController.navigate(Screen.Account.route) {
                         popUpTo(Screen.EditAccount.route) { inclusive = true }
@@ -86,5 +79,6 @@ fun AppNavHost(
                 accountId = accountId
             )
         }
+
     }
 }

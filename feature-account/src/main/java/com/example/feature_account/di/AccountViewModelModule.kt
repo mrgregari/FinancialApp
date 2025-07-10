@@ -10,6 +10,8 @@ import dagger.multibindings.IntoMap
 
 @Module
 interface AccountViewModelModule {
+
+
     @Binds
     @IntoMap
     @ViewModelKey(AccountViewModel::class)
