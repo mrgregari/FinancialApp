@@ -82,11 +82,11 @@ dependencies {
     kapt(libs.google.dagger.compiler)
 
 
-    implementation(project(":core-data"))
-    implementation(project(":core-ui"))
-    implementation(project(":feature-account"))
-    implementation(project(":feature-expenses"))
-    implementation(project(":feature-incomes"))
-    implementation(project(":feature-categories"))
-    implementation(project(":feature-settings"))
+    implementation(project(":core:data"))
+    implementation(project(":core:ui"))
+    implementation(project(":feature:account"))
+    implementation(project(":feature:expenses"))
+    implementation(project(":feature:incomes"))
+    implementation(project(":feature:categories"))
+    implementation(project(":feature:settings"))
 }
