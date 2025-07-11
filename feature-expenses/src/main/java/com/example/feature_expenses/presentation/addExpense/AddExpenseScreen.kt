@@ -25,6 +25,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.core_data.di.DataComponentProvider
 import com.example.core_domain.models.Category
 import com.example.core_ui.R
+import com.example.core_ui.components.ErrorScreen
 import com.example.core_ui.components.LoadingScreen
 import com.example.core_ui.components.NetworkErrorBanner
 import com.example.feature_expenses.di.DaggerExpensesComponent
@@ -110,7 +111,13 @@ fun AddExpenseScreen(
                 isVisible = !isNetworkAvailable
             )
             when (uiState) {
-                is AddExpenseUiState.Error -> TODO()
+                is AddExpenseUiState.Error -> {
+                    val errorResId = (uiState as AddExpenseUiState.Error).errorResId
+                    ErrorScreen(
+                        error = stringResource(errorResId),
+                        onRetry = { viewModel.retry() }
+                    )
+                }
                 is AddExpenseUiState.Loading -> LoadingScreen()
                 is AddExpenseUiState.Success -> {
                     val state = uiState as AddExpenseUiState.Success

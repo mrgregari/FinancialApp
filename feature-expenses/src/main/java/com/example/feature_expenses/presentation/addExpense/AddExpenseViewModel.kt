@@ -56,6 +56,10 @@ class AddExpenseViewModel @Inject constructor(
         loadCategories()
     }
 
+    fun retry() {
+        loadCategories()
+    }
+
     private fun loadCategories() {
         safeApiCall(
             apiCall = {
@@ -141,7 +145,7 @@ class AddExpenseViewModel @Inject constructor(
                         amount = value.replace(',', '.'),
                         account = current.account.name,
                         currency = current.account.currency,
-                        comment = comment,
+                        comment = comment.takeIf { it.isNotBlank() },
                         date = formatToIso8601(date)
                     )
                     addExpenseUseCase(expense, accountId, categoryId)

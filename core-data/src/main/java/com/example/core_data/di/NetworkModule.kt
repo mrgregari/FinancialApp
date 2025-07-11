@@ -5,6 +5,7 @@ import com.example.core_data.remote.api.AuthInterceptor
 import com.example.core_data.remote.api.FinancialApi
 import com.example.core_network.network.NetworkState
 import com.example.core_network.network.RetryInterceptor
+import com.google.gson.GsonBuilder
 import dagger.Module
 import dagger.Provides
 import kotlinx.coroutines.Dispatchers
@@ -61,10 +62,13 @@ object NetworkModule {
 
     @Provides
     fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit {
+        val gson = GsonBuilder()
+            .serializeNulls()
+            .create()
         return Retrofit.Builder()
             .baseUrl(BASE_URL)
             .client(okHttpClient)
-            .addConverterFactory(GsonConverterFactory.create())
+            .addConverterFactory(GsonConverterFactory.create(gson))
             .build()
     }
 

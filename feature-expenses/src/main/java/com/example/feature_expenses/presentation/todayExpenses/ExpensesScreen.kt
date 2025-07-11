@@ -29,6 +29,7 @@ import com.example.core_ui.components.ErrorScreen
 import com.example.core_ui.components.LoadingScreen
 import com.example.core_ui.components.NetworkErrorBanner
 import com.example.feature_expenses.di.DaggerExpensesComponent
+import androidx.compose.runtime.LaunchedEffect
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
@@ -48,6 +49,10 @@ fun ExpensesScreen(
     val viewModel: ExpensesViewModel = viewModel(factory = viewModelFactory)
     val uiState by viewModel.uiState.collectAsState()
     val isNetworkAvailable by viewModel.isNetworkAvailable.collectAsState()
+
+    LaunchedEffect(Unit) {
+        viewModel.retry()
+    }
 
     Scaffold(
         topBar = {
