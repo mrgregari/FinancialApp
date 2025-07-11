@@ -16,6 +16,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -28,6 +29,7 @@ import com.example.core_ui.R
 import com.example.core_ui.components.ErrorScreen
 import com.example.core_ui.components.LoadingScreen
 import com.example.core_ui.components.NetworkErrorBanner
+import com.example.core_ui.utils.combineDateAndTime
 import com.example.feature_incomes.di.DaggerIncomesComponent
 import java.util.Date
 
@@ -48,8 +50,8 @@ fun AddIncomeScreen(
 
     var value by remember { mutableStateOf("") }
     var selectedCategory by remember { mutableStateOf<Category?>(null) }
-    var date by remember { mutableStateOf(Date()) }
-    var time by remember { mutableStateOf(Date()) }
+    var date by rememberSaveable { mutableStateOf(Date()) }
+    var time by rememberSaveable { mutableStateOf(Date()) }
     var comment by remember { mutableStateOf("") }
 
     Scaffold(
@@ -77,10 +79,11 @@ fun AddIncomeScreen(
                             viewModel.validateAllFields(value, selectedCategory)
                             val currentState = (uiState as? AddIncomeUiState.Success)
                             if (currentState?.validationState?.isFormValid == true) {
+                                val combinedDateTime = combineDateAndTime(date, time)
                                 viewModel.addIncome(
                                     value = value,
                                     selectedCategory = selectedCategory,
-                                    date = date,
+                                    date = combinedDateTime,
                                     comment = comment
                                 )
                             }

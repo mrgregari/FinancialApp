@@ -75,7 +75,7 @@ sealed class Screen(
     )
 
     object AddIncome : Screen(
-        route = "add_expense",
+        route = "add_income",
         titleResId = R.string.add_income,
         icon = R.drawable.edit
     )

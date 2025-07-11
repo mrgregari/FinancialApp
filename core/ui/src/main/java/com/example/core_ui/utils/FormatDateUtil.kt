@@ -33,6 +33,12 @@ fun formatToIso8601(date: Date): String {
     return sdf.format(date)
 }
 
+fun formatToIso8601Local(date: Date): String {
+    val sdf = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault())
+    // sdf.timeZone = TimeZone.getDefault() // по умолчанию локальное время
+    return sdf.format(date)
+}
+
 fun parseIso8601Date(dateString: String?): Date? {
     if (dateString.isNullOrEmpty()) return null
     return try {

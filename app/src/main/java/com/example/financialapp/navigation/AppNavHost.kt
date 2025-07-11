@@ -44,7 +44,10 @@ fun AppNavHost(
         }
         composable(Screen.ExpensesHistory.route) {
             ExpensesHistoryScreen(
-                onNavigateUp = { navController.navigateUp() }
+                onNavigateUp = { navController.navigateUp() },
+                onItemClick = { id ->
+                    navController.navigate(Screen.EditExpense.routeWithIdExpense(id))
+                }
             )
         }
         composable(Screen.IncomesHistory.route) {
@@ -58,7 +61,7 @@ fun AppNavHost(
                     navController.navigate(Screen.IncomesHistory.route)
                 },
                 onAddClick = {
-                    navController.navigate(Screen.AddExpense.route)
+                    navController.navigate(Screen.AddIncome.route)
                 }
             )
         }

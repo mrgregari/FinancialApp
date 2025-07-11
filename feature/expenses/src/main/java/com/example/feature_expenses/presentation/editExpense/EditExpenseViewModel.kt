@@ -10,6 +10,7 @@ import com.example.core_network.network.NetworkState
 import com.example.core_ui.base.BaseViewModel
 import com.example.core_ui.utils.TransactionValidator
 import com.example.core_ui.utils.formatToIso8601
+import com.example.core_ui.utils.formatToIso8601Local
 import com.example.feature_expenses.domain.GetExpenseByIdUseCase
 import com.example.feature_expenses.domain.GetExpensesCategoriesUseCase
 import com.example.feature_expenses.domain.UpdateExpenseUseCase
@@ -142,7 +143,7 @@ class EditExpenseViewModel @Inject constructor(
                         icon = category?.icon ?: expense.icon,
                         amount = value.replace(',', '.'),
                         comment = comment.takeIf { it.isNotBlank() },
-                        date = formatToIso8601(date)
+                        date = formatToIso8601Local(date)
                     )
                     updateExpenseUseCase(updatedExpense, current.account.id, category?.id ?: 0)
                 },

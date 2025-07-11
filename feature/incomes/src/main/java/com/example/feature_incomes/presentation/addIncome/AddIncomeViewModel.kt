@@ -22,6 +22,7 @@ import java.text.SimpleDateFormat
 import java.util.Locale
 import com.example.feature_incomes.domain.AddIncomeUseCase
 import com.example.core_ui.utils.formatToIso8601
+import com.example.core_ui.utils.formatToIso8601Local
 
 class AddIncomeViewModel @Inject constructor(
     val getIncomesCategoriesUseCase: GetIncomesCategoriesUseCase,
@@ -132,7 +133,7 @@ class AddIncomeViewModel @Inject constructor(
                         account = current.account.name,
                         currency = current.account.currency,
                         comment = comment.takeIf { it.isNotBlank() },
-                        date = formatToIso8601(date)
+                        date = formatToIso8601Local(date)
                     )
                     addIncomeUseCase(income, accountId, categoryId)
                 },

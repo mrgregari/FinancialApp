@@ -37,7 +37,8 @@ fun ExpensesHistoryContent(
     onDismissStartDatePicker: () -> Unit,
     onDismissEndDatePicker: () -> Unit,
     onStartDateSelected: (Date?) -> Unit,
-    onEndDateSelected: (Date?) -> Unit
+    onEndDateSelected: (Date?) -> Unit,
+    onItemClick: (Int) -> Unit
 ) {
     LazyColumn(modifier = Modifier.fillMaxSize()) {
         stickyHeader {
@@ -80,6 +81,7 @@ fun ExpensesHistoryContent(
                 trailingText = formatAmountWithCurrency(expense.amount.toDouble(), expense.currency),
                 subTrailingText = formatDateTime(expense.date),
                 showArrow = true,
+                onClick = { onItemClick(expense.id) }
             )
             HorizontalDivider()
         }

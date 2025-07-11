@@ -10,11 +10,11 @@ import com.example.core_network.network.NetworkState
 import com.example.core_ui.base.BaseViewModel
 import com.example.core_ui.utils.TransactionValidator
 import com.example.core_ui.utils.formatToIso8601
+import com.example.core_ui.utils.formatToIso8601Local
 import com.example.feature_expenses.domain.AddExpenseUseCase
 import com.example.feature_expenses.domain.GetExpensesCategoriesUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import java.util.Calendar
 import java.util.Date
 import javax.inject.Inject
 
@@ -29,20 +29,12 @@ class AddExpenseViewModel @Inject constructor(
     errorHandler
 ) {
 
-    private val _startDate = MutableStateFlow<Date?>(null)
-
-    private val _endDate = MutableStateFlow<Date?>(null)
-
     private val _uiState = MutableStateFlow<AddExpenseUiState>(AddExpenseUiState.Loading)
     val uiState = _uiState.asStateFlow()
 
     private val _account = MutableStateFlow<Account?>(null)
 
     init {
-        val calendar = Calendar.getInstance()
-        _endDate.value = calendar.time
-        calendar.set(Calendar.DAY_OF_MONTH, 1)
-        _startDate.value = calendar.time
         initializeNetworkState()
         loadCategories()
     }
@@ -129,6 +121,8 @@ class AddExpenseViewModel @Inject constructor(
                 apiCall = {
                     val accountId = current.account.id
                     val categoryId = selectedCategory!!.id
+                    println(date)
+                    println(formatToIso8601Local(date))
                     val expense = Expense(
                         id = 0,
                         title = selectedCategory.name,
@@ -137,7 +131,7 @@ class AddExpenseViewModel @Inject constructor(
                         account = current.account.name,
                         currency = current.account.currency,
                         comment = comment.takeIf { it.isNotBlank() },
-                        date = formatToIso8601(date)
+                        date = formatToIso8601Local(date)
                     )
                     addExpenseUseCase(expense, accountId, categoryId)
                 },
