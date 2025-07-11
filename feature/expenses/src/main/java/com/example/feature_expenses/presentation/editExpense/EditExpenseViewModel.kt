@@ -9,8 +9,8 @@ import com.example.core_network.network.NetworkResult
 import com.example.core_network.network.NetworkState
 import com.example.core_ui.base.BaseViewModel
 import com.example.core_ui.utils.TransactionValidator
-import com.example.core_ui.utils.formatToIso8601
 import com.example.core_ui.utils.formatToIso8601Local
+import com.example.feature_expenses.domain.DeleteExpenseUseCase
 import com.example.feature_expenses.domain.GetExpenseByIdUseCase
 import com.example.feature_expenses.domain.GetExpensesCategoriesUseCase
 import com.example.feature_expenses.domain.UpdateExpenseUseCase
@@ -24,7 +24,7 @@ class EditExpenseViewModel @Inject constructor(
     val getAccountUseCase: GetAccountUseCase,
     val getExpenseByIdUseCase: GetExpenseByIdUseCase,
     val updateExpenseUseCase: UpdateExpenseUseCase,
-    /*val deleteExpenseUseCase: DeleteExpenseUseCase,*/
+    val deleteExpenseUseCase: DeleteExpenseUseCase,
     networkState: NetworkState,
     errorHandler: ErrorHandler
 ) : BaseViewModel(
@@ -153,18 +153,15 @@ class EditExpenseViewModel @Inject constructor(
         }
     }
 
-    /*
     fun deleteExpense() {
         val expense = currentExpense
         if (expense != null) {
             _uiState.value = EditExpenseUiState.Loading
             safeApiCall(
-                apiCall = { deleteExpenseUseCase(expense) },
+                apiCall = { deleteExpenseUseCase(expense.id) },
                 onSuccess = { _uiState.value = EditExpenseUiState.Deleted },
                 onError = { errorResId -> _uiState.value = EditExpenseUiState.Error(errorResId) }
             )
         }
     }
-
-     */
 } 

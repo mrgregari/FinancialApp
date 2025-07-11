@@ -8,6 +8,7 @@ import com.example.core_data.remote.dto.CreateTransactionDto
 import com.example.core_data.remote.dto.UpdateTransactionDto
 import retrofit2.Response
 import retrofit2.http.Body
+import retrofit2.http.DELETE
 import retrofit2.http.GET
 import retrofit2.http.POST
 import retrofit2.http.PUT
@@ -25,6 +26,11 @@ interface FinancialApi {
 
     @POST("transactions")
     suspend fun postTransaction(@Body transaction: CreateTransactionDto): Response<Unit>
+
+    @DELETE("transactions/{id}")
+    suspend fun deleteTransaction(
+        @Path("id") transactionId: Int
+    ) : Response<Unit>
 
     @PUT("transactions/{id}")
     suspend fun updateTransaction(

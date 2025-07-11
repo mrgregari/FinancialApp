@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.ModalBottomSheet
@@ -137,19 +138,18 @@ fun EditExpenseContent(
                 hint = "Комментарий"
             )
             HorizontalDivider()
-            Spacer(modifier = Modifier.weight(1f))
             Button(
                 onClick = onDeleteClick,
                 colors = ButtonDefaults.buttonColors(containerColor = MaterialTheme.colorScheme.error),
-                shape = MaterialTheme.shapes.large,
+                shape = RoundedCornerShape(20.dp),
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(horizontal = 24.dp, vertical = 24.dp)
-                    .height(56.dp)
+                    .padding(horizontal = 16.dp, vertical = 32.dp)
+                    .height(40.dp)
             ) {
                 Text(
                     text = "Удалить расход",
-                    style = MaterialTheme.typography.titleMedium,
+                    style = MaterialTheme.typography.bodyLarge,
                     color = Color.White
                 )
             }

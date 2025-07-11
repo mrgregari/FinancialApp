@@ -17,6 +17,7 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -30,6 +31,7 @@ import com.example.core_ui.components.ErrorScreen
 import com.example.core_ui.components.LoadingScreen
 import com.example.core_ui.components.NetworkErrorBanner
 import com.example.core_ui.utils.parseIso8601Date
+import com.example.core_ui.utils.parseIso8601LocalDate
 import com.example.feature_expenses.di.DaggerExpensesComponent
 import java.util.Date
 
@@ -51,8 +53,8 @@ fun EditExpenseScreen(
 
     var value by remember { mutableStateOf("") }
     var selectedCategory by remember { mutableStateOf<Category?>(null) }
-    var date by remember { mutableStateOf(Date()) }
-    var time by remember { mutableStateOf(Date()) }
+    var date by rememberSaveable { mutableStateOf(Date()) }
+    var time by rememberSaveable { mutableStateOf(Date()) }
     var comment by remember { mutableStateOf("") }
     var isInitialized by remember { mutableStateOf(false) }
 
@@ -130,9 +132,16 @@ fun EditExpenseScreen(
                             value = expense.amount
                             selectedCategory = state.categories.find { it.name == expense.title }
                             println("selectedCategory: $selectedCategory")
-                            val parsedDate = parseIso8601Date(expense.date)
-                            date = parsedDate ?: Date()
-                            time = parsedDate ?: Date()
+                            println("expense.date: ${expense.date}")
+                            val parsedDate = parseIso8601LocalDate(expense.date)
+                            println("parsedDate: $parsedDate")
+                            if (parsedDate != null) {
+                                date = parsedDate
+                                time = parsedDate
+                                println("Set date and time to: $parsedDate")
+                            } else {
+                                println("parsedDate is null, keeping current time")
+                            }
                             comment = expense.comment ?: ""
                             isInitialized = true
                             viewModel.validateAllFields(value, selectedCategory)
@@ -165,7 +174,7 @@ fun EditExpenseScreen(
                             viewModel.validateField("category", value, category)
                         },
                         validationState = validationState,
-                        onDeleteClick = { /*viewModel.deleteExpense() */}
+                        onDeleteClick = { viewModel.deleteExpense() }
                     )
                 }
                 is EditExpenseUiState.Updated, is EditExpenseUiState.Deleted -> onNavigateBack()

@@ -157,4 +157,15 @@ class TransactionRepositoryImpl @Inject constructor(
         }
     }
 
+    override suspend fun deleteTransactionById(id: Int): NetworkResult<Unit> {
+        return withContext(ioDispatcher) {
+            try {
+                transactionRemoteDataSource.deleteTransactionById(id)
+                NetworkResult.Success(Unit)
+            } catch (e: Exception) {
+                NetworkResult.Error(e)
+            }
+        }
+    }
+
 }

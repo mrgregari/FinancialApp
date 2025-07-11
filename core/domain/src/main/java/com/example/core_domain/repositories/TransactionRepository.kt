@@ -58,4 +58,6 @@ interface TransactionRepository {
     ): NetworkResult<Unit>
 
     suspend fun getExpenseById(id: Int) : NetworkResult<Expense>
+
+    suspend fun deleteTransactionById(id: Int) : NetworkResult<Unit>
 }

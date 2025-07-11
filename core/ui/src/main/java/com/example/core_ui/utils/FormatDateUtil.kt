@@ -49,3 +49,14 @@ fun parseIso8601Date(dateString: String?): Date? {
         null
     }
 }
+
+fun parseIso8601LocalDate(dateString: String?): Date? {
+    if (dateString.isNullOrEmpty()) return null
+    return try {
+        val parser = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.getDefault())
+        // parser.timeZone = TimeZone.getDefault() // по умолчанию локальное время
+        parser.parse(dateString)
+    } catch (e: Exception) {
+        null
+    }
+}

@@ -38,4 +38,13 @@ class TransactionRemoteDataSource @Inject constructor(
     suspend fun getTransactionById(
         transactionId: Int
     ) : TransactionDto = api.getTransactionById(transactionId)
+
+    suspend fun deleteTransactionById(
+        transactionId: Int
+    ) {
+        val response = api.deleteTransaction(transactionId)
+        if (!response.isSuccessful) {
+            throw HttpException(response)
+        }
+    }
 }
