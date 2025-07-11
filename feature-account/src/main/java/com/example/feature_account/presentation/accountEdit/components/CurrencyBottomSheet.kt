@@ -6,6 +6,8 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.runtime.Composable
 import com.example.core_ui.R
+import com.example.core_ui.components.BottomSheetItem
+import com.example.core_ui.components.CancelSheetItem
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -17,7 +19,7 @@ fun CurrencyBottomSheet(
         onDismissRequest = onDismiss
     ) {
         Column {
-            CurrencySheetItem(
+            BottomSheetItem(
                 iconRes = R.drawable.ruble,
                 text = "Российский рубль ₽",
                 onClick = {
@@ -26,7 +28,7 @@ fun CurrencyBottomSheet(
                 }
             )
             HorizontalDivider()
-            CurrencySheetItem(
+            BottomSheetItem(
                 iconRes = R.drawable.dollar,
                 text = "Американский доллар $",
                 onClick = {
@@ -35,7 +37,7 @@ fun CurrencyBottomSheet(
                 }
             )
             HorizontalDivider()
-            CurrencySheetItem(
+            BottomSheetItem(
                 iconRes = R.drawable.euro,
                 text = "Евро €",
                 onClick = {

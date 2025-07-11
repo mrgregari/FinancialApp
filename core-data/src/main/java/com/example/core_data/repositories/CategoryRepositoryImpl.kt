@@ -27,4 +27,28 @@ class CategoryRepositoryImpl @Inject constructor(
             }
         }
     }
+
+    override suspend fun getIncomeCategories(): NetworkResult<List<Category>> {
+        return withContext(ioDispatcher) {
+            try {
+                val dtos = categoryRemoteDataSource.getCategoriesByType(true)
+                val categories = dtos.map { mapper.fromDtoToCategory(it) }
+                NetworkResult.Success(categories)
+            } catch (e: Exception) {
+                NetworkResult.Error(e)
+            }
+        }
+    }
+
+    override suspend fun getExpenseCategories(): NetworkResult<List<Category>> {
+        return withContext(ioDispatcher) {
+            try {
+                val dtos = categoryRemoteDataSource.getCategoriesByType(false)
+                val categories = dtos.map { mapper.fromDtoToCategory(it) }
+                NetworkResult.Success(categories)
+            } catch (e: Exception) {
+                NetworkResult.Error(e)
+            }
+        }
+    }
 }

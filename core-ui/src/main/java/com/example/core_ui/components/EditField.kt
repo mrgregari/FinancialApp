@@ -1,4 +1,4 @@
-package com.example.feature_account.presentation.accountEdit.components
+package com.example.core_ui.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Row
@@ -22,7 +22,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun EditAccountField(
+fun EditField(
     label: String,
     value: String,
     onValueChange: (String) -> Unit,

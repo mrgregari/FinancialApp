@@ -12,4 +12,8 @@ class CategoryRemoteDataSource @Inject constructor(
     private val api: FinancialApi
 ) {
     suspend fun getCategories(): List<CategoryDto> = api.getCategories()
+
+    suspend fun getCategoriesByType(isIncome: Boolean): List<CategoryDto> =
+        api.getCategoriesByType(isIncome)
+
 }

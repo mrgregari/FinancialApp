@@ -16,4 +16,8 @@ interface CategoryRepository {
      */
 
     suspend fun getCategories(): NetworkResult<List<Category>>
+
+    suspend fun getIncomeCategories(): NetworkResult<List<Category>>
+
+    suspend fun getExpenseCategories(): NetworkResult<List<Category>>
 }

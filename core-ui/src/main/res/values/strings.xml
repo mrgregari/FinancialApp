@@ -48,4 +48,6 @@
     <string name="categories">Статьи</string>
     <string name="settings">Настройки</string>
     <string name="account_name">Название счета</string>
+    <string name="add_expense">Добавить расход</string>
+    <string name="my_expenses">Мои расходы</string>
 </resources> 

@@ -1,4 +1,4 @@
-package com.example.feature_account.presentation.accountEdit.components
+package com.example.core_ui.components
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Row
@@ -17,7 +17,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun CurrencySheetItem(
+fun BottomSheetItem(
     iconRes: Int,
     text: String,
     onClick: () -> Unit

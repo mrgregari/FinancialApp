@@ -30,6 +30,7 @@ import com.example.feature_categories.di.DaggerCategoriesComponent
 @Composable
 fun CategoriesScreen(
 ) {
+    // поискать вместо ремембер
     val app = LocalContext.current.applicationContext as DataComponentProvider
     val categoriesComponent = remember {
         DaggerCategoriesComponent.factory()

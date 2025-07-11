@@ -1,4 +1,4 @@
-package com.example.feature_expenses.presentation
+package com.example.feature_expenses.presentation.todayExpenses
 
 
 import androidx.compose.foundation.ExperimentalFoundationApi
@@ -33,7 +33,8 @@ import com.example.feature_expenses.di.DaggerExpensesComponent
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
 fun ExpensesScreen(
-    onHistoryClick: () -> Unit
+    onHistoryClick: () -> Unit,
+    onAddClick: () -> Unit
 ) {
 
     val app = LocalContext.current.applicationContext as DataComponentProvider
@@ -70,7 +71,9 @@ fun ExpensesScreen(
             )
         },
         floatingActionButton = {
-            CustomFab(onClick = { })
+            CustomFab(onClick = {
+                onAddClick()
+            })
         }
     ) { innerPadding ->
         Column(

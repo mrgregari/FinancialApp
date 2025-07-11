@@ -37,4 +37,6 @@ interface TransactionRepository {
         startDate: Date? = null,
         endDate: Date? = null
     ) : NetworkResult<List<Income>>
+
+    suspend fun addExpense(expense: Expense, accountId: Int, categoryId: Int): NetworkResult<Unit>
 }

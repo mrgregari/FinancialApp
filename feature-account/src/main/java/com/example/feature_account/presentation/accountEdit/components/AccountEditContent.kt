@@ -16,6 +16,7 @@ import androidx.compose.ui.platform.LocalFocusManager
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.example.core_ui.components.CustomListItem
+import com.example.core_ui.components.EditField
 import com.example.core_ui.utils.getCurrencySymbol
 
 @Composable
@@ -39,7 +40,7 @@ fun AccountEditContent(
                 interactionSource = remember { MutableInteractionSource() }
             ) { focusManager.clearFocus() }
     ) {
-        EditAccountField(
+        EditField(
             label = "Название счета",
             value = name,
             onValueChange = onNameChange
@@ -52,7 +53,7 @@ fun AccountEditContent(
                 modifier = Modifier.padding(start = 16.dp, top = 2.dp, bottom = 2.dp)
             )
         }
-        EditAccountField(
+        EditField(
             label = "Баланс",
             value = balance,
             onValueChange = onValueChange,

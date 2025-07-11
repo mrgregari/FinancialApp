@@ -1,4 +1,4 @@
-package com.example.feature_expenses.presentation
+package com.example.feature_expenses.presentation.todayExpenses
 
 import com.example.core_domain.usecases.GetAccountUseCase
 import com.example.core_network.network.ErrorHandler

@@ -22,7 +22,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.core_data.di.DataComponentProvider
 import com.example.core_ui.R
@@ -78,8 +77,9 @@ fun AccountEditScreen(
                 title = { Text(stringResource(R.string.account_title)) },
                 actions = {
                     val account = (uiState as? AccountEditUiState.Success)?.account
-                    val isFormValid = (uiState as? AccountEditUiState.Success)?.validationState?.isFormValid == true
-                    
+                    val isFormValid =
+                        (uiState as? AccountEditUiState.Success)?.validationState?.isFormValid == true
+
                     IconButton(
                         onClick = {
                             viewModel.validateAllFields(name, balance, currency)
@@ -119,7 +119,7 @@ fun AccountEditScreen(
                 is AccountEditUiState.Success -> {
                     val account = (uiState as AccountEditUiState.Success).account
                     val validationState = (uiState as AccountEditUiState.Success).validationState
-                    
+
                     LaunchedEffect(account) {
                         if (!isInitialized) {
                             name = account.name
@@ -129,7 +129,7 @@ fun AccountEditScreen(
                             viewModel.validateAllFields(name, balance, currency)
                         }
                     }
-                    
+
                     AccountEditContent(
                         name = name,
                         onNameChange = { newName ->
@@ -153,7 +153,7 @@ fun AccountEditScreen(
                     onNavigateBack()
                 }
             }
-            
+
             if (showCurrencySheet) {
                 CurrencyBottomSheet(
                     onCurrencySelected = { selectedCurrency ->

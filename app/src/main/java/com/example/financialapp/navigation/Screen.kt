@@ -1,6 +1,7 @@
 package com.example.financialapp.navigation
 
-import com.example.financialapp.R
+import com.example.core_ui.R
+
 
 /**
  * Sealed class representing navigation screens in the app.
@@ -66,4 +67,10 @@ sealed class Screen(
     ) {
         fun routeWithIdAccount(accountId: Int) = "edit_account/$accountId"
     }
+
+    object AddExpense : Screen(
+        route = "add_expense",
+        titleResId = R.string.add_expense,
+        icon = R.drawable.edit
+    )
 }

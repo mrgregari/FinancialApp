@@ -3,6 +3,7 @@ package com.example.core_ui.utils
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
+import java.util.TimeZone
 
 fun formatDate(date: Date?): String {
     return if (date != null) {
@@ -24,4 +25,10 @@ fun formatDateTime(dateString: String?): String {
         // В случае ошибки парсинга, можно вернуть исходную строку или пустую
         ""
     }
+}
+
+fun formatToIso8601(date: Date): String {
+    val sdf = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.getDefault())
+    sdf.timeZone = TimeZone.getTimeZone("UTC")
+    return sdf.format(date)
 }
