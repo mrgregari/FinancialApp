@@ -27,7 +27,8 @@ fun EditField(
     value: String,
     onValueChange: (String) -> Unit,
     modifier: Modifier = Modifier,
-    keyboardType: KeyboardType = KeyboardType.Text
+    keyboardType: KeyboardType = KeyboardType.Text,
+    hint: String? = null
 ) {
     val textFieldValue = remember(value) {
         TextFieldValue(
@@ -35,7 +36,7 @@ fun EditField(
             selection = TextRange(value.length)
         )
     }
-    
+
     Row(
         verticalAlignment = Alignment.CenterVertically,
         modifier = modifier
@@ -67,7 +68,19 @@ fun EditField(
             ),
             keyboardOptions = KeyboardOptions(keyboardType = keyboardType),
             modifier = Modifier
-                .padding(horizontal = 16.dp)
+                .padding(horizontal = 16.dp),
+            placeholder = if (hint != null) {
+                {
+                    Text(
+                        hint,
+                        style = MaterialTheme.typography.bodyLarge.copy(
+                            color = MaterialTheme.colorScheme.outlineVariant,
+                            textAlign = TextAlign.End
+                        ),
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                }
+            } else null
         )
     }
     HorizontalDivider(modifier = Modifier.fillMaxWidth())

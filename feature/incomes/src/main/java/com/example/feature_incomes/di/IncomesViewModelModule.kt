@@ -2,7 +2,8 @@ package com.example.feature_incomes.di
 
 import androidx.lifecycle.ViewModel
 import com.example.core_ui.di.ViewModelKey
-import com.example.feature_incomes.presentation.IncomesViewModel
+import com.example.feature_incomes.presentation.addIncome.AddIncomeViewModel
+import com.example.feature_incomes.presentation.todayIncomes.IncomesViewModel
 import com.example.feature_incomes.presentation.incomesHistory.IncomesHistoryViewModel
 import dagger.Binds
 import dagger.Module
@@ -19,4 +20,9 @@ interface IncomesViewModelModule {
     @IntoMap
     @ViewModelKey(IncomesHistoryViewModel::class)
     fun bindIncomesHistoryViewModel(viewModel: IncomesHistoryViewModel): ViewModel
+
+    @Binds
+    @IntoMap
+    @ViewModelKey(AddIncomeViewModel::class)
+    fun bindAddIncomeViewModel(viewModel: AddIncomeViewModel): ViewModel
 } 

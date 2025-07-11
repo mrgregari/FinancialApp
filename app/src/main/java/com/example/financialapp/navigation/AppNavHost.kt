@@ -11,11 +11,12 @@ import com.example.feature_account.presentation.AccountScreen
 import com.example.feature_account.presentation.accountEdit.AccountEditScreen
 import com.example.feature_categories.presentation.CategoriesScreen
 import com.example.feature_expenses.presentation.addExpense.AddExpenseScreen
-import com.example.feature_incomes.presentation.IncomeScreen
+import com.example.feature_incomes.presentation.todayIncomes.IncomeScreen
 import com.example.feature_incomes.presentation.incomesHistory.IncomesHistoryScreen
 import com.example.feature_settings.presentation.SettingsScreen
 import com.example.feature_expenses.presentation.todayExpenses.ExpensesScreen
 import com.example.feature_expenses.presentation.expensesHistory.ExpensesHistoryScreen
+import com.example.feature_incomes.presentation.addIncome.AddIncomeScreen
 
 @Composable
 fun AppNavHost(
@@ -51,6 +52,9 @@ fun AppNavHost(
             IncomeScreen(
                 onHistoryClick = {
                     navController.navigate(Screen.IncomesHistory.route)
+                },
+                onAddClick = {
+                    navController.navigate(Screen.AddExpense.route)
                 }
             )
         }
@@ -89,6 +93,17 @@ fun AppNavHost(
                 onNavigateBack = {
                     navController.navigate(Screen.Expenses.route) {
                         popUpTo(Screen.AddExpense.route) { inclusive = true }
+                        launchSingleTop = true
+                    }
+                }
+            )
+        }
+
+        composable(Screen.AddIncome.route) {
+            AddIncomeScreen(
+                onNavigateBack = {
+                    navController.navigate(Screen.Income.route) {
+                        popUpTo(Screen.AddIncome.route) { inclusive = true }
                         launchSingleTop = true
                     }
                 }

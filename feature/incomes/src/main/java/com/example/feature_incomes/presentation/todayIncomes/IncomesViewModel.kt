@@ -1,4 +1,4 @@
-package com.example.feature_incomes.presentation
+package com.example.feature_incomes.presentation.todayIncomes
 
 
 import com.example.core_domain.usecases.GetAccountUseCase

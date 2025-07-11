@@ -48,5 +48,6 @@ dependencies {
     kapt(libs.google.dagger.compiler)
 
     api(project(":core:network"))
+    api(project(":core:domain"))
 
 }

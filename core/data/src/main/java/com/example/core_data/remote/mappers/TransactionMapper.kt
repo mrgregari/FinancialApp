@@ -34,14 +34,31 @@ class TransactionMapper @Inject constructor() {
     )
 
 
-
-    fun toCreateDto(expense: Expense, accountId: Int, categoryId: Int): CreateTransactionDto {
+    fun fromExpenseToCreateDto(
+        expense: Expense,
+        accountId: Int,
+        categoryId: Int
+    ): CreateTransactionDto {
         return CreateTransactionDto(
             accountId = accountId,
             categoryId = categoryId,
             amount = expense.amount,
             transactionDate = expense.date,
             comment = expense.comment
+        )
+    }
+
+    fun fromIncomeToCreateDto(
+        income: Income,
+        accountId: Int,
+        categoryId: Int
+    ): CreateTransactionDto {
+        return CreateTransactionDto(
+            accountId = accountId,
+            categoryId = categoryId,
+            amount = income.amount,
+            transactionDate = income.date,
+            comment = income.comment
         )
     }
 }

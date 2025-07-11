@@ -14,9 +14,6 @@ import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
 import javax.inject.Inject
-import com.example.core_data.remote.dto.TransactionDto
-import com.example.core_data.remote.dto.AccountDto
-import com.example.core_data.remote.dto.CategoryDto
 
 class TransactionRepositoryImpl @Inject constructor(
     private val transactionRemoteDataSource: TransactionRemoteDataSource,
@@ -93,7 +90,27 @@ class TransactionRepositoryImpl @Inject constructor(
     override suspend fun addExpense(expense: Expense, accountId: Int, categoryId: Int): NetworkResult<Unit> {
         return withContext(ioDispatcher) {
             try {
-                val dto = mapper.toCreateDto(expense, accountId, categoryId)
+                val dto = mapper.fromExpenseToCreateDto(expense, accountId, categoryId)
+                val response = transactionRemoteDataSource.postTransaction(dto)
+                if (response.isSuccessful) {
+                    NetworkResult.Success(Unit)
+                } else {
+                    NetworkResult.Error(Exception("Ошибка при добавлении транзакции: ${response.code()}"))
+                }
+            } catch (e: Exception) {
+                NetworkResult.Error(e)
+            }
+        }
+    }
+
+    override suspend fun addIncome(
+        income: Income,
+        accountId: Int,
+        categoryId: Int
+    ): NetworkResult<Unit> {
+        return withContext(ioDispatcher) {
+            try {
+                val dto = mapper.fromIncomeToCreateDto(income, accountId, categoryId)
                 val response = transactionRemoteDataSource.postTransaction(dto)
                 if (response.isSuccessful) {
                     NetworkResult.Success(Unit)

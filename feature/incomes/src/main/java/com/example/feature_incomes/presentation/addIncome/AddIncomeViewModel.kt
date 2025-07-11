@@ -1,48 +1,44 @@
-package com.example.feature_expenses.presentation.addExpense
+package com.example.feature_incomes.presentation.addIncome
 
-import com.example.core_domain.models.Account
 import com.example.core_domain.models.Category
-import com.example.core_domain.models.Expense
 import com.example.core_domain.usecases.GetAccountUseCase
 import com.example.core_network.network.ErrorHandler
 import com.example.core_network.network.NetworkResult
 import com.example.core_network.network.NetworkState
 import com.example.core_ui.base.BaseViewModel
-import com.example.core_ui.utils.TransactionValidator
-import com.example.core_ui.utils.formatToIso8601
-import com.example.feature_expenses.domain.AddExpenseUseCase
-import com.example.feature_expenses.domain.GetExpensesCategoriesUseCase
+import com.example.feature_incomes.domain.GetIncomesCategoriesUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import java.util.Calendar
 import java.util.Date
 import javax.inject.Inject
+import com.example.core_ui.utils.TransactionValidator
+import com.example.core_ui.utils.TransactionValidationState
+import com.example.core_domain.repositories.TransactionRepository
+import com.example.core_domain.models.Account
+import com.example.core_domain.models.Income
+import kotlinx.coroutines.launch
+import java.text.SimpleDateFormat
+import java.util.Locale
+import com.example.feature_incomes.domain.AddIncomeUseCase
+import com.example.core_ui.utils.formatToIso8601
 
-class AddExpenseViewModel @Inject constructor(
-    val getExpensesCategoriesUseCase: GetExpensesCategoriesUseCase,
+class AddIncomeViewModel @Inject constructor(
+    val getIncomesCategoriesUseCase: GetIncomesCategoriesUseCase,
     val getAccountUseCase: GetAccountUseCase,
-    val addExpenseUseCase: AddExpenseUseCase,
+    val addIncomeUseCase: AddIncomeUseCase,
     networkState: NetworkState,
     errorHandler: ErrorHandler
 ) : BaseViewModel(
     networkState,
     errorHandler
 ) {
-
-    private val _startDate = MutableStateFlow<Date?>(null)
-
-    private val _endDate = MutableStateFlow<Date?>(null)
-
-    private val _uiState = MutableStateFlow<AddExpenseUiState>(AddExpenseUiState.Loading)
+    private val _uiState = MutableStateFlow<AddIncomeUiState>(AddIncomeUiState.Loading)
     val uiState = _uiState.asStateFlow()
 
     private val _account = MutableStateFlow<Account?>(null)
 
     init {
-        val calendar = Calendar.getInstance()
-        _endDate.value = calendar.time
-        calendar.set(Calendar.DAY_OF_MONTH, 1)
-        _startDate.value = calendar.time
         initializeNetworkState()
         loadCategories()
     }
@@ -61,31 +57,30 @@ class AddExpenseViewModel @Inject constructor(
                         val accountId = account?.id
                         if (accountId != null && accountId != 0) {
                             _account.value = account
-                            getExpensesCategoriesUseCase()
+                            getIncomesCategoriesUseCase()
                         } else {
                             NetworkResult.Error(Throwable("Нет доступного счёта"))
                         }
                     }
-
                     is NetworkResult.Error -> accountsResult
                     is NetworkResult.Loading -> NetworkResult.Loading
                 }
             },
             onSuccess = { categories ->
-                _uiState.value = AddExpenseUiState.Success(
+                _uiState.value = AddIncomeUiState.Success(
                     categories = categories,
                     account = _account.value!!
                 )
             },
             onError = { errorResId ->
-                _uiState.value = AddExpenseUiState.Error(errorResId)
+                _uiState.value = AddIncomeUiState.Error(errorResId)
             }
         )
     }
 
     fun validateField(field: String, value: String, selectedCategory: Category? = null) {
         val current = _uiState.value
-        if (current is AddExpenseUiState.Success) {
+        if (current is AddIncomeUiState.Success) {
             val validationState = when (field) {
                 "value" -> {
                     val valueError = TransactionValidator.validateValue(value)?.getMessage()
@@ -105,31 +100,31 @@ class AddExpenseViewModel @Inject constructor(
 
     fun validateAllFields(value: String, category: Category?) {
         val current = _uiState.value
-        if (current is AddExpenseUiState.Success) {
+        if (current is AddIncomeUiState.Success) {
             val validationState = TransactionValidator.validateAll(value, category)
             _uiState.value = current.copy(validationState = validationState)
         }
     }
 
-    fun addExpense(
+    fun addIncome(
         value: String,
         selectedCategory: Category?,
         date: Date,
         comment: String
     ) {
         val current = _uiState.value
-        if (current is AddExpenseUiState.Success) {
+        if (current is AddIncomeUiState.Success) {
             val validationState = TransactionValidator.validateAll(value, selectedCategory)
             if (!validationState.isFormValid) {
                 _uiState.value = current.copy(validationState = validationState)
                 return
             }
-            _uiState.value = AddExpenseUiState.Loading
+            _uiState.value = AddIncomeUiState.Loading
             safeApiCall(
                 apiCall = {
                     val accountId = current.account.id
                     val categoryId = selectedCategory!!.id
-                    val expense = Expense(
+                    val income = Income(
                         id = 0,
                         title = selectedCategory.name,
                         icon = selectedCategory.icon,
@@ -139,11 +134,11 @@ class AddExpenseViewModel @Inject constructor(
                         comment = comment.takeIf { it.isNotBlank() },
                         date = formatToIso8601(date)
                     )
-                    addExpenseUseCase(expense, accountId, categoryId)
+                    addIncomeUseCase(income, accountId, categoryId)
                 },
-                onSuccess = { _uiState.value = AddExpenseUiState.Updated },
-                onError = { errorResId -> _uiState.value = AddExpenseUiState.Error(errorResId) }
+                onSuccess = { _uiState.value = AddIncomeUiState.Updated },
+                onError = { errorResId -> _uiState.value = AddIncomeUiState.Error(errorResId) }
             )
         }
     }
-}
+} 

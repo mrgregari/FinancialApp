@@ -1,4 +1,4 @@
-package com.example.feature_incomes.presentation
+package com.example.feature_incomes.presentation.todayIncomes
 
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Column
@@ -34,7 +34,8 @@ import com.example.feature_incomes.di.DaggerIncomesComponent
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
 fun IncomeScreen(
-    onHistoryClick: () -> Unit
+    onHistoryClick: () -> Unit,
+    onAddClick: () -> Unit
 ) {
 
     val app = LocalContext.current.applicationContext as DataComponentProvider
@@ -73,7 +74,9 @@ fun IncomeScreen(
             )
         },
         floatingActionButton = {
-            CustomFab(onClick = { })
+            CustomFab(onClick = {
+                onAddClick()
+            })
         }
     ) { innerPadding ->
         Column(

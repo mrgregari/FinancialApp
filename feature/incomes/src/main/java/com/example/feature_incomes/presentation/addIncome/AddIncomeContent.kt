@@ -1,4 +1,4 @@
-package com.example.feature_expenses.presentation.addExpense
+package com.example.feature_incomes.presentation.addIncome
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -30,15 +30,15 @@ import com.example.core_ui.components.CustomListItem
 import com.example.core_ui.components.CustomTimePickerDialog
 import com.example.core_ui.components.EditField
 import com.example.core_ui.components.HintEditField
-import com.example.core_ui.utils.TransactionValidationState
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
 import java.util.Locale
+import com.example.core_ui.utils.TransactionValidationState
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AddExpenseContent(
+fun AddIncomeContent(
     account: String,
     selectedCategory: String?,
     value: String,
@@ -53,7 +53,6 @@ fun AddExpenseContent(
     onCategorySelected: (Category) -> Unit,
     validationState: TransactionValidationState = TransactionValidationState()
 ) {
-
     val dateFormat = remember { SimpleDateFormat("dd.MM.yyyy", Locale.getDefault()) }
     val timeFormat = remember { SimpleDateFormat("HH:mm", Locale.getDefault()) }
     var showDatePicker by remember { mutableStateOf(false) }
@@ -189,4 +188,4 @@ fun AddExpenseContent(
             }
         )
     }
-}
+} 
