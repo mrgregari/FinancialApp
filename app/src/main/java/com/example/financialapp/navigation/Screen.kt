@@ -79,4 +79,12 @@ sealed class Screen(
         titleResId = R.string.add_income,
         icon = R.drawable.edit
     )
+
+    object EditExpense : Screen (
+        route = "edit_expense/{expenseId}",
+        titleResId = R.string.expenses,
+        icon = R.drawable.edit
+    ) {
+        fun routeWithIdExpense(expenseId: Int) = "edit_expense/$expenseId"
+    }
 }

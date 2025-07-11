@@ -87,7 +87,11 @@ class TransactionRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun addExpense(expense: Expense, accountId: Int, categoryId: Int): NetworkResult<Unit> {
+    override suspend fun addExpense(
+        expense: Expense,
+        accountId: Int,
+        categoryId: Int
+    ): NetworkResult<Unit> {
         return withContext(ioDispatcher) {
             try {
                 val dto = mapper.fromExpenseToCreateDto(expense, accountId, categoryId)
@@ -117,6 +121,36 @@ class TransactionRepositoryImpl @Inject constructor(
                 } else {
                     NetworkResult.Error(Exception("Ошибка при добавлении транзакции: ${response.code()}"))
                 }
+            } catch (e: Exception) {
+                NetworkResult.Error(e)
+            }
+        }
+    }
+
+    override suspend fun updateExpense(
+        expense: Expense,
+        accountId: Int,
+        categoryId: Int
+    ): NetworkResult<Unit> {
+        return withContext(ioDispatcher) {
+            try {
+                val dto = mapper.fromExpenseToUpdateDto(expense, accountId, categoryId)
+                transactionRemoteDataSource.updateTransaction(expense.id, dto)
+                NetworkResult.Success(Unit)
+            } catch (e: Exception) {
+                NetworkResult.Error(e)
+            }
+        }
+    }
+
+    override suspend fun getExpenseById(id: Int): NetworkResult<Expense> {
+        return withContext(ioDispatcher) {
+            try {
+                val dto = transactionRemoteDataSource.getTransactionById(
+                    transactionId = id
+                )
+                val result = mapper.fromDtoToExpense(dto)
+                NetworkResult.Success(result)
             } catch (e: Exception) {
                 NetworkResult.Error(e)
             }

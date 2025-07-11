@@ -50,4 +50,12 @@ interface TransactionRepository {
         accountId: Int,
         categoryId: Int
     ): NetworkResult<Unit>
+
+    suspend fun updateExpense(
+        expense: Expense,
+        accountId: Int,
+        categoryId: Int
+    ): NetworkResult<Unit>
+
+    suspend fun getExpenseById(id: Int) : NetworkResult<Expense>
 }

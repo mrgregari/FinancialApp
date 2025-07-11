@@ -21,6 +21,7 @@ import com.example.core_ui.utils.getCurrencySymbol
 fun ExpensesContent(
     expenses: List<Expense>,
     currency: String,
+    onItemClick: (Int) -> Unit,
     modifier: Modifier = Modifier
 ) {
     LazyColumn(modifier = modifier) {
@@ -51,6 +52,7 @@ fun ExpensesContent(
                     expense.currency
                 ),
                 showArrow = true,
+                onClick = { onItemClick(expense.id) }
             )
             HorizontalDivider()
         }

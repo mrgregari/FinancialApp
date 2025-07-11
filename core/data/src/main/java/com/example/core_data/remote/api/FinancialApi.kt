@@ -5,6 +5,7 @@ import com.example.core_data.remote.dto.CategoryDto
 import com.example.core_data.remote.dto.TransactionDto
 import com.example.core_data.remote.dto.UpdateAccountDto
 import com.example.core_data.remote.dto.CreateTransactionDto
+import com.example.core_data.remote.dto.UpdateTransactionDto
 import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
@@ -25,10 +26,21 @@ interface FinancialApi {
     @POST("transactions")
     suspend fun postTransaction(@Body transaction: CreateTransactionDto): Response<Unit>
 
+    @PUT("transactions/{id}")
+    suspend fun updateTransaction(
+        @Path("id") transactionId: Int,
+        @Body update: UpdateTransactionDto
+    ): Response<Unit>
+
     @GET("categories/type/{isIncome}")
     suspend fun getCategoriesByType(
         @Path("isIncome") isIncome: Boolean,
     ): List<CategoryDto>
+
+    @GET("transactions/{id}")
+    suspend fun getTransactionById(
+        @Path("id") transactionId: Int
+    ): TransactionDto
 
     @GET("accounts")
     suspend fun getAccounts(): List<AccountDto>

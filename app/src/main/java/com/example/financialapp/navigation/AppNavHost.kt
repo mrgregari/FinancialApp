@@ -11,6 +11,7 @@ import com.example.feature_account.presentation.AccountScreen
 import com.example.feature_account.presentation.accountEdit.AccountEditScreen
 import com.example.feature_categories.presentation.CategoriesScreen
 import com.example.feature_expenses.presentation.addExpense.AddExpenseScreen
+import com.example.feature_expenses.presentation.editExpense.EditExpenseScreen
 import com.example.feature_incomes.presentation.todayIncomes.IncomeScreen
 import com.example.feature_incomes.presentation.incomesHistory.IncomesHistoryScreen
 import com.example.feature_settings.presentation.SettingsScreen
@@ -35,6 +36,9 @@ fun AppNavHost(
                 },
                 onAddClick = {
                     navController.navigate(Screen.AddExpense.route)
+                },
+                onItemClick = { id ->
+                    navController.navigate(Screen.EditExpense.routeWithIdExpense(id))
                 }
             )
         }
@@ -88,6 +92,17 @@ fun AppNavHost(
             )
         }
 
+        composable(
+            Screen.EditExpense.route,
+            arguments = listOf(navArgument("expenseId") { type = NavType.IntType })
+        ) { backStackEntry ->
+            val expenseId = backStackEntry.arguments?.getInt("expenseId") ?: return@composable
+            EditExpenseScreen(
+                onNavigateBack = { navController.navigateUp() },
+                expenseId = expenseId
+            )
+        }
+
         composable(Screen.AddExpense.route) {
             AddExpenseScreen(
                 onNavigateBack = {
@@ -112,3 +127,4 @@ fun AppNavHost(
 
     }
 }
+

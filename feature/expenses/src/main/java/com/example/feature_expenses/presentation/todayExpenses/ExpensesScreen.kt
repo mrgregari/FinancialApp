@@ -35,7 +35,8 @@ import androidx.compose.runtime.LaunchedEffect
 @Composable
 fun ExpensesScreen(
     onHistoryClick: () -> Unit,
-    onAddClick: () -> Unit
+    onAddClick: () -> Unit,
+    onItemClick: (Int) -> Unit
 ) {
 
     val app = LocalContext.current.applicationContext as DataComponentProvider
@@ -106,7 +107,8 @@ fun ExpensesScreen(
                     ExpensesContent(
                         expenses = expenses,
                         currency = currency,
-                        modifier = Modifier.fillMaxSize()
+                        modifier = Modifier.fillMaxSize(),
+                        onItemClick = onItemClick
                     )
                 }
             }

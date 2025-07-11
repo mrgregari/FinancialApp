@@ -2,6 +2,7 @@ package com.example.core_data.remote.mappers
 
 import com.example.core_data.remote.dto.TransactionDto
 import com.example.core_data.remote.dto.CreateTransactionDto
+import com.example.core_data.remote.dto.UpdateTransactionDto
 import com.example.core_data.utils.getCurrencySymbol
 import com.example.core_domain.models.Expense
 import com.example.core_domain.models.Income
@@ -40,6 +41,21 @@ class TransactionMapper @Inject constructor() {
         categoryId: Int
     ): CreateTransactionDto {
         return CreateTransactionDto(
+            accountId = accountId,
+            categoryId = categoryId,
+            amount = expense.amount,
+            transactionDate = expense.date,
+            comment = expense.comment
+        )
+    }
+
+    fun fromExpenseToUpdateDto(
+        expense: Expense,
+        accountId: Int,
+        categoryId: Int
+    ): UpdateTransactionDto {
+        return UpdateTransactionDto(
+            id = expense.id,
             accountId = accountId,
             categoryId = categoryId,
             amount = expense.amount,

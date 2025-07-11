@@ -117,6 +117,7 @@ fun CustomListItem(
                             text = subTrailingText,
                             style = MaterialTheme.typography.bodyLarge,
                             color = MaterialTheme.colorScheme.onSurface,
+                            maxLines = 1
                         )
                     }
                 }
