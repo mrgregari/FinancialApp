@@ -35,7 +35,8 @@ import com.example.feature_incomes.di.DaggerIncomesComponent
 @Composable
 fun IncomeScreen(
     onHistoryClick: () -> Unit,
-    onAddClick: () -> Unit
+    onAddClick: () -> Unit,
+    onItemClick: (Int) -> Unit
 ) {
 
     val app = LocalContext.current.applicationContext as DataComponentProvider
@@ -102,7 +103,8 @@ fun IncomeScreen(
                     IncomesContent(
                         incomes = state.incomes,
                         modifier = Modifier.fillMaxSize(),
-                        currency = state.currency
+                        currency = state.currency,
+                        onItemClick = onItemClick
                     )
                 }
             }

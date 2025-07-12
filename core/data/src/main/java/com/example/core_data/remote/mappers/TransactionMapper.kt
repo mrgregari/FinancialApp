@@ -77,4 +77,19 @@ class TransactionMapper @Inject constructor() {
             comment = income.comment
         )
     }
+
+    fun fromIncomeToUpdateDto(
+        income: Income,
+        accountId: Int,
+        categoryId: Int
+    ): UpdateTransactionDto {
+        return UpdateTransactionDto(
+            id = income.id,
+            accountId = accountId,
+            categoryId = categoryId,
+            amount = income.amount,
+            transactionDate = income.date,
+            comment = income.comment
+        )
+    }
 }

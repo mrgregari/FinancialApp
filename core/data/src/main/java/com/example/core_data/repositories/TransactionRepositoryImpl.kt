@@ -168,4 +168,34 @@ class TransactionRepositoryImpl @Inject constructor(
         }
     }
 
+    override suspend fun getIncomeById(id: Int): NetworkResult<Income> {
+        return withContext(ioDispatcher) {
+            try {
+                val dto = transactionRemoteDataSource.getTransactionById(
+                    transactionId = id
+                )
+                val result = mapper.fromDtoToIncome(dto)
+                NetworkResult.Success(result)
+            } catch (e: Exception) {
+                NetworkResult.Error(e)
+            }
+        }
+    }
+
+    override suspend fun updateIncome(
+        income: Income,
+        accountId: Int,
+        categoryId: Int
+    ): NetworkResult<Unit> {
+        return withContext(ioDispatcher) {
+            try {
+                val dto = mapper.fromIncomeToUpdateDto(income, accountId, categoryId)
+                transactionRemoteDataSource.updateTransaction(income.id, dto)
+                NetworkResult.Success(Unit)
+            } catch (e: Exception) {
+                NetworkResult.Error(e)
+            }
+        }
+    }
+
 }

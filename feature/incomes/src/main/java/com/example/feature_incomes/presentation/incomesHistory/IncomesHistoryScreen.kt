@@ -13,6 +13,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -34,7 +35,8 @@ import com.example.feature_incomes.di.DaggerIncomesComponent
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
 @Composable
 fun IncomesHistoryScreen(
-    onNavigateUp: () -> Unit
+    onNavigateUp: () -> Unit,
+    onItemClick: (Int) -> Unit
 ) {
     val app = LocalContext.current.applicationContext as DataComponentProvider
     val incomesComponent = remember {
@@ -47,6 +49,10 @@ fun IncomesHistoryScreen(
     val viewModel : IncomesHistoryViewModel = viewModel(factory = viewModelFactory)
     val isNetworkAvailable by viewModel.isNetworkAvailable.collectAsState()
     val uiState by viewModel.uiState.collectAsState()
+
+    LaunchedEffect(Unit) {
+        viewModel.retry()
+    }
 
     var showStartDatePicker by remember { mutableStateOf(false) }
     var showEndDatePicker by remember { mutableStateOf(false) }
@@ -111,7 +117,8 @@ fun IncomesHistoryScreen(
                         onDismissStartDatePicker = { showStartDatePicker = false },
                         onDismissEndDatePicker = { showEndDatePicker = false },
                         onStartDateSelected = { viewModel.updateStartDate(it) },
-                        onEndDateSelected = { viewModel.updateEndDate(it) }
+                        onEndDateSelected = { viewModel.updateEndDate(it) },
+                        onItemClick = onItemClick
                     )
                 }
             }

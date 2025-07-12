@@ -36,7 +36,8 @@ fun IncomesHistoryContent(
     onDismissStartDatePicker: () -> Unit,
     onDismissEndDatePicker: () -> Unit,
     onStartDateSelected: (Date?) -> Unit,
-    onEndDateSelected: (Date?) -> Unit
+    onEndDateSelected: (Date?) -> Unit,
+    onItemClick: (Int) -> Unit
 ) {
     LazyColumn(modifier = Modifier.fillMaxSize()) {
         stickyHeader {
@@ -80,6 +81,7 @@ fun IncomesHistoryContent(
                 trailingText = formatAmountWithCurrency(income.amount.toDouble(), income.currency),
                 subTrailingText = formatDateTime(income.date),
                 showArrow = true,
+                onClick = { onItemClick(income.id) }
             )
             HorizontalDivider()
         }

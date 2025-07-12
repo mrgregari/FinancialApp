@@ -21,7 +21,8 @@ import androidx.compose.foundation.lazy.items
 fun IncomesContent(
     incomes: List<Income>,
     modifier: Modifier = Modifier,
-    currency: String
+    currency: String,
+    onItemClick: (Int) -> Unit
 ) {
     LazyColumn(modifier = modifier) {
         stickyHeader {
@@ -49,6 +50,7 @@ fun IncomesContent(
                 trailingText = formatAmountWithCurrency(income.amount.toDouble(), income.currency),
                 subTrailingText = null,
                 showArrow = true,
+                onClick = { onItemClick(income.id) }
             )
             HorizontalDivider()
         }

@@ -14,6 +14,7 @@ import com.example.feature_expenses.presentation.addExpense.AddExpenseScreen
 import com.example.feature_expenses.presentation.editExpense.EditExpenseScreen
 import com.example.feature_incomes.presentation.todayIncomes.IncomeScreen
 import com.example.feature_incomes.presentation.incomesHistory.IncomesHistoryScreen
+import com.example.feature_incomes.presentation.editIncome.EditIncomeScreen
 import com.example.feature_settings.presentation.SettingsScreen
 import com.example.feature_expenses.presentation.todayExpenses.ExpensesScreen
 import com.example.feature_expenses.presentation.expensesHistory.ExpensesHistoryScreen
@@ -52,7 +53,10 @@ fun AppNavHost(
         }
         composable(Screen.IncomesHistory.route) {
             IncomesHistoryScreen(
-                onNavigateUp = { navController.navigateUp() }
+                onNavigateUp = { navController.navigateUp() },
+                onItemClick = { id ->
+                    navController.navigate(Screen.EditIncome.routeWithIdIncome(id))
+                }
             )
         }
         composable(Screen.Income.route) {
@@ -62,6 +66,9 @@ fun AppNavHost(
                 },
                 onAddClick = {
                     navController.navigate(Screen.AddIncome.route)
+                },
+                onItemClick = { id ->
+                    navController.navigate(Screen.EditIncome.routeWithIdIncome(id))
                 }
             )
         }
@@ -103,6 +110,17 @@ fun AppNavHost(
             EditExpenseScreen(
                 onNavigateBack = { navController.navigateUp() },
                 expenseId = expenseId
+            )
+        }
+
+        composable(
+            Screen.EditIncome.route,
+            arguments = listOf(navArgument("incomeId") { type = NavType.IntType })
+        ) { backStackEntry ->
+            val incomeId = backStackEntry.arguments?.getInt("incomeId") ?: return@composable
+            EditIncomeScreen(
+                onNavigateBack = { navController.navigateUp() },
+                incomeId = incomeId
             )
         }
 

@@ -50,5 +50,6 @@
     <string name="account_name">Название счета</string>
     <string name="add_expense">Добавить расход</string>
     <string name="my_expenses">Мои расходы</string>
+    <string name="my_incomes">Мои доходы</string>
     <string name="add_income">Мои доходы</string>
 </resources> 

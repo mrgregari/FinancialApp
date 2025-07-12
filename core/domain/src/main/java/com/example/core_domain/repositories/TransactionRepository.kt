@@ -60,4 +60,12 @@ interface TransactionRepository {
     suspend fun getExpenseById(id: Int) : NetworkResult<Expense>
 
     suspend fun deleteTransactionById(id: Int) : NetworkResult<Unit>
+
+    suspend fun getIncomeById(id: Int) : NetworkResult<Income>
+
+    suspend fun updateIncome(
+        income: Income,
+        accountId: Int,
+        categoryId: Int
+    ): NetworkResult<Unit>
 }
