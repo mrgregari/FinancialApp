@@ -1,6 +1,6 @@
 package com.example.core_data.repositories
 
-import com.example.core_data.remote.mappers.CategoryMapper
+import com.example.core_data.mappers.CategoryMapper
 import com.example.core_data.remote.remoteDataSource.CategoryRemoteDataSource
 import com.example.core_data.di.IODispatcher
 import com.example.core_domain.models.Category

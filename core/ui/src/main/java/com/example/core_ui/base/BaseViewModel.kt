@@ -43,6 +43,8 @@ abstract class BaseViewModel(
     protected fun initializeNetworkState() {
         observeNetworkState()
     }
+
+    protected open fun onNetworkAvailable() {}
     
     private fun observeNetworkState() {
         viewModelScope.launch {
@@ -50,6 +52,8 @@ abstract class BaseViewModel(
                 _isNetworkAvailable.value = isAvailable
                 if (!isAvailable) {
                     showError(R.string.no_internet)
+                } else {
+                    onNetworkAvailable()
                 }
             }
         }

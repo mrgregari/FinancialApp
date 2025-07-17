@@ -1,7 +1,7 @@
 package com.example.core_data.repositories
 
 import android.annotation.SuppressLint
-import com.example.core_data.remote.mappers.TransactionMapper
+import com.example.core_data.mappers.TransactionMapper
 import com.example.core_data.remote.remoteDataSource.TransactionRemoteDataSource
 import com.example.core_data.di.IODispatcher
 import com.example.core_domain.models.Expense

@@ -1,4 +1,4 @@
-package com.example.core_data.remote.mappers
+package com.example.core_data.mappers
 
 import com.example.core_data.remote.dto.CategoryDto
 import jakarta.inject.Inject
