@@ -1,11 +1,11 @@
 package com.example.core_data.repositories
 
-import com.example.core_data.remote.dto.UpdateAccountDto
-import com.example.core_data.remote.remoteDataSource.AccountRemoteDataSource
 import com.example.core_data.di.IODispatcher
 import com.example.core_data.local.dao.AccountDao
 import com.example.core_data.local.entity.AccountEntity
 import com.example.core_data.mappers.AccountMapper
+import com.example.core_data.remote.dto.UpdateAccountDto
+import com.example.core_data.remote.remoteDataSource.AccountRemoteDataSource
 import com.example.core_domain.models.Account
 import com.example.core_domain.repositories.AccountRepository
 import com.example.core_network.network.NetworkResult
@@ -14,7 +14,6 @@ import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
 import kotlin.time.Clock
 import kotlin.time.ExperimentalTime
-import kotlin.time.Instant
 
 class AccountRepositoryImpl @Inject constructor(
     private val accountRemoteDataSource: AccountRemoteDataSource,
@@ -66,16 +65,46 @@ class AccountRepositoryImpl @Inject constructor(
                 )
                 NetworkResult.Success(Unit)
             } catch (e: Exception) {
-                accountDao.insertAccount(AccountEntity(
-                    id,
-                    name,
-                    balance,
-                    currency,
-                    Clock.System.now().toString()
-                ))
+                accountDao.insertAccount(
+                    AccountEntity(
+                        id,
+                        name,
+                        balance,
+                        currency,
+                        Clock.System.now().toString()
+                    )
+                )
                 NetworkResult.Success(Unit)
                 //NetworkResult.Error(e)
             }
         }
+    }
+
+    override suspend fun getAccountsFromRemote(): List<Account> = withContext(ioDispatcher) {
+        val dtos = accountRemoteDataSource.getAccounts()
+        dtos.map { mapper.fromDtoToAccount(it) }
+    }
+
+    override suspend fun getAccountsFromLocal(): List<Account> = withContext(ioDispatcher) {
+        accountDao.getAll().map { mapper.fromEntityToDomain(it) }
+    }
+
+    @OptIn(ExperimentalTime::class)
+    override suspend fun insertAccountToLocal(account: Account) = withContext(ioDispatcher) {
+        accountDao.insertAll(
+            listOf(
+                mapper.fromDomainToEntity(
+                    account,
+                    Clock.System.now().toString()
+                )
+            )
+        )
+    }
+
+    override suspend fun updateAccountRemote(account: Account) = withContext(ioDispatcher) {
+        accountRemoteDataSource.updateAccount(
+            account.id,
+            UpdateAccountDto(account.name, account.balance, account.currency)
+        )
     }
 }

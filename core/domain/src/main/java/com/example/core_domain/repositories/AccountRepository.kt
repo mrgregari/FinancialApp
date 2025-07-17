@@ -21,4 +21,9 @@ interface AccountRepository {
         balance: String,
         currency: String
     ): NetworkResult<Unit>
+
+    suspend fun getAccountsFromRemote(): List<Account>
+    suspend fun getAccountsFromLocal(): List<Account>
+    suspend fun insertAccountToLocal(account: Account)
+    suspend fun updateAccountRemote(account: Account)
 }

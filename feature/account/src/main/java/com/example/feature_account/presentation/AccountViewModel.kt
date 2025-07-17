@@ -7,6 +7,7 @@ import com.example.core_domain.usecases.GetAccountUseCase
 import com.example.core_network.network.ErrorHandler
 import com.example.core_network.network.NetworkState
 import com.example.core_ui.base.BaseViewModel
+import com.example.feature_account.domain.SyncAccountsUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -16,7 +17,7 @@ import javax.inject.Inject
 
 class AccountViewModel @Inject constructor(
     private val getAccountUseCase: GetAccountUseCase,
-    //private val syncAccountsUseCase: SyncAccountsUseCase,
+    private val syncAccountsUseCase: SyncAccountsUseCase,
     networkState: NetworkState,
     errorHandler: ErrorHandler
 ) : BaseViewModel(networkState, errorHandler) {
@@ -46,43 +47,11 @@ class AccountViewModel @Inject constructor(
         super.onNetworkAvailable()
         syncAccounts()
     }
+
     private fun syncAccounts() {
         viewModelScope.launch {
-            //syncAccountUseCase()
+            syncAccountsUseCase()
         }
     }
 
-    /*
-    suspend fun syncAccounts() {
-        val remoteAccounts = accountRemoteDataSource.getAccounts() // с сервера
-        val localAccounts = accountDao.getAll() // из БД
-
-        val localMap = localAccounts.associateBy { it.id }
-        val remoteMap = remoteAccounts.associateBy { it.id }
-
-        for ((id, remote) in remoteMap) {
-            val local = localMap[id]
-            if (local == null) {
-                // На сервере есть, локально нет — добавить в БД
-                accountDao.insertAll(listOf(remote.toEntity()))
-            } else {
-                when {
-                    local.updatedAt > remote.updatedAt -> {
-                        // Локальная новее — отправить на сервер
-                        accountRemoteDataSource.updateAccount(
-                            local.id,
-                            UpdateAccountDto(local.name, local.balance, local.currency)
-                        )
-                        // Можно обновить isSynced = true
-                    }
-                    remote.updatedAt > local.updatedAt -> {
-                        accountDao.insertAll(listOf(remote.toEntity()))
-                    }
-                }
-            }
-        }
-
-    }
-
-     */
 }

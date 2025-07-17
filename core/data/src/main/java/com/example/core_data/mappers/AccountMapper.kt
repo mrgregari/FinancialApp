@@ -10,14 +10,16 @@ class AccountMapper @Inject constructor() {
         id = dto.id,
         name = dto.name,
         balance = dto.balance,
-        currency = dto.currency
+        currency = dto.currency,
+        updatedAt = dto.updatedAt
     )
 
     fun fromEntityToDomain(entity: AccountEntity) = Account(
         id = entity.id,
         name = entity.name,
         balance = entity.balance,
-        currency = entity.currency
+        currency = entity.currency,
+        updatedAt = entity.updatedAt
     )
 
     fun fromDomainToEntity(domain: Account, time: String) = AccountEntity(
