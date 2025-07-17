@@ -57,8 +57,7 @@ fun NetworkErrorBanner(
     if (isVisible) {
         Card(
             modifier = modifier
-                .fillMaxWidth()
-                .padding(16.dp),
+                .fillMaxWidth(),
             colors = CardDefaults.cardColors(
                 containerColor = MaterialTheme.colorScheme.errorContainer
             )

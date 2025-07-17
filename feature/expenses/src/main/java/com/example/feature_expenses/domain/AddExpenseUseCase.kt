@@ -8,7 +8,11 @@ import javax.inject.Inject
 class AddExpenseUseCase @Inject constructor(
     private val transactionRepository: TransactionRepository
 ) {
-    suspend operator fun invoke(expense: Expense, accountId: Int, categoryId: Int): NetworkResult<Unit> {
+    suspend operator fun invoke(
+        expense: Expense,
+        accountId: Int,
+        categoryId: Int
+    ): NetworkResult<Unit> {
         return transactionRepository.addExpense(expense, accountId, categoryId)
     }
 } 

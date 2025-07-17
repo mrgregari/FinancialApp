@@ -1,6 +1,6 @@
 package com.example.core_data.remote.dto
 
-data class TransactionDto(
+data class  TransactionDto(
     val id: Int,
     val account: AccountDto,
     val category: CategoryDto,
