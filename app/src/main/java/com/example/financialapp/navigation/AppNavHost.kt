@@ -11,6 +11,7 @@ import com.example.feature_account.presentation.AccountScreen
 import com.example.feature_account.presentation.accountEdit.AccountEditScreen
 import com.example.feature_categories.presentation.CategoriesScreen
 import com.example.feature_expenses.presentation.addExpense.AddExpenseScreen
+import com.example.feature_expenses.presentation.analytics.ExpenseAnalyticsScreen
 import com.example.feature_expenses.presentation.editExpense.EditExpenseScreen
 import com.example.feature_incomes.presentation.todayIncomes.IncomeScreen
 import com.example.feature_incomes.presentation.incomesHistory.IncomesHistoryScreen
@@ -48,6 +49,9 @@ fun AppNavHost(
                 onNavigateUp = { navController.navigateUp() },
                 onItemClick = { id ->
                     navController.navigate(Screen.EditExpense.routeWithIdExpense(id))
+                },
+                onAnalyticsClick = {
+                    navController.navigate(Screen.ExpenseAnalytics.route)
                 }
             )
         }
@@ -140,6 +144,17 @@ fun AppNavHost(
                 onNavigateBack = {
                     navController.navigate(Screen.Income.route) {
                         popUpTo(Screen.AddIncome.route) { inclusive = true }
+                        launchSingleTop = true
+                    }
+                }
+            )
+        }
+
+        composable(Screen.ExpenseAnalytics.route) {
+            ExpenseAnalyticsScreen(
+                onNavigateBack = {
+                    navController.navigate(Screen.ExpensesHistory.route) {
+                        popUpTo(Screen.ExpenseAnalytics.route) { inclusive = true }
                         launchSingleTop = true
                     }
                 }

@@ -1,6 +1,5 @@
-package com.example.feature_expenses.presentation.expensesHistory
+package com.example.feature_expenses.presentation.analytics
 
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -13,7 +12,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -26,35 +24,30 @@ import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.core_data.di.DataComponentProvider
 import com.example.core_ui.R
+import com.example.core_ui.components.CustomFab
 import com.example.core_ui.components.ErrorScreen
 import com.example.core_ui.components.LoadingScreen
 import com.example.core_ui.components.NetworkErrorBanner
 import com.example.feature_expenses.di.DaggerExpensesComponent
+import com.example.feature_expenses.presentation.expensesHistory.ExpensesHistoryUiState
+import com.example.feature_expenses.presentation.todayExpenses.ExpensesContent
+import com.example.feature_expenses.presentation.todayExpenses.ExpensesUiState
 
-
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun ExpensesHistoryScreen(
-    onNavigateUp: () -> Unit,
-    onItemClick: (Int) -> Unit,
-    onAnalyticsClick: () -> Unit
+fun ExpenseAnalyticsScreen(
+    onNavigateBack: () -> Unit
 ) {
-
     val app = LocalContext.current.applicationContext as DataComponentProvider
     val expensesComponent = remember {
         DaggerExpensesComponent.factory()
             .create(app.dataComponent)
     }
-
     val viewModelFactory = expensesComponent.viewModelFactory()
 
-    val viewModel : ExpensesHistoryViewModel = viewModel(factory = viewModelFactory)
-    val isNetworkAvailable by viewModel.isNetworkAvailable.collectAsState()
+    val viewModel: ExpenseAnalyticsViewModel = viewModel(factory = viewModelFactory)
     val uiState by viewModel.uiState.collectAsState()
-
-    LaunchedEffect(Unit) {
-        viewModel.retry()
-    }
+    val isNetworkAvailable by viewModel.isNetworkAvailable.collectAsState()
 
     var showStartDatePicker by remember { mutableStateOf(false) }
     var showEndDatePicker by remember { mutableStateOf(false) }
@@ -62,13 +55,13 @@ fun ExpensesHistoryScreen(
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
-                title = { Text(stringResource(R.string.expenses_history_title)) },
+                title = { Text("Анализ") },
                 colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.primary,
+                    containerColor = MaterialTheme.colorScheme.surface,
                     titleContentColor = MaterialTheme.colorScheme.onSurface
                 ),
                 navigationIcon = {
-                    IconButton(onClick = { onNavigateUp() }) {
+                    IconButton(onClick = { onNavigateBack() }) {
                         Icon(
                             painter = painterResource(R.drawable.leading_icon),
                             contentDescription = stringResource(R.string.back),
@@ -76,15 +69,6 @@ fun ExpensesHistoryScreen(
                         )
                     }
                 },
-                actions = {
-                    IconButton(onClick = { onAnalyticsClick() }) {
-                        Icon(
-                            painter = painterResource(R.drawable.analytics),
-                            contentDescription = stringResource(R.string.analytics),
-                            tint = MaterialTheme.colorScheme.onSurfaceVariant
-                        )
-                    }
-                }
             )
         }
     ) { innerPadding ->
@@ -97,22 +81,24 @@ fun ExpensesHistoryScreen(
                 isVisible = !isNetworkAvailable
             )
 
-            when (uiState) {
-                is ExpensesHistoryUiState.Loading -> LoadingScreen()
-                is ExpensesHistoryUiState.Error -> {
-                    val errorResId = (uiState as ExpensesHistoryUiState.Error).errorResId
+            when (uiState){
+                is ExpensesAnalyticsUiState.Loading -> LoadingScreen()
+                is ExpensesAnalyticsUiState.Error -> {
+                    val errorResId = (uiState as ExpensesAnalyticsUiState.Error).errorResId
                     ErrorScreen(
                         error = stringResource(errorResId),
                         onRetry = { viewModel.retry() }
                     )
                 }
-                is ExpensesHistoryUiState.Success -> {
-                    val state = uiState as ExpensesHistoryUiState.Success
-                    ExpensesHistoryContent(
+
+                is ExpensesAnalyticsUiState.Success -> {
+                    val state = uiState as ExpensesAnalyticsUiState.Success
+                    ExpenseAnalyticsContent(
                         expenses = state.expenses,
                         startDate = state.startDate,
                         endDate = state.endDate,
                         currency = state.currency,
+                        total = state.total,
                         showStartDatePicker = showStartDatePicker,
                         showEndDatePicker = showEndDatePicker,
                         onShowStartDatePicker = { showStartDatePicker = true },
@@ -120,12 +106,11 @@ fun ExpensesHistoryScreen(
                         onDismissStartDatePicker = { showStartDatePicker = false },
                         onDismissEndDatePicker = { showEndDatePicker = false },
                         onStartDateSelected = { viewModel.updateStartDate(it) },
-                        onEndDateSelected = { viewModel.updateEndDate(it) },
-                        onItemClick = onItemClick
+                        onEndDateSelected = { viewModel.updateEndDate(it) }
                     )
                 }
             }
+
         }
     }
 }
-
