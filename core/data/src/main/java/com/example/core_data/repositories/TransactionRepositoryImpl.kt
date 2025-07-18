@@ -12,6 +12,7 @@ import com.example.core_data.utils.toApiStringStartOfDay
 import com.example.core_data.utils.toLocalApiStringEndOfDay
 import com.example.core_data.utils.toLocalApiStringStartOfDay
 import com.example.core_data.utils.toServerApiString
+import com.example.core_domain.models.Account
 import com.example.core_domain.models.Expense
 import com.example.core_domain.models.Income
 import com.example.core_domain.repositories.TransactionRepository
@@ -21,6 +22,8 @@ import kotlinx.coroutines.withContext
 import java.util.Calendar
 import java.util.Date
 import javax.inject.Inject
+import com.example.core_data.repositories.TransactionSyncManager
+import com.example.core_data.local.localDataSource.TransactionLocalDataSource
 
 class TransactionRepositoryImpl @Inject constructor(
     private val transactionRemoteDataSource: TransactionRemoteDataSource,
@@ -28,7 +31,9 @@ class TransactionRepositoryImpl @Inject constructor(
     private val transactionDao: TransactionDao,
     private val accountDao: AccountDao,
     private val categoryDao: CategoryDao,
-    @IODispatcher private val ioDispatcher: CoroutineDispatcher
+    @IODispatcher private val ioDispatcher: CoroutineDispatcher,
+    private val transactionSyncManager: TransactionSyncManager,
+    private val transactionLocalDataSource: TransactionLocalDataSource
 ) : TransactionRepository {
 
     private fun getDefaultPeriod(): Pair<Date, Date> {
@@ -50,77 +55,39 @@ class TransactionRepositoryImpl @Inject constructor(
         val start = startDate ?: defaultStart
         val end = endDate ?: defaultEnd
         try {
-            val dtos = transactionRemoteDataSource.getTransactions(
-                accountId = accountId,
-                startDate = start.toServerApiString(),
-                endDate = end.toServerApiString()
-            )
-            val remoteEntities = dtos.map { mapper.fromDtoToEntity(it) }
-
-            val localEntities = transactionDao.getExpensesInPeriod(
-                start.toLocalApiStringStartOfDay(),
-                end.toLocalApiStringEndOfDay()
-            ).filter { it.accountId == accountId }
-
-            val localMap = localEntities.associateBy { it.id }
-
-            val toUpdateLocally = mutableListOf<TransactionEntity>()
-            for (remote in remoteEntities) {
-                val local = localMap[remote.id]
-                if (local == null || remote.updatedAt > local.updatedAt) {
-                    toUpdateLocally.add(remote)
-                }
-            }
-            if (toUpdateLocally.isNotEmpty()) {
-                transactionDao.insertTransactions(toUpdateLocally)
-            }
-
-            val accounts = accountDao.getAll().associateBy { it.id }
-            val categories = categoryDao.getAll().associateBy { it.id }
-            val resultEntities = transactionDao.getExpensesInPeriod(
-                start.toLocalApiStringStartOfDay(),
-                end.toLocalApiStringEndOfDay()
-            ).filter { it.accountId == accountId }
-
-            val expenses = resultEntities.mapNotNull { entity ->
-                val account = accounts[entity.accountId]
-                val category = categories[entity.categoryId]
-                if (account != null && category != null && !category.isIncome) {
-                    mapper.fromEntityToExpense(
-                        entity,
-                        accountName = account.name,
-                        currency = account.currency,
-                        categoryName = category.name,
-                        icon = category.icon
-                    )
-                } else null
-            }.sortedByDescending { it.date }
-
-            NetworkResult.Success(expenses)
+            syncTransactionsWithRemote(listOf(accountDao.getAll().first { it.id == accountId }.let {
+                Account(
+                    id = it.id,
+                    name = it.name,
+                    balance = it.balance,
+                    currency = it.currency,
+                    updatedAt = it.updatedAt
+                )
+            }))
         } catch (e: Exception) {
-            e.printStackTrace()
-            val accounts = accountDao.getAll().associateBy { it.id }
-            val categories = categoryDao.getAll().associateBy { it.id }
-            val resultEntities = transactionDao.getExpensesInPeriod(
-                start.toLocalApiStringStartOfDay(),
-                end.toLocalApiStringEndOfDay()
-            ).filter { it.accountId == accountId }
-
-            val expenses = resultEntities.mapNotNull { entity ->
-                val account = accounts[entity.accountId]
-                val category = categories[entity.categoryId]
-                if (account != null && category != null && !category.isIncome) {
-                    mapper.fromEntityToExpense(
-                        entity,
-                        accountName = account.name,
-                        currency = account.currency,
-                        categoryName = category.name,
-                        icon = category.icon
-                    )
-                } else null
-            }.sortedByDescending { it.date }
-            NetworkResult.Success(expenses)
         }
+        val transactions = transactionDao.getExpensesInPeriod(
+            start.toLocalApiStringStartOfDay(),
+            end.toLocalApiStringEndOfDay()
+        )
+            .filter { it.accountId == accountId && !it.isDeleted }
+        val accounts = accountDao.getAll().associateBy { it.id }
+        val categories = categoryDao.getAll().associateBy { it.id }
+        val expenses = transactions.mapNotNull { entity ->
+            val account = accounts[entity.accountId]
+            val category = categories[entity.categoryId]
+            if (account != null && category != null && !category.isIncome) {
+                mapper.fromEntityToExpense(
+                    entity,
+                    accountName = account.name,
+                    currency = account.currency,
+                    categoryName = category.name,
+                    icon = category.icon
+                )
+            } else null
+        }.sortedByDescending { it.date }
+        NetworkResult.Success(expenses)
+
     }
 
     override suspend fun getIncomes(
@@ -132,76 +99,37 @@ class TransactionRepositoryImpl @Inject constructor(
         val start = startDate ?: defaultStart
         val end = endDate ?: defaultEnd
         try {
-            val dtos = transactionRemoteDataSource.getTransactions(
-                accountId = accountId,
-                startDate = start.toApiStringStartOfDay(),
-                endDate = end.toApiStringEndOfDay()
-            )
-            val remoteEntities = dtos.map { mapper.fromDtoToEntity(it) }
-
-            val localEntities = transactionDao.getIncomesInPeriod(
-                start.toApiStringStartOfDay(),
-                end.toApiStringEndOfDay()
-            ).filter { it.accountId == accountId }
-            val localMap = localEntities.associateBy { it.id }
-
-            val toUpdateLocally = mutableListOf<TransactionEntity>()
-            for (remote in remoteEntities) {
-                val local = localMap[remote.id]
-                if (local == null || remote.updatedAt > local.updatedAt) {
-                    toUpdateLocally.add(remote)
-                }
-            }
-            if (toUpdateLocally.isNotEmpty()) {
-                transactionDao.insertTransactions(toUpdateLocally)
-            }
-
-            val accounts = accountDao.getAll().associateBy { it.id }
-            val categories = categoryDao.getAll().associateBy { it.id }
-            val resultEntities = transactionDao.getIncomesInPeriod(
-                start.toApiStringStartOfDay(),
-                end.toApiStringEndOfDay()
-            ).filter { it.accountId == accountId }
-
-            val incomes = resultEntities.mapNotNull { entity ->
-                val account = accounts[entity.accountId]
-                val category = categories[entity.categoryId]
-                if (account != null && category != null && category.isIncome) {
-                    mapper.fromEntityToIncome(
-                        entity,
-                        accountName = account.name,
-                        currency = account.currency,
-                        categoryName = category.name,
-                        icon = category.icon
-                    )
-                } else null
-            }.sortedByDescending { it.date }
-
-            NetworkResult.Success(incomes)
+            syncTransactionsWithRemote(listOf(accountDao.getAll().first { it.id == accountId }.let {
+                Account(
+                    id = it.id,
+                    name = it.name,
+                    balance = it.balance,
+                    currency = it.currency,
+                    updatedAt = it.updatedAt
+                )
+            }))
         } catch (e: Exception) {
-            val accounts = accountDao.getAll().associateBy { it.id }
-            val categories = categoryDao.getAll().associateBy { it.id }
-            val resultEntities = transactionDao.getIncomesInPeriod(
-                start.toApiStringStartOfDay(),
-                end.toApiStringEndOfDay()
-            ).filter { it.accountId == accountId }
-
-            val incomes = resultEntities.mapNotNull { entity ->
-                val account = accounts[entity.accountId]
-                val category = categories[entity.categoryId]
-                if (account != null && category != null && category.isIncome) {
-                    mapper.fromEntityToIncome(
-                        entity,
-                        accountName = account.name,
-                        currency = account.currency,
-                        categoryName = category.name,
-                        icon = category.icon
-                    )
-                } else null
-            }.sortedByDescending { it.date }
-
-            NetworkResult.Success(incomes)
         }
+        val transactions = transactionDao.getIncomesInPeriod(
+            start.toApiStringStartOfDay(),
+            end.toApiStringEndOfDay()
+        ).filter { it.accountId == accountId && !it.isDeleted }
+        val accounts = accountDao.getAll().associateBy { it.id }
+        val categories = categoryDao.getAll().associateBy { it.id }
+        val incomes = transactions.mapNotNull { entity ->
+            val account = accounts[entity.accountId]
+            val category = categories[entity.categoryId]
+            if (account != null && category != null && category.isIncome) {
+                mapper.fromEntityToIncome(
+                    entity,
+                    accountName = account.name,
+                    currency = account.currency,
+                    categoryName = category.name,
+                    icon = category.icon
+                )
+            } else null
+        }.sortedByDescending { it.date }
+        NetworkResult.Success(incomes)
     }
 
     override suspend fun addExpense(
@@ -219,7 +147,19 @@ class TransactionRepositoryImpl @Inject constructor(
                     NetworkResult.Error(Exception("Ошибка при добавлении транзакции: ${response.code()}"))
                 }
             } catch (e: Exception) {
-                NetworkResult.Error(e)
+                transactionDao.insertTransaction(
+                    TransactionEntity(
+                        id = 0,
+                        accountId = accountId,
+                        categoryId = categoryId,
+                        amount = expense.amount,
+                        transactionDate = expense.date,
+                        comment = expense.comment,
+                        updatedAt = expense.updatedAt
+                    )
+                )
+                NetworkResult.Success(Unit)
+                //NetworkResult.Error(e)
             }
         }
     }
@@ -239,7 +179,18 @@ class TransactionRepositoryImpl @Inject constructor(
                     NetworkResult.Error(Exception("Ошибка при добавлении транзакции: ${response.code()}"))
                 }
             } catch (e: Exception) {
-                NetworkResult.Error(e)
+                transactionDao.insertTransaction(
+                    TransactionEntity(
+                        id = 0,
+                        accountId = accountId,
+                        categoryId = categoryId,
+                        amount = income.amount,
+                        transactionDate = income.date,
+                        comment = income.comment,
+                        updatedAt = income.updatedAt
+                    )
+                )
+                NetworkResult.Success(Unit)
             }
         }
     }
@@ -255,7 +206,18 @@ class TransactionRepositoryImpl @Inject constructor(
                 transactionRemoteDataSource.updateTransaction(expense.id, dto)
                 NetworkResult.Success(Unit)
             } catch (e: Exception) {
-                NetworkResult.Error(e)
+                transactionDao.updateTransaction(
+                    TransactionEntity(
+                        id = expense.id,
+                        accountId = accountId,
+                        categoryId = categoryId,
+                        amount = expense.amount,
+                        transactionDate = expense.date,
+                        comment = expense.comment,
+                        updatedAt = expense.updatedAt
+                    )
+                )
+                NetworkResult.Success(Unit)
             }
         }
     }
@@ -269,7 +231,19 @@ class TransactionRepositoryImpl @Inject constructor(
                 val result = mapper.fromDtoToExpense(dto)
                 NetworkResult.Success(result)
             } catch (e: Exception) {
-                NetworkResult.Error(e)
+                val transaction = transactionDao.getTransactionById(id)
+                val account =
+                    accountDao.getAll().firstOrNull({ it.id == transaction!!.accountId })!!
+                val category =
+                    categoryDao.getAll().firstOrNull({ it.id == transaction!!.categoryId })!!
+                val result = mapper.fromEntityToExpense(
+                    transaction!!,
+                    accountName = account.name,
+                    currency = account.currency,
+                    categoryName = category.name,
+                    icon = category.icon
+                )
+                NetworkResult.Success(result)
             }
         }
     }
@@ -280,7 +254,9 @@ class TransactionRepositoryImpl @Inject constructor(
                 transactionRemoteDataSource.deleteTransactionById(id)
                 NetworkResult.Success(Unit)
             } catch (e: Exception) {
-                NetworkResult.Error(e)
+                val transaction = transactionDao.getTransactionById(id)
+                transactionDao.updateTransaction(transaction!!.copy(isDeleted = true))
+                NetworkResult.Success(Unit)
             }
         }
     }
@@ -294,7 +270,19 @@ class TransactionRepositoryImpl @Inject constructor(
                 val result = mapper.fromDtoToIncome(dto)
                 NetworkResult.Success(result)
             } catch (e: Exception) {
-                NetworkResult.Error(e)
+                val transaction = transactionDao.getTransactionById(id)
+                val account =
+                    accountDao.getAll().firstOrNull({ it.id == transaction!!.accountId })!!
+                val category =
+                    categoryDao.getAll().firstOrNull({ it.id == transaction!!.categoryId })!!
+                val result = mapper.fromEntityToIncome(
+                    transaction!!,
+                    accountName = account.name,
+                    currency = account.currency,
+                    categoryName = category.name,
+                    icon = category.icon
+                )
+                NetworkResult.Success(result)
             }
         }
     }
@@ -310,7 +298,18 @@ class TransactionRepositoryImpl @Inject constructor(
                 transactionRemoteDataSource.updateTransaction(income.id, dto)
                 NetworkResult.Success(Unit)
             } catch (e: Exception) {
-                NetworkResult.Error(e)
+                transactionDao.updateTransaction(
+                    TransactionEntity(
+                        id = income.id,
+                        accountId = accountId,
+                        categoryId = categoryId,
+                        amount = income.amount,
+                        transactionDate = income.date,
+                        comment = income.comment,
+                        updatedAt = income.updatedAt
+                    )
+                )
+                NetworkResult.Success(Unit)
             }
         }
     }
@@ -320,24 +319,7 @@ class TransactionRepositoryImpl @Inject constructor(
         startDate: String,
         endDate: String
     ): List<Expense> = withContext(ioDispatcher) {
-        val transactions = transactionDao.getExpensesInPeriod(startDate, endDate)
-            .filter { it.accountId == accountId }
-        val accounts = accountDao.getAll().associateBy { it.id }
-        val categories = categoryDao.getAll().associateBy { it.id }
-
-        transactions.mapNotNull { entity ->
-            val account = accounts[entity.accountId]
-            val category = categories[entity.categoryId]
-            if (account != null && category != null && !category.isIncome) {
-                mapper.fromEntityToExpense(
-                    entity,
-                    accountName = account.name,
-                    currency = account.currency,
-                    categoryName = category.name,
-                    icon = category.icon
-                )
-            } else null
-        }
+        transactionLocalDataSource.getExpensesLocal(accountId, startDate, endDate)
     }
 
     override suspend fun getIncomesLocal(
@@ -345,24 +327,21 @@ class TransactionRepositoryImpl @Inject constructor(
         startDate: String,
         endDate: String
     ): List<Income> = withContext(ioDispatcher) {
-        val transactions = transactionDao.getIncomesInPeriod(startDate, endDate)
-            .filter { it.accountId == accountId }
-        val accounts = accountDao.getAll().associateBy { it.id }
-        val categories = categoryDao.getAll().associateBy { it.id }
-
-        transactions.mapNotNull { entity ->
-            val account = accounts[entity.accountId]
-            val category = categories[entity.categoryId]
-            if (account != null && category != null && category.isIncome) {
-                mapper.fromEntityToIncome(
-                    entity,
-                    accountName = account.name,
-                    currency = account.currency,
-                    categoryName = category.name,
-                    icon = category.icon
-                )
-            } else null
-        }
+        transactionLocalDataSource.getIncomesLocal(accountId, startDate, endDate)
     }
 
+    override suspend fun getAllLocalEntities(accountId: Int?): List<TransactionEntity> =
+        withContext(ioDispatcher) {
+            transactionLocalDataSource.getAllLocalEntities(accountId)
+        }
+
+    override suspend fun syncTransactionsWithRemote(accounts: List<Account>): NetworkResult<Unit> =
+        withContext(ioDispatcher) {
+            try {
+                transactionSyncManager.syncTransactionsWithRemote(accounts)
+                NetworkResult.Success(Unit)
+            } catch (e: Exception) {
+                NetworkResult.Error(e)
+            }
+        }
 }

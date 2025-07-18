@@ -4,6 +4,7 @@ import com.example.core_domain.models.Expense
 import com.example.core_domain.models.Income
 import com.example.core_network.network.NetworkResult
 import java.util.Date
+import com.example.core_domain.models.Account
 
 /**
  * Repository for managing transaction data.
@@ -57,11 +58,11 @@ interface TransactionRepository {
         categoryId: Int
     ): NetworkResult<Unit>
 
-    suspend fun getExpenseById(id: Int) : NetworkResult<Expense>
+    suspend fun getExpenseById(id: Int): NetworkResult<Expense>
 
-    suspend fun deleteTransactionById(id: Int) : NetworkResult<Unit>
+    suspend fun deleteTransactionById(id: Int): NetworkResult<Unit>
 
-    suspend fun getIncomeById(id: Int) : NetworkResult<Income>
+    suspend fun getIncomeById(id: Int): NetworkResult<Income>
 
     suspend fun updateIncome(
         income: Income,
@@ -80,4 +81,9 @@ interface TransactionRepository {
         startDate: String,
         endDate: String
     ): List<Income>
+
+
+    suspend fun getAllLocalEntities(accountId: Int? = null): List<Any>
+
+    suspend fun syncTransactionsWithRemote(accounts: List<Account>): NetworkResult<Unit>
 }

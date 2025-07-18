@@ -52,6 +52,31 @@ class TransactionMapper @Inject constructor() {
         )
     }
 
+    fun fromEntityToCreateDto(
+        entity: TransactionEntity
+    ): CreateTransactionDto {
+        return CreateTransactionDto(
+            accountId = entity.accountId,
+            categoryId = entity.categoryId,
+            amount = entity.amount,
+            transactionDate = entity.transactionDate,
+            comment = entity.comment
+        )
+    }
+
+    fun fromEntityToUpdateDto(
+        entity: TransactionEntity
+    ): UpdateTransactionDto {
+        return UpdateTransactionDto(
+            id = entity.id,
+            accountId = entity.accountId,
+            categoryId = entity.categoryId,
+            amount = entity.amount,
+            transactionDate = entity.transactionDate,
+            comment = entity.comment
+        )
+    }
+
     fun fromExpenseToUpdateDto(
         expense: Expense,
         accountId: Int,
@@ -176,7 +201,9 @@ class TransactionMapper @Inject constructor() {
             amount = dto.amount,
             transactionDate = dto.transactionDate,
             comment = dto.comment,
-            updatedAt = dto.updatedAt
+            updatedAt = dto.updatedAt,
+            isDeleted = false,
+            isSynced = true // remote всегда считается синхронизированным
         )
     }
 }

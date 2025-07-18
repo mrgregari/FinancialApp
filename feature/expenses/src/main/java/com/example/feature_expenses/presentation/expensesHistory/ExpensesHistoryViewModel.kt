@@ -1,7 +1,9 @@
 package com.example.feature_expenses.presentation.expensesHistory
 
 
+import androidx.lifecycle.viewModelScope
 import com.example.core_domain.usecases.GetAccountUseCase
+import com.example.core_domain.usecases.SyncTransactionsUseCase
 import com.example.core_network.network.ErrorHandler
 import com.example.core_network.network.NetworkResult
 import com.example.core_network.network.NetworkState
@@ -10,6 +12,7 @@ import com.example.feature_expenses.domain.GetExpensesUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 import java.util.Calendar
 import java.util.Date
 import javax.inject.Inject
@@ -17,6 +20,7 @@ import javax.inject.Inject
 class ExpensesHistoryViewModel @Inject constructor(
     private val getExpensesUseCase: GetExpensesUseCase,
     private val getAccountUseCase: GetAccountUseCase,
+    private val syncTransactionsUseCase: SyncTransactionsUseCase,
     networkState: NetworkState,
     errorHandler: ErrorHandler
 ) : BaseViewModel(networkState, errorHandler) {
@@ -36,6 +40,7 @@ class ExpensesHistoryViewModel @Inject constructor(
         _endDate.value = calendar.time
         calendar.set(Calendar.DAY_OF_MONTH, 1)
         _startDate.value = calendar.time
+        syncTransactions()
         loadAllExpenses()
         initializeNetworkState()
     }
@@ -51,6 +56,7 @@ class ExpensesHistoryViewModel @Inject constructor(
     }
 
     fun retry() {
+        syncTransactions()
         loadExpensesWithFilter()
     }
 
@@ -91,5 +97,16 @@ class ExpensesHistoryViewModel @Inject constructor(
                 _uiState.value = ExpensesHistoryUiState.Error(errorResId)
             }
         )
+    }
+
+    override fun onNetworkAvailable() {
+        super.onNetworkAvailable()
+        syncTransactions()
+    }
+
+    private fun syncTransactions() {
+        viewModelScope.launch {
+            syncTransactionsUseCase()
+        }
     }
 }

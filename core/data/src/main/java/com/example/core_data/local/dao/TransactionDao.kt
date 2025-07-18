@@ -26,6 +26,12 @@ interface TransactionDao {
     """)
     suspend fun getExpensesInPeriod(startDate: String, endDate: String): List<TransactionEntity>
 
+    @Query("SELECT * FROM transactions")
+    suspend fun getAllTransactions(): List<TransactionEntity>
+
+    @Query("SELECT * FROM transactions WHERE id = :id LIMIT 1")
+    suspend fun getTransactionById(id: Int): TransactionEntity?
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertTransaction(transaction: TransactionEntity)
 
@@ -34,4 +40,7 @@ interface TransactionDao {
 
     @Update
     suspend fun updateTransaction(transaction: TransactionEntity)
+
+    @Query("DELETE FROM transactions WHERE id = :id")
+    suspend fun deleteTransactionById(id: Int)
 }

@@ -31,6 +31,7 @@ class AccountViewModel @Inject constructor(
     val accounts: StateFlow<List<Account>> = _accounts.asStateFlow()
 
     fun retry() {
+        syncAccounts()
         loadAccount()
     }
 
