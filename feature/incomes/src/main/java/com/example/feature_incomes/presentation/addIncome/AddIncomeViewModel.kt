@@ -1,5 +1,6 @@
 package com.example.feature_incomes.presentation.addIncome
 
+import androidx.lifecycle.viewModelScope
 import com.example.core_domain.models.Category
 import com.example.core_domain.usecases.GetAccountUseCase
 import com.example.core_network.network.ErrorHandler
@@ -38,6 +39,7 @@ class AddIncomeViewModel @Inject constructor(
     val uiState = _uiState.asStateFlow()
 
     private val _account = MutableStateFlow<Account?>(null)
+    private var _categories = emptyList<Category>()
 
     init {
         initializeNetworkState()
