@@ -4,6 +4,7 @@ import android.app.Application
 import android.content.Context
 import com.example.core_data.local.dao.AccountDao
 import com.example.core_data.local.dao.CategoryDao
+import com.example.core_data.local.dao.TransactionDao
 import com.example.core_data.local.database.AppDatabase
 import com.example.core_data.repositories.AccountRepositoryImpl
 import com.example.core_data.repositories.CategoryRepositoryImpl
@@ -45,6 +46,13 @@ abstract class DataModule {
             context: Context
         ): CategoryDao {
             return AppDatabase.getInstance(context).categoryDao()
+        }
+
+        @Provides
+        fun provideTransactionDao(
+            context: Context
+        ): TransactionDao {
+            return AppDatabase.getInstance(context).transactionDao()
         }
     }
 }

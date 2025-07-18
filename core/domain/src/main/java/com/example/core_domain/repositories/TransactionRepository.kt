@@ -68,4 +68,16 @@ interface TransactionRepository {
         accountId: Int,
         categoryId: Int
     ): NetworkResult<Unit>
+
+    suspend fun getExpensesLocal(
+        accountId: Int,
+        startDate: String,
+        endDate: String
+    ): List<Expense>
+
+    suspend fun getIncomesLocal(
+        accountId: Int,
+        startDate: String,
+        endDate: String
+    ): List<Income>
 }
