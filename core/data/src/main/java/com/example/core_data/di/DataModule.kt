@@ -2,6 +2,7 @@ package com.example.core_data.di
 
 import android.app.Application
 import android.content.Context
+import android.content.SharedPreferences
 import com.example.core_data.local.dao.AccountDao
 import com.example.core_data.local.dao.CategoryDao
 import com.example.core_data.local.dao.TransactionDao
@@ -54,5 +55,9 @@ abstract class DataModule {
         ): TransactionDao {
             return AppDatabase.getInstance(context).transactionDao()
         }
+
+        @Provides
+        fun provideSyncPrefs(context: Context): SharedPreferences =
+            context.getSharedPreferences("sync_prefs", Context.MODE_PRIVATE)
     }
 }
