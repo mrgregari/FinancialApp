@@ -2,6 +2,7 @@ package com.example.feature_incomes.presentation.todayIncomes
 
 
 import com.example.core_domain.usecases.GetAccountUseCase
+import com.example.core_domain.usecases.SyncCategoriesUseCase
 import com.example.core_network.network.ErrorHandler
 import com.example.core_network.network.NetworkResult
 import com.example.core_network.network.NetworkState
@@ -18,6 +19,7 @@ import javax.inject.Inject
 class IncomesViewModel @Inject constructor(
     private val getAccountUseCase: GetAccountUseCase,
     private val getIncomesUseCase: GetIncomesUseCase,
+    private val syncCategoriesUseCase: SyncCategoriesUseCase,
     networkState: NetworkState,
     errorHandler: ErrorHandler
 ) : BaseViewModel(networkState, errorHandler) {
@@ -54,6 +56,7 @@ class IncomesViewModel @Inject constructor(
         _uiState.value = IncomesUiState.Loading
         safeApiCall(
             apiCall = {
+                syncCategoriesUseCase()
                 val accountsResult = getAccountUseCase.invoke()
                 when (accountsResult) {
                     is NetworkResult.Success -> {

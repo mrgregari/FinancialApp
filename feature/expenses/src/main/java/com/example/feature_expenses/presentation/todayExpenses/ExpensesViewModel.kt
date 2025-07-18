@@ -1,6 +1,7 @@
 package com.example.feature_expenses.presentation.todayExpenses
 
 import com.example.core_domain.usecases.GetAccountUseCase
+import com.example.core_domain.usecases.SyncCategoriesUseCase
 import com.example.core_network.network.ErrorHandler
 import com.example.core_network.network.NetworkResult
 import com.example.core_network.network.NetworkState
@@ -16,6 +17,7 @@ import javax.inject.Inject
 class ExpensesViewModel @Inject constructor(
     private val getExpensesUseCase: GetExpensesUseCase,
     private val getAccountUseCase: GetAccountUseCase,
+    private val syncCategoriesUseCase: SyncCategoriesUseCase,
     networkState: NetworkState,
     errorHandler: ErrorHandler
 ) : BaseViewModel(networkState, errorHandler) {
@@ -50,6 +52,7 @@ class ExpensesViewModel @Inject constructor(
     private fun loadExpenses(startDate: Date? = null, endDate: Date? = null) {
         safeApiCall(
             apiCall = {
+                syncCategoriesUseCase()
                 val accountsResult = getAccountUseCase.invoke()
                 when (accountsResult) {
                     is NetworkResult.Success -> {

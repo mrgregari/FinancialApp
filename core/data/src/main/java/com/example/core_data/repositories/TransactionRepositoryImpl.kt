@@ -1,25 +1,26 @@
 package com.example.core_data.repositories
 
-import android.annotation.SuppressLint
-import com.example.core_data.mappers.TransactionMapper
-import com.example.core_data.remote.remoteDataSource.TransactionRemoteDataSource
 import com.example.core_data.di.IODispatcher
-import com.example.core_data.local.dao.TransactionDao
 import com.example.core_data.local.dao.AccountDao
 import com.example.core_data.local.dao.CategoryDao
+import com.example.core_data.local.dao.TransactionDao
+import com.example.core_data.local.entity.TransactionEntity
+import com.example.core_data.mappers.TransactionMapper
+import com.example.core_data.remote.remoteDataSource.TransactionRemoteDataSource
+import com.example.core_data.utils.toApiStringEndOfDay
+import com.example.core_data.utils.toApiStringStartOfDay
+import com.example.core_data.utils.toLocalApiStringEndOfDay
+import com.example.core_data.utils.toLocalApiStringStartOfDay
+import com.example.core_data.utils.toServerApiString
 import com.example.core_domain.models.Expense
 import com.example.core_domain.models.Income
 import com.example.core_domain.repositories.TransactionRepository
 import com.example.core_network.network.NetworkResult
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
-import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
 import javax.inject.Inject
-import com.example.core_data.local.entity.TransactionEntity
-import java.util.Locale
-import java.util.TimeZone
 
 class TransactionRepositoryImpl @Inject constructor(
     private val transactionRemoteDataSource: TransactionRemoteDataSource,
@@ -38,31 +39,6 @@ class TransactionRepositoryImpl @Inject constructor(
         return startDate to endDate
     }
 
-    @SuppressLint("SimpleDateFormat")
-    private fun Date.toApiStringStartOfDay(): String {
-        val calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"))
-        calendar.time = this
-        calendar.set(Calendar.HOUR_OF_DAY, 0)
-        calendar.set(Calendar.MINUTE, 0)
-        calendar.set(Calendar.SECOND, 0)
-        calendar.set(Calendar.MILLISECOND, 0)
-        val format = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.US)
-        format.timeZone = TimeZone.getTimeZone("UTC")
-        return format.format(calendar.time)
-    }
-
-    @SuppressLint("SimpleDateFormat")
-    private fun Date.toApiStringEndOfDay(): String {
-        val calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"))
-        calendar.time = this
-        calendar.set(Calendar.HOUR_OF_DAY, 23)
-        calendar.set(Calendar.MINUTE, 59)
-        calendar.set(Calendar.SECOND, 59)
-        calendar.set(Calendar.MILLISECOND, 999)
-        val format = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", Locale.US)
-        format.timeZone = TimeZone.getTimeZone("UTC")
-        return format.format(calendar.time)
-    }
 
     override suspend fun getExpenses(
         accountId: Int,
@@ -73,19 +49,17 @@ class TransactionRepositoryImpl @Inject constructor(
         val (defaultStart, defaultEnd) = getDefaultPeriod()
         val start = startDate ?: defaultStart
         val end = endDate ?: defaultEnd
-        println(start.toApiStringStartOfDay())
-        println(end.toApiStringEndOfDay())
         try {
             val dtos = transactionRemoteDataSource.getTransactions(
                 accountId = accountId,
-                startDate = start.toApiStringStartOfDay(),
-                endDate = end.toApiStringEndOfDay()
+                startDate = start.toServerApiString(),
+                endDate = end.toServerApiString()
             )
             val remoteEntities = dtos.map { mapper.fromDtoToEntity(it) }
 
             val localEntities = transactionDao.getExpensesInPeriod(
-                start.toApiStringStartOfDay(),
-                end.toApiStringEndOfDay()
+                start.toLocalApiStringStartOfDay(),
+                end.toLocalApiStringEndOfDay()
             ).filter { it.accountId == accountId }
 
             val localMap = localEntities.associateBy { it.id }
@@ -104,8 +78,8 @@ class TransactionRepositoryImpl @Inject constructor(
             val accounts = accountDao.getAll().associateBy { it.id }
             val categories = categoryDao.getAll().associateBy { it.id }
             val resultEntities = transactionDao.getExpensesInPeriod(
-                start.toApiStringStartOfDay(),
-                end.toApiStringEndOfDay()
+                start.toLocalApiStringStartOfDay(),
+                end.toLocalApiStringEndOfDay()
             ).filter { it.accountId == accountId }
 
             val expenses = resultEntities.mapNotNull { entity ->
@@ -124,11 +98,12 @@ class TransactionRepositoryImpl @Inject constructor(
 
             NetworkResult.Success(expenses)
         } catch (e: Exception) {
+            e.printStackTrace()
             val accounts = accountDao.getAll().associateBy { it.id }
             val categories = categoryDao.getAll().associateBy { it.id }
             val resultEntities = transactionDao.getExpensesInPeriod(
-                start.toApiStringStartOfDay(),
-                end.toApiStringEndOfDay()
+                start.toLocalApiStringStartOfDay(),
+                end.toLocalApiStringEndOfDay()
             ).filter { it.accountId == accountId }
 
             val expenses = resultEntities.mapNotNull { entity ->
