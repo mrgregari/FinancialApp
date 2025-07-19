@@ -70,20 +70,6 @@ interface TransactionRepository {
         categoryId: Int
     ): NetworkResult<Unit>
 
-    suspend fun getExpensesLocal(
-        accountId: Int,
-        startDate: String,
-        endDate: String
-    ): List<Expense>
-
-    suspend fun getIncomesLocal(
-        accountId: Int,
-        startDate: String,
-        endDate: String
-    ): List<Income>
-
-
-    suspend fun getAllLocalEntities(accountId: Int? = null): List<Any>
 
     suspend fun syncTransactionsWithRemote(accounts: List<Account>): NetworkResult<Unit>
 }

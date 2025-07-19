@@ -7,11 +7,8 @@ import com.example.core_data.local.dao.TransactionDao
 import com.example.core_data.local.entity.TransactionEntity
 import com.example.core_data.mappers.TransactionMapper
 import com.example.core_data.remote.remoteDataSource.TransactionRemoteDataSource
-import com.example.core_data.utils.toApiStringEndOfDay
-import com.example.core_data.utils.toApiStringStartOfDay
 import com.example.core_data.utils.toLocalApiStringEndOfDay
 import com.example.core_data.utils.toLocalApiStringStartOfDay
-import com.example.core_data.utils.toServerApiString
 import com.example.core_domain.models.Account
 import com.example.core_domain.models.Expense
 import com.example.core_domain.models.Income
@@ -22,8 +19,6 @@ import kotlinx.coroutines.withContext
 import java.util.Calendar
 import java.util.Date
 import javax.inject.Inject
-import com.example.core_data.repositories.TransactionSyncManager
-import com.example.core_data.local.localDataSource.TransactionLocalDataSource
 
 class TransactionRepositoryImpl @Inject constructor(
     private val transactionRemoteDataSource: TransactionRemoteDataSource,
@@ -32,8 +27,7 @@ class TransactionRepositoryImpl @Inject constructor(
     private val accountDao: AccountDao,
     private val categoryDao: CategoryDao,
     @IODispatcher private val ioDispatcher: CoroutineDispatcher,
-    private val transactionSyncManager: TransactionSyncManager,
-    private val transactionLocalDataSource: TransactionLocalDataSource
+    private val transactionSyncManager: TransactionSyncManager
 ) : TransactionRepository {
 
     private fun getDefaultPeriod(): Pair<Date, Date> {
@@ -111,8 +105,8 @@ class TransactionRepositoryImpl @Inject constructor(
         } catch (e: Exception) {
         }
         val transactions = transactionDao.getIncomesInPeriod(
-            start.toApiStringStartOfDay(),
-            end.toApiStringEndOfDay()
+            start.toLocalApiStringStartOfDay(),
+            end.toLocalApiStringEndOfDay()
         ).filter { it.accountId == accountId && !it.isDeleted }
         val accounts = accountDao.getAll().associateBy { it.id }
         val categories = categoryDao.getAll().associateBy { it.id }
@@ -314,26 +308,6 @@ class TransactionRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun getExpensesLocal(
-        accountId: Int,
-        startDate: String,
-        endDate: String
-    ): List<Expense> = withContext(ioDispatcher) {
-        transactionLocalDataSource.getExpensesLocal(accountId, startDate, endDate)
-    }
-
-    override suspend fun getIncomesLocal(
-        accountId: Int,
-        startDate: String,
-        endDate: String
-    ): List<Income> = withContext(ioDispatcher) {
-        transactionLocalDataSource.getIncomesLocal(accountId, startDate, endDate)
-    }
-
-    override suspend fun getAllLocalEntities(accountId: Int?): List<TransactionEntity> =
-        withContext(ioDispatcher) {
-            transactionLocalDataSource.getAllLocalEntities(accountId)
-        }
 
     override suspend fun syncTransactionsWithRemote(accounts: List<Account>): NetworkResult<Unit> =
         withContext(ioDispatcher) {
