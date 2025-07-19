@@ -47,7 +47,10 @@ fun IncomesContent(
                 title = income.title,
                 emoji = income.icon,
                 subTitle = income.comment,
-                trailingText = formatAmountWithCurrency(income.amount.toDouble(), income.currency),
+                trailingText = formatAmountWithCurrency(
+                    income.amount.toDouble(),
+                    getCurrencySymbol(income.currency)
+                ),
                 subTrailingText = null,
                 showArrow = true,
                 onClick = { onItemClick(income.id) }

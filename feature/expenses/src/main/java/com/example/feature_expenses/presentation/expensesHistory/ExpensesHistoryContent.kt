@@ -78,7 +78,10 @@ fun ExpensesHistoryContent(
                 emoji = expense.icon,
                 title = expense.title,
                 subTitle = expense.comment,
-                trailingText = formatAmountWithCurrency(expense.amount.toDouble(), expense.currency),
+                trailingText = formatAmountWithCurrency(
+                    expense.amount.toDouble(),
+                    getCurrencySymbol(expense.currency)
+                ),
                 subTrailingText = formatDateTime(expense.date),
                 showArrow = true,
                 onClick = { onItemClick(expense.id) }

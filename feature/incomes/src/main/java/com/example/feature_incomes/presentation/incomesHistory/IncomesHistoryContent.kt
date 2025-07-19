@@ -78,7 +78,10 @@ fun IncomesHistoryContent(
                 emoji = income.icon,
                 title = income.title,
                 subTitle = income.comment,
-                trailingText = formatAmountWithCurrency(income.amount.toDouble(), income.currency),
+                trailingText = formatAmountWithCurrency(
+                    income.amount.toDouble(),
+                    getCurrencySymbol(income.currency)
+                ),
                 subTrailingText = formatDateTime(income.date),
                 showArrow = true,
                 onClick = { onItemClick(income.id) }

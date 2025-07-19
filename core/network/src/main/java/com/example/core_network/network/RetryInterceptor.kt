@@ -14,7 +14,7 @@ class RetryInterceptor : Interceptor {
     
     companion object {
         private const val MAX_RETRIES = 2
-        private const val RETRY_DELAY_MS = 1000L // 1 second1
+        private const val RETRY_DELAY_MS = 500L // 0.5 second
     }
 
     override fun intercept(chain: Interceptor.Chain): Response {
