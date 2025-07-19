@@ -8,7 +8,8 @@ data class Expense(
     val account: String,
     val currency: String,
     val comment: String? = null,
-    val date: String
+    val date: String,
+    val updatedAt: String
 ) {
     companion object {
         const val UNDEFINED_ID = 0

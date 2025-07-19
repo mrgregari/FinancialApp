@@ -1,5 +1,6 @@
 package com.example.feature_incomes.presentation.addIncome
 
+import androidx.lifecycle.viewModelScope
 import com.example.core_domain.models.Category
 import com.example.core_domain.usecases.GetAccountUseCase
 import com.example.core_network.network.ErrorHandler
@@ -23,6 +24,8 @@ import java.util.Locale
 import com.example.feature_incomes.domain.AddIncomeUseCase
 import com.example.core_ui.utils.formatToIso8601
 import com.example.core_ui.utils.formatToIso8601Local
+import kotlin.time.Clock
+import kotlin.time.ExperimentalTime
 
 class AddIncomeViewModel @Inject constructor(
     val getIncomesCategoriesUseCase: GetIncomesCategoriesUseCase,
@@ -38,6 +41,7 @@ class AddIncomeViewModel @Inject constructor(
     val uiState = _uiState.asStateFlow()
 
     private val _account = MutableStateFlow<Account?>(null)
+    private var _categories = emptyList<Category>()
 
     init {
         initializeNetworkState()
@@ -107,6 +111,7 @@ class AddIncomeViewModel @Inject constructor(
         }
     }
 
+    @OptIn(ExperimentalTime::class)
     fun addIncome(
         value: String,
         selectedCategory: Category?,
@@ -133,7 +138,8 @@ class AddIncomeViewModel @Inject constructor(
                         account = current.account.name,
                         currency = current.account.currency,
                         comment = comment.takeIf { it.isNotBlank() },
-                        date = formatToIso8601Local(date)
+                        date = formatToIso8601Local(date),
+                        updatedAt = Clock.System.now().toString()
                     )
                     addIncomeUseCase(income, accountId, categoryId)
                 },

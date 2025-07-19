@@ -11,7 +11,7 @@
     <string name="about">О программе</string>
     <string name="error_title">Ошибка</string>
     <string name="retry">Повторить</string>
-    <string name="no_internet">Нет подключения к интернету</string>
+    <string name="local_storage">Нет сети: используется локальное хранилище</string>
     <string name="network_timeout">Превышено время ожидания ответа от сервера.</string>
     <string name="network_error">Ошибка сети. Проверьте подключение к интернету.</string>
     <string name="invalid_credentials">Неверные учетные данные. Войдите в систему заново.</string>
@@ -52,4 +52,5 @@
     <string name="my_expenses">Мои расходы</string>
     <string name="my_incomes">Мои доходы</string>
     <string name="add_income">Мои доходы</string>
+    <string name="no_internet">Нет подключения к интернету</string>
 </resources> 

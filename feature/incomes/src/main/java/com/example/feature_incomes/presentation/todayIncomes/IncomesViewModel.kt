@@ -1,7 +1,10 @@
 package com.example.feature_incomes.presentation.todayIncomes
 
 
+import androidx.lifecycle.viewModelScope
 import com.example.core_domain.usecases.GetAccountUseCase
+import com.example.core_domain.usecases.SyncCategoriesUseCase
+import com.example.core_domain.usecases.SyncTransactionsUseCase
 import com.example.core_network.network.ErrorHandler
 import com.example.core_network.network.NetworkResult
 import com.example.core_network.network.NetworkState
@@ -10,6 +13,7 @@ import com.example.feature_incomes.domain.GetIncomesUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 import java.util.Calendar
 import java.util.Date
 import javax.inject.Inject
@@ -18,6 +22,8 @@ import javax.inject.Inject
 class IncomesViewModel @Inject constructor(
     private val getAccountUseCase: GetAccountUseCase,
     private val getIncomesUseCase: GetIncomesUseCase,
+    private val syncCategoriesUseCase: SyncCategoriesUseCase,
+    private val syncTransactionsUseCase: SyncTransactionsUseCase,
     networkState: NetworkState,
     errorHandler: ErrorHandler
 ) : BaseViewModel(networkState, errorHandler) {
@@ -36,11 +42,13 @@ class IncomesViewModel @Inject constructor(
         calendar.set(Calendar.SECOND, 0)
         calendar.set(Calendar.MILLISECOND, 0)
         val startDate = calendar.time
+        syncTransactions()
         loadIncomes(startDate = startDate)
         initializeNetworkState()
     }
 
     fun retry() {
+        syncTransactions()
         val calendar = Calendar.getInstance()
         calendar.set(Calendar.HOUR_OF_DAY, 0)
         calendar.set(Calendar.MINUTE, 0)
@@ -54,6 +62,7 @@ class IncomesViewModel @Inject constructor(
         _uiState.value = IncomesUiState.Loading
         safeApiCall(
             apiCall = {
+                syncCategoriesUseCase()
                 val accountsResult = getAccountUseCase.invoke()
                 when (accountsResult) {
                     is NetworkResult.Success -> {
@@ -80,5 +89,16 @@ class IncomesViewModel @Inject constructor(
                 _uiState.value = IncomesUiState.Error(errorResId)
             }
         )
+    }
+
+    override fun onNetworkAvailable() {
+        super.onNetworkAvailable()
+        syncTransactions()
+    }
+
+    private fun syncTransactions() {
+        viewModelScope.launch {
+            syncTransactionsUseCase()
+        }
     }
 }

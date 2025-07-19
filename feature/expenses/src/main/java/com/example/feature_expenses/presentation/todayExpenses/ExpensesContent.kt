@@ -49,7 +49,7 @@ fun ExpensesContent(
                 subTitle = expense.comment,
                 trailingText = formatAmountWithCurrency(
                     expense.amount.toDouble(),
-                    expense.currency
+                    getCurrencySymbol(expense.currency)
                 ),
                 showArrow = true,
                 onClick = { onItemClick(expense.id) }

@@ -13,8 +13,8 @@ import java.io.IOException
 class RetryInterceptor : Interceptor {
     
     companion object {
-        private const val MAX_RETRIES = 3
-        private const val RETRY_DELAY_MS = 2000L // 2 seconds
+        private const val MAX_RETRIES = 2
+        private const val RETRY_DELAY_MS = 500L // 0.5 second
     }
 
     override fun intercept(chain: Interceptor.Chain): Response {

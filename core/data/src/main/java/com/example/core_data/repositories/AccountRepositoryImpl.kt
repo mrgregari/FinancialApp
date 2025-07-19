@@ -1,19 +1,24 @@
 package com.example.core_data.repositories
 
-import com.example.core_data.remote.dto.UpdateAccountDto
-import com.example.core_data.remote.mappers.AccountMapper
-import com.example.core_data.remote.remoteDataSource.AccountRemoteDataSource
 import com.example.core_data.di.IODispatcher
+import com.example.core_data.local.dao.AccountDao
+import com.example.core_data.local.entity.AccountEntity
+import com.example.core_data.mappers.AccountMapper
+import com.example.core_data.remote.dto.UpdateAccountDto
+import com.example.core_data.remote.remoteDataSource.AccountRemoteDataSource
 import com.example.core_domain.models.Account
 import com.example.core_domain.repositories.AccountRepository
 import com.example.core_network.network.NetworkResult
 import jakarta.inject.Inject
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.withContext
+import kotlin.time.Clock
+import kotlin.time.ExperimentalTime
 
 class AccountRepositoryImpl @Inject constructor(
     private val accountRemoteDataSource: AccountRemoteDataSource,
     private val mapper: AccountMapper,
+    private val accountDao: AccountDao,
     @IODispatcher private val ioDispatcher: CoroutineDispatcher
 ) : AccountRepository {
 
@@ -21,14 +26,31 @@ class AccountRepositoryImpl @Inject constructor(
         return withContext(ioDispatcher) {
             try {
                 val dtos = accountRemoteDataSource.getAccounts()
-                val accounts = dtos.map { mapper.fromDtoToAccount(it) }
-                NetworkResult.Success(accounts)
+                val remoteEntities = dtos.map { mapper.fromDtoToEntity(it) }
+                val localEntities = accountDao.getAll()
+                val localMap = localEntities.associateBy { it.id }
+
+                val toUpdateLocally = mutableListOf<AccountEntity>()
+                for (remote in remoteEntities) {
+                    val local = localMap[remote.id]
+                    if (local == null || remote.updatedAt > local.updatedAt) {
+                        toUpdateLocally.add(remote)
+                    }
+                }
+                if (toUpdateLocally.isNotEmpty()) {
+                    accountDao.insertAll(toUpdateLocally)
+                }
+
+                val resultAccounts = accountDao.getAll().map { mapper.fromEntityToDomain(it) }
+                NetworkResult.Success(resultAccounts)
             } catch (e: Exception) {
-                NetworkResult.Error(e)
+                val localAccounts = accountDao.getAll().map { mapper.fromEntityToDomain(it) }
+                NetworkResult.Success(localAccounts)
             }
         }
     }
 
+    @OptIn(ExperimentalTime::class)
     override suspend fun updateAccount(
         id: Int,
         name: String,
@@ -43,8 +65,46 @@ class AccountRepositoryImpl @Inject constructor(
                 )
                 NetworkResult.Success(Unit)
             } catch (e: Exception) {
-                NetworkResult.Error(e)
+                accountDao.insertAccount(
+                    AccountEntity(
+                        id,
+                        name,
+                        balance,
+                        currency,
+                        Clock.System.now().toString()
+                    )
+                )
+                NetworkResult.Success(Unit)
+                //NetworkResult.Error(e)
             }
         }
+    }
+
+    override suspend fun getAccountsFromRemote(): List<Account> = withContext(ioDispatcher) {
+        val dtos = accountRemoteDataSource.getAccounts()
+        dtos.map { mapper.fromDtoToAccount(it) }
+    }
+
+    override suspend fun getAccountsFromLocal(): List<Account> = withContext(ioDispatcher) {
+        accountDao.getAll().map { mapper.fromEntityToDomain(it) }
+    }
+
+    @OptIn(ExperimentalTime::class)
+    override suspend fun insertAccountToLocal(account: Account) = withContext(ioDispatcher) {
+        accountDao.insertAll(
+            listOf(
+                mapper.fromDomainToEntity(
+                    account,
+                    Clock.System.now().toString()
+                )
+            )
+        )
+    }
+
+    override suspend fun updateAccountRemote(account: Account) = withContext(ioDispatcher) {
+        accountRemoteDataSource.updateAccount(
+            account.id,
+            UpdateAccountDto(account.name, account.balance, account.currency)
+        )
     }
 }

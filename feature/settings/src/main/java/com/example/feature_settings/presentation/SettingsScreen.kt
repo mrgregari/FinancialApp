@@ -12,20 +12,33 @@ import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
+import com.example.core_data.di.DataComponentProvider
 import com.example.core_ui.R
 import com.example.core_ui.components.CustomListItem
+import com.example.feature_settings.di.DaggerSettingsComponent
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SettingsScreen() {
+    val app = LocalContext.current.applicationContext as DataComponentProvider
+    val settingsComponent = remember {
+        DaggerSettingsComponent.factory()
+            .create(app.dataComponent)
+    }
+    val viewModelFactory = settingsComponent.viewModelFactory()
+    val viewModel: SettingsViewModel = androidx.lifecycle.viewmodel.compose.viewModel(factory = viewModelFactory)
     var isDarkTheme by remember { mutableStateOf(false) }
+    val lastSyncText by viewModel.lastSyncText.collectAsState()
     
     val settings = listOf(
         R.string.dark_theme to true,
@@ -52,6 +65,8 @@ fun SettingsScreen() {
         Column(
             modifier = Modifier.padding(innerPadding)
         ) {
+            Text(text = "Последняя синхронизация: $lastSyncText", style = MaterialTheme.typography.bodyMedium, modifier = Modifier.padding(16.dp))
+            HorizontalDivider()
             settings.forEach { (titleRes, isSwitch) ->
                 val title = stringResource(titleRes)
                 if (isSwitch) {

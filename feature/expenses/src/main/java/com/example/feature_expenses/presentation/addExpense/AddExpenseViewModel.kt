@@ -17,6 +17,8 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import java.util.Date
 import javax.inject.Inject
+import kotlin.time.Clock
+import kotlin.time.ExperimentalTime
 
 class AddExpenseViewModel @Inject constructor(
     val getExpensesCategoriesUseCase: GetExpensesCategoriesUseCase,
@@ -103,6 +105,7 @@ class AddExpenseViewModel @Inject constructor(
         }
     }
 
+    @OptIn(ExperimentalTime::class)
     fun addExpense(
         value: String,
         selectedCategory: Category?,
@@ -131,7 +134,8 @@ class AddExpenseViewModel @Inject constructor(
                         account = current.account.name,
                         currency = current.account.currency,
                         comment = comment.takeIf { it.isNotBlank() },
-                        date = formatToIso8601Local(date)
+                        date = formatToIso8601Local(date),
+                        updatedAt = Clock.System.now().toString()
                     )
                     addExpenseUseCase(expense, accountId, categoryId)
                 },

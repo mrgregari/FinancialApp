@@ -36,7 +36,8 @@ import com.example.feature_expenses.di.DaggerExpensesComponent
 @Composable
 fun ExpensesHistoryScreen(
     onNavigateUp: () -> Unit,
-    onItemClick: (Int) -> Unit
+    onItemClick: (Int) -> Unit,
+    onAnalyticsClick: () -> Unit
 ) {
 
     val app = LocalContext.current.applicationContext as DataComponentProvider
@@ -76,7 +77,7 @@ fun ExpensesHistoryScreen(
                     }
                 },
                 actions = {
-                    IconButton(onClick = { }) {
+                    IconButton(onClick = { onAnalyticsClick() }) {
                         Icon(
                             painter = painterResource(R.drawable.analytics),
                             contentDescription = stringResource(R.string.analytics),

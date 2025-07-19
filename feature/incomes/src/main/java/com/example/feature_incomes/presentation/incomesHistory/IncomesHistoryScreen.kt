@@ -36,7 +36,8 @@ import com.example.feature_incomes.di.DaggerIncomesComponent
 @Composable
 fun IncomesHistoryScreen(
     onNavigateUp: () -> Unit,
-    onItemClick: (Int) -> Unit
+    onItemClick: (Int) -> Unit,
+    onAnalyticsClick: () -> Unit
 ) {
     val app = LocalContext.current.applicationContext as DataComponentProvider
     val incomesComponent = remember {
@@ -75,7 +76,7 @@ fun IncomesHistoryScreen(
                     }
                 },
                 actions = {
-                    IconButton(onClick = { }) {
+                    IconButton(onClick = { onAnalyticsClick() }) {
                         Icon(
                             painter = painterResource(R.drawable.analytics),
                             contentDescription = stringResource(R.string.analytics),

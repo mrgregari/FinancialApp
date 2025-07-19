@@ -1,7 +1,9 @@
 package com.example.feature_incomes.presentation.incomesHistory
 
 
+import androidx.lifecycle.viewModelScope
 import com.example.core_domain.usecases.GetAccountUseCase
+import com.example.core_domain.usecases.SyncTransactionsUseCase
 import com.example.core_network.network.NetworkState
 import com.example.core_ui.base.BaseViewModel
 import com.example.feature_incomes.domain.GetIncomesUseCase
@@ -13,11 +15,13 @@ import java.util.Date
 import javax.inject.Inject
 import com.example.core_network.network.ErrorHandler
 import com.example.core_network.network.NetworkResult
+import kotlinx.coroutines.launch
 
 
 class IncomesHistoryViewModel @Inject constructor(
     private val getIncomesUseCase: GetIncomesUseCase,
     private val getAccountUseCase: GetAccountUseCase,
+    private val syncTransactionsUseCase: SyncTransactionsUseCase,
     networkState: NetworkState,
     errorHandler: ErrorHandler
 ) : BaseViewModel(networkState, errorHandler) {
@@ -33,6 +37,7 @@ class IncomesHistoryViewModel @Inject constructor(
     private val _currency = MutableStateFlow<String>("")
 
     init {
+        syncTransactions()
         val calendar = Calendar.getInstance()
         _endDate.value = calendar.time
         calendar.set(Calendar.DAY_OF_MONTH, 1)
@@ -52,6 +57,7 @@ class IncomesHistoryViewModel @Inject constructor(
     }
 
     fun retry() {
+        syncTransactions()
         loadIncomesWithFilter()
     }
 
@@ -91,5 +97,15 @@ class IncomesHistoryViewModel @Inject constructor(
                 _uiState.value = IncomesHistoryUiState.Error(errorResId)
             }
         )
+    }
+    override fun onNetworkAvailable() {
+        super.onNetworkAvailable()
+        syncTransactions()
+    }
+
+    private fun syncTransactions() {
+        viewModelScope.launch {
+            syncTransactionsUseCase()
+        }
     }
 } 

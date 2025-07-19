@@ -1,6 +1,9 @@
 package com.example.feature_expenses.presentation.todayExpenses
 
+import androidx.lifecycle.viewModelScope
 import com.example.core_domain.usecases.GetAccountUseCase
+import com.example.core_domain.usecases.SyncCategoriesUseCase
+import com.example.core_domain.usecases.SyncTransactionsUseCase
 import com.example.core_network.network.ErrorHandler
 import com.example.core_network.network.NetworkResult
 import com.example.core_network.network.NetworkState
@@ -8,6 +11,7 @@ import com.example.core_ui.base.BaseViewModel
 import com.example.feature_expenses.domain.GetExpensesUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 import java.util.Calendar
 import java.util.Date
 import javax.inject.Inject
@@ -16,6 +20,8 @@ import javax.inject.Inject
 class ExpensesViewModel @Inject constructor(
     private val getExpensesUseCase: GetExpensesUseCase,
     private val getAccountUseCase: GetAccountUseCase,
+    private val syncTransactionsUseCase: SyncTransactionsUseCase,
+    private val syncCategoriesUseCase: SyncCategoriesUseCase,
     networkState: NetworkState,
     errorHandler: ErrorHandler
 ) : BaseViewModel(networkState, errorHandler) {
@@ -28,6 +34,7 @@ class ExpensesViewModel @Inject constructor(
         calendar.set(Calendar.SECOND, 0)
         calendar.set(Calendar.MILLISECOND, 0)
         val startDate = calendar.time
+        syncTransactions()
         loadExpenses(startDate = startDate)
     }
 
@@ -38,6 +45,7 @@ class ExpensesViewModel @Inject constructor(
 
 
     fun retry() {
+        syncTransactions()
         val calendar = Calendar.getInstance()
         calendar.set(Calendar.HOUR_OF_DAY, 0)
         calendar.set(Calendar.MINUTE, 0)
@@ -50,6 +58,7 @@ class ExpensesViewModel @Inject constructor(
     private fun loadExpenses(startDate: Date? = null, endDate: Date? = null) {
         safeApiCall(
             apiCall = {
+                syncCategoriesUseCase()
                 val accountsResult = getAccountUseCase.invoke()
                 when (accountsResult) {
                     is NetworkResult.Success -> {
@@ -74,5 +83,16 @@ class ExpensesViewModel @Inject constructor(
                 _uiState.value = ExpensesUiState.Error(errorResId)
             }
         )
+    }
+
+    override fun onNetworkAvailable() {
+        super.onNetworkAvailable()
+        syncTransactions()
+    }
+
+    private fun syncTransactions() {
+        viewModelScope.launch {
+            syncTransactionsUseCase()
+        }
     }
 }
