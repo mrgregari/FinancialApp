@@ -60,6 +60,9 @@ fun AppNavHost(
                 onNavigateUp = { navController.navigateUp() },
                 onItemClick = { id ->
                     navController.navigate(Screen.EditIncome.routeWithIdIncome(id))
+                },
+                onAnalyticsClick = {
+                    navController.navigate(Screen.IncomeAnalytics.route)
                 }
             )
         }
@@ -155,6 +158,17 @@ fun AppNavHost(
                 onNavigateBack = {
                     navController.navigate(Screen.ExpensesHistory.route) {
                         popUpTo(Screen.ExpenseAnalytics.route) { inclusive = true }
+                        launchSingleTop = true
+                    }
+                }
+            )
+        }
+
+        composable(Screen.IncomeAnalytics.route) {
+            com.example.feature_incomes.presentation.analytics.IncomeAnalyticsScreen(
+                onNavigateBack = {
+                    navController.navigate(Screen.IncomesHistory.route) {
+                        popUpTo(Screen.IncomeAnalytics.route) { inclusive = true }
                         launchSingleTop = true
                     }
                 }

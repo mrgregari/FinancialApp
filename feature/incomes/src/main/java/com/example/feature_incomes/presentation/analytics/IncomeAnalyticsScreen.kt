@@ -1,6 +1,5 @@
-package com.example.feature_incomes.presentation.incomesHistory
+package com.example.feature_incomes.presentation.analytics
 
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -13,7 +12,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -31,29 +29,21 @@ import com.example.core_ui.components.LoadingScreen
 import com.example.core_ui.components.NetworkErrorBanner
 import com.example.feature_incomes.di.DaggerIncomesComponent
 
-
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalFoundationApi::class)
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun IncomesHistoryScreen(
-    onNavigateUp: () -> Unit,
-    onItemClick: (Int) -> Unit,
-    onAnalyticsClick: () -> Unit
+fun IncomeAnalyticsScreen(
+    onNavigateBack: () -> Unit
 ) {
     val app = LocalContext.current.applicationContext as DataComponentProvider
     val incomesComponent = remember {
         DaggerIncomesComponent.factory()
             .create(app.dataComponent)
     }
-
     val viewModelFactory = incomesComponent.viewModelFactory()
 
-    val viewModel : IncomesHistoryViewModel = viewModel(factory = viewModelFactory)
-    val isNetworkAvailable by viewModel.isNetworkAvailable.collectAsState()
+    val viewModel: IncomeAnalyticsViewModel = viewModel(factory = viewModelFactory)
     val uiState by viewModel.uiState.collectAsState()
-
-    LaunchedEffect(Unit) {
-        viewModel.retry()
-    }
+    val isNetworkAvailable by viewModel.isNetworkAvailable.collectAsState()
 
     var showStartDatePicker by remember { mutableStateOf(false) }
     var showEndDatePicker by remember { mutableStateOf(false) }
@@ -61,13 +51,13 @@ fun IncomesHistoryScreen(
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
-                title = { Text(stringResource(R.string.incomes_history_title)) },
+                title = { Text("Анализ доходов") },
                 colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-                    containerColor = MaterialTheme.colorScheme.primary,
+                    containerColor = MaterialTheme.colorScheme.surface,
                     titleContentColor = MaterialTheme.colorScheme.onSurface
                 ),
                 navigationIcon = {
-                    IconButton(onClick = { onNavigateUp() }) {
+                    IconButton(onClick = { onNavigateBack() }) {
                         Icon(
                             painter = painterResource(R.drawable.leading_icon),
                             contentDescription = stringResource(R.string.back),
@@ -75,15 +65,6 @@ fun IncomesHistoryScreen(
                         )
                     }
                 },
-                actions = {
-                    IconButton(onClick = { onAnalyticsClick() }) {
-                        Icon(
-                            painter = painterResource(R.drawable.analytics),
-                            contentDescription = stringResource(R.string.analytics),
-                            tint = MaterialTheme.colorScheme.onSurfaceVariant
-                        )
-                    }
-                }
             )
         }
     ) { innerPadding ->
@@ -95,22 +76,25 @@ fun IncomesHistoryScreen(
             NetworkErrorBanner(
                 isVisible = !isNetworkAvailable
             )
-            when (uiState) {
-                is IncomesHistoryUiState.Loading -> LoadingScreen()
-                is IncomesHistoryUiState.Error -> {
-                    val errorResId = (uiState as IncomesHistoryUiState.Error).errorResId
+
+            when (uiState){
+                is IncomeAnalyticsUiState.Loading -> LoadingScreen()
+                is IncomeAnalyticsUiState.Error -> {
+                    val errorResId = (uiState as IncomeAnalyticsUiState.Error).errorResId
                     ErrorScreen(
                         error = stringResource(errorResId),
                         onRetry = { viewModel.retry() }
                     )
                 }
-                is IncomesHistoryUiState.Success -> {
-                    val state = uiState as IncomesHistoryUiState.Success
-                    IncomesHistoryContent(
+
+                is IncomeAnalyticsUiState.Success -> {
+                    val state = uiState as IncomeAnalyticsUiState.Success
+                    IncomeAnalyticsContent(
                         incomes = state.incomes,
                         startDate = state.startDate,
                         endDate = state.endDate,
                         currency = state.currency,
+                        total = state.total,
                         showStartDatePicker = showStartDatePicker,
                         showEndDatePicker = showEndDatePicker,
                         onShowStartDatePicker = { showStartDatePicker = true },
@@ -118,11 +102,11 @@ fun IncomesHistoryScreen(
                         onDismissStartDatePicker = { showStartDatePicker = false },
                         onDismissEndDatePicker = { showEndDatePicker = false },
                         onStartDateSelected = { viewModel.updateStartDate(it) },
-                        onEndDateSelected = { viewModel.updateEndDate(it) },
-                        onItemClick = onItemClick
+                        onEndDateSelected = { viewModel.updateEndDate(it) }
                     )
                 }
             }
+
         }
     }
 } 
