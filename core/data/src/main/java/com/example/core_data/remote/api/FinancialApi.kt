@@ -25,7 +25,7 @@ interface FinancialApi {
     suspend fun getCategories(): List<CategoryDto>
 
     @POST("transactions")
-    suspend fun postTransaction(@Body transaction: CreateTransactionDto): Response<Unit>
+    suspend fun postTransaction(@Body transaction: CreateTransactionDto): Response<TransactionDto>
 
     @DELETE("transactions/{id}")
     suspend fun deleteTransaction(

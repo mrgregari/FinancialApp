@@ -141,9 +141,11 @@ class TransactionRepositoryImpl @Inject constructor(
                     NetworkResult.Error(Exception("Ошибка при добавлении транзакции: ${response.code()}"))
                 }
             } catch (e: Exception) {
+                val minId = transactionDao.getMinTransactionId() ?: 0
+                val newId = if (minId < 0) minId - 1 else -1
                 transactionDao.insertTransaction(
                     TransactionEntity(
-                        id = 0,
+                        id = newId,
                         accountId = accountId,
                         categoryId = categoryId,
                         amount = expense.amount,
@@ -173,9 +175,11 @@ class TransactionRepositoryImpl @Inject constructor(
                     NetworkResult.Error(Exception("Ошибка при добавлении транзакции: ${response.code()}"))
                 }
             } catch (e: Exception) {
+                val minId = transactionDao.getMinTransactionId() ?: 0
+                val newId = if (minId < 0) minId - 1 else -1
                 transactionDao.insertTransaction(
                     TransactionEntity(
-                        id = 0,
+                        id = newId,
                         accountId = accountId,
                         categoryId = categoryId,
                         amount = income.amount,
@@ -312,6 +316,7 @@ class TransactionRepositoryImpl @Inject constructor(
     override suspend fun syncTransactionsWithRemote(accounts: List<Account>): NetworkResult<Unit> =
         withContext(ioDispatcher) {
             try {
+                println("Sync")
                 transactionSyncManager.syncTransactionsWithRemote(accounts)
                 NetworkResult.Success(Unit)
             } catch (e: Exception) {

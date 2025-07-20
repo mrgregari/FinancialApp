@@ -22,7 +22,7 @@ class TransactionRemoteDataSource @Inject constructor(
     ): List<TransactionDto> =
         api.getTransactions(accountId, startDate, endDate)
 
-    suspend fun postTransaction(transaction: CreateTransactionDto): Response<Unit> =
+    suspend fun postTransaction(transaction: CreateTransactionDto): Response<TransactionDto> =
         api.postTransaction(transaction)
 
     suspend fun updateTransaction(

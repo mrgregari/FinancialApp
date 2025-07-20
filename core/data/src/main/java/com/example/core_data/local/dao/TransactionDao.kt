@@ -43,4 +43,7 @@ interface TransactionDao {
 
     @Query("DELETE FROM transactions WHERE id = :id")
     suspend fun deleteTransactionById(id: Int)
+
+    @Query("SELECT MIN(id) FROM transactions")
+    fun getMinTransactionId(): Int?
 }
