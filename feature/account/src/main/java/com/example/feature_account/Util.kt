@@ -8,7 +8,7 @@ fun alignBarChartEntities(
     incomes: List<BarChartEntity>,
     expenses: List<BarChartEntity>
 ): Pair<List<BarChartEntity>, List<BarChartEntity>> {
-    val formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy")
+    val formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy")
 
     // Преобразуем даты к формату "день-месяц-год" и группируем суммы по дню
     fun groupByDay(entities: List<BarChartEntity>): Map<String, Double> =
