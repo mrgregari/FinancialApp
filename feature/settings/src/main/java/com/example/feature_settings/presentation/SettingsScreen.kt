@@ -1,5 +1,7 @@
 package com.example.feature_settings.presentation
 
+import android.app.Activity
+import android.content.Intent
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.CenterAlignedTopAppBar
@@ -16,7 +18,9 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.setValue
+import kotlinx.coroutines.delay
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
@@ -31,6 +35,7 @@ import com.example.feature_settings.di.DaggerSettingsComponent
 @Composable
 fun SettingsScreen() {
     val app = LocalContext.current.applicationContext as DataComponentProvider
+    val context = LocalContext.current
     val settingsComponent = remember {
         DaggerSettingsComponent.factory()
             .create(app.dataComponent)
@@ -50,6 +55,16 @@ fun SettingsScreen() {
         R.string.language to false,
         R.string.about to false
     )
+
+    var pendingRestart by remember { mutableStateOf(false) }
+
+    fun restartApp(activity: Activity) {
+        val intent = activity.packageManager.getLaunchIntentForPackage(activity.packageName)
+        intent?.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
+        activity.startActivity(intent)
+        activity.finish()
+        Runtime.getRuntime().exit(0)
+    }
 
     Scaffold(
         topBar = {
@@ -75,7 +90,10 @@ fun SettingsScreen() {
                         trailingContent = {
                             Switch(
                                 checked = isDarkTheme,
-                                onCheckedChange = { viewModel.setDarkTheme(it) }
+                                onCheckedChange = {
+                                    viewModel.setDarkTheme(it)
+                                    pendingRestart = true
+                                }
                             )
                         }
                     )
@@ -88,6 +106,12 @@ fun SettingsScreen() {
                 }
                 HorizontalDivider()
             }
+        }
+    }
+    if (pendingRestart) {
+        LaunchedEffect(Unit) {
+            delay(200)
+            restartApp(context as Activity)
         }
     }
 }
