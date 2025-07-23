@@ -54,9 +54,9 @@ private val LightColorScheme = lightColorScheme(
 
 @Composable
 fun FinancialAppTheme(
-
     darkTheme: Boolean = isSystemInDarkTheme(),
-    // Dynamic color is available on Android 12+
+    mainColor: Color = Color(0xFF2AE881),
+    secondaryColor: Color = Color(0xFFD4FAE6),
     dynamicColor: Boolean = true,
     content: @Composable () -> Unit
 ) {
@@ -65,12 +65,9 @@ fun FinancialAppTheme(
             val context = LocalContext.current
             if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
         }
-
-        darkTheme -> DarkColorScheme
-        else -> LightColorScheme
+        darkTheme -> DarkColorScheme.copy(primary = mainColor, secondary = secondaryColor)
+        else -> LightColorScheme.copy(primary = mainColor, secondary = secondaryColor)
     }
-
-
     MaterialTheme(
         colorScheme = colorScheme,
         typography = Typography,

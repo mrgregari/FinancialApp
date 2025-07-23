@@ -82,6 +82,7 @@ dependencies {
 
     implementation(libs.google.dagger)
     kapt(libs.google.dagger.compiler)
+    implementation(libs.accompanist.systemuicontroller)
 
 
     implementation(project(":core:data"))

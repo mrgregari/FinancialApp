@@ -5,16 +5,14 @@ import android.app.PendingIntent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.compose.runtime.SideEffect
+import androidx.compose.ui.graphics.Color
 import com.example.core_data.sync.SyncReceiver
 import com.example.core_ui.theme.FinancialAppTheme
+import com.example.core_ui.theme.getSecondaryForPrimary
 import com.example.financialapp.navigation.AppNavGraph
-import com.example.feature_settings.presentation.SettingsViewModel
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import java.util.Calendar
-import android.content.Context
-import android.content.SharedPreferences
 
 /**
  * Main activity of the application.
@@ -26,9 +24,26 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContent {
             val context = applicationContext
-            val prefs = context.getSharedPreferences("sync_prefs", Context.MODE_PRIVATE)
+            val prefs = context.getSharedPreferences("sync_prefs", MODE_PRIVATE)
             val isDarkTheme = prefs.getBoolean("dark_theme", false)
-            FinancialAppTheme(darkTheme = isDarkTheme, dynamicColor = false) {
+            val mainColorInt = prefs.getInt("main_color", 0xFF2AE881.toInt())
+            val mainColor = Color(mainColorInt)
+            val secondaryColor = getSecondaryForPrimary(mainColor)
+
+            val systemUiController = rememberSystemUiController()
+            SideEffect {
+                systemUiController.setStatusBarColor(
+                    color = mainColor,
+                    darkIcons = !isDarkTheme
+                )
+            }
+
+            FinancialAppTheme(
+                darkTheme = isDarkTheme,
+                mainColor = mainColor,
+                secondaryColor = secondaryColor,
+                dynamicColor = false
+            ) {
                 AppNavGraph()
             }
         }

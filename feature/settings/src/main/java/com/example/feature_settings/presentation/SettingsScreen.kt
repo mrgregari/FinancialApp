@@ -30,6 +30,21 @@ import com.example.core_data.di.DataComponentProvider
 import com.example.core_ui.R
 import com.example.core_ui.components.CustomListItem
 import com.example.feature_settings.di.DaggerSettingsComponent
+import androidx.compose.material3.ModalBottomSheet
+import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.draw.clip
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.graphics.toArgb
+import android.util.Log
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import android.content.Context
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -57,6 +72,10 @@ fun SettingsScreen() {
     )
 
     var pendingRestart by remember { mutableStateOf(false) }
+    var showColorSheet by remember { mutableStateOf(false) }
+    val colorOptions = listOf(
+        Color(0xFF2AE881), Color(0xFFE46962), Color(0xFF62A3E4), Color(0xFFF39C12), Color(0xFF8E44AD)
+    )
 
     fun restartApp(activity: Activity) {
         val intent = activity.packageManager.getLaunchIntentForPackage(activity.packageName)
@@ -65,6 +84,8 @@ fun SettingsScreen() {
         activity.finish()
         Runtime.getRuntime().exit(0)
     }
+
+    val prefs = context.getSharedPreferences("sync_prefs", Context.MODE_PRIVATE)
 
     Scaffold(
         topBar = {
@@ -97,6 +118,13 @@ fun SettingsScreen() {
                             )
                         }
                     )
+                } else if (titleRes == R.string.main_color) {
+                    CustomListItem(
+                        title = title,
+                        showArrow = true,
+                        arrowIcon = painterResource(R.drawable.arrow_right),
+                        onClick = { showColorSheet = true }
+                    )
                 } else {
                     CustomListItem(
                         title = title,
@@ -105,6 +133,28 @@ fun SettingsScreen() {
                     )
                 }
                 HorizontalDivider()
+            }
+        }
+        if (showColorSheet) {
+            ModalBottomSheet(onDismissRequest = { showColorSheet = false }) {
+                Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
+                    Row(modifier = Modifier.padding(16.dp), verticalAlignment = Alignment.CenterVertically) {
+                        colorOptions.forEach { color ->
+                            Box(
+                                modifier = Modifier
+                                    .size(48.dp)
+                                    .clip(CircleShape)
+                                    .background(color)
+                                    .clickable {
+                                        prefs.edit().putInt("main_color", color.toArgb()).apply()
+                                        showColorSheet = false
+                                        pendingRestart = true
+                                    }
+                            )
+                            Spacer(modifier = Modifier.size(16.dp))
+                        }
+                    }
+                }
             }
         }
     }
