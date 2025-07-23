@@ -2,11 +2,10 @@ plugins {
     alias(libs.plugins.android.library)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
-    id("org.jetbrains.kotlin.kapt")
 }
 
 android {
-    namespace = "com.example.feature_account"
+    namespace = "com.example.charts"
     compileSdk = 35
 
     defaultConfig {
@@ -40,16 +39,12 @@ dependencies {
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
     implementation(libs.androidx.runtime.android)
-    implementation(libs.androidx.material3.android)
-    implementation(libs.androidx.navigation.runtime.android)
+    implementation(libs.androidx.ui.android)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
+    implementation(libs.ui)
+    implementation(libs.androidx.foundation)
 
-    implementation(libs.lifecycle.viewmodel.compose)
-    implementation(project(":core:data"))
-    implementation(project(":core:ui"))
-    implementation(project(":core:charts"))
-    implementation(libs.google.dagger)
-    kapt(libs.google.dagger.compiler)
+    implementation(libs.material3)
 }
