@@ -27,6 +27,8 @@ import com.example.core_ui.components.CustomDatePickerDialog
 import com.example.core_ui.components.CustomListItem
 import com.example.core_ui.utils.formatAmountWithCurrency
 import com.example.core_ui.utils.getCurrencySymbol
+import com.example.charts.PieChartEntity
+import com.example.charts.CategoryPieChart
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -108,8 +110,26 @@ fun IncomeAnalyticsContent(
             title = "Сумма",
             trailingText = formatAmountWithCurrency(total, getCurrencySymbol(currency))
         )
+        val pieChartData = incomes.map { (category, list) ->
+            PieChartEntity(
+                name = category,
+                sum = list.sumOf { it.amount.toDoubleOrNull() ?: 0.0 }
+            )
+        }
         HorizontalDivider()
         LazyColumn {
+            item {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                ) {
+                    CategoryPieChart(
+                        data = pieChartData,
+                        modifier = Modifier.align(Alignment.Center)
+                    )
+                }
+                HorizontalDivider()
+            }
             items(incomes.entries.toList()) { entry ->
                 val sum = entry.value.sumOf { it.amount.toDouble() }
                 CustomListItem(

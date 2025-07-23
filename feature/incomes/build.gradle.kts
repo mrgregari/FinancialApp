@@ -48,6 +48,7 @@ dependencies {
     implementation(libs.lifecycle.viewmodel.compose)
     implementation(project(":core:data"))
     implementation(project(":core:ui"))
+    implementation(project(":core:charts"))
     implementation(libs.google.dagger)
     kapt(libs.google.dagger.compiler)
 }
