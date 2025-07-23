@@ -64,7 +64,6 @@ fun SettingsScreen() {
     val settings = listOf(
         R.string.dark_theme to true,
         R.string.main_color to false,
-        R.string.sounds to false,
         R.string.haptics to false,
         R.string.code_password to false,
         R.string.sync to false,
@@ -82,6 +81,11 @@ fun SettingsScreen() {
         Color(0xFF8E44AD)
     )
 
+    val prefs = context.getSharedPreferences("sync_prefs", Context.MODE_PRIVATE)
+    var showHapticSheet by remember { mutableStateOf(false) }
+    val hapticOptions = listOf("Выкл.", "Короткая", "Средняя", "Длинная")
+    val selectedHaptic = prefs.getInt("haptic_mode", 0)
+
     fun restartApp(activity: Activity) {
         val intent = activity.packageManager.getLaunchIntentForPackage(activity.packageName)
         intent?.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
@@ -90,7 +94,7 @@ fun SettingsScreen() {
         Runtime.getRuntime().exit(0)
     }
 
-    val prefs = context.getSharedPreferences("sync_prefs", Context.MODE_PRIVATE)
+
 
     Scaffold(
         topBar = {
@@ -134,6 +138,13 @@ fun SettingsScreen() {
                         arrowIcon = painterResource(R.drawable.arrow_right),
                         onClick = { showColorSheet = true }
                     )
+                } else if (titleRes == R.string.haptics) {
+                    CustomListItem(
+                        title = title,
+                        showArrow = true,
+                        arrowIcon = painterResource(R.drawable.arrow_right),
+                        onClick = { showHapticSheet = true }
+                    )
                 } else {
                     CustomListItem(
                         title = title,
@@ -164,6 +175,33 @@ fun SettingsScreen() {
                                     }
                             )
                             Spacer(modifier = Modifier.size(16.dp))
+                        }
+                    }
+                }
+            }
+        }
+        if (showHapticSheet) {
+            ModalBottomSheet(onDismissRequest = { showHapticSheet = false }) {
+                Column(Modifier.padding(16.dp)) {
+                    hapticOptions.forEachIndexed { idx, label ->
+                        Row(
+                            Modifier
+                                .fillMaxWidth()
+                                .clickable {
+                                    prefs.edit().putInt("haptic_mode", idx).apply()
+                                    showHapticSheet = false
+                                }
+                                .padding(vertical = 12.dp),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            androidx.compose.material3.RadioButton(
+                                selected = selectedHaptic == idx,
+                                onClick = {
+                                    prefs.edit().putInt("haptic_mode", idx).apply()
+                                    showHapticSheet = false
+                                }
+                            )
+                            Text(label, Modifier.padding(start = 8.dp))
                         }
                     }
                 }
