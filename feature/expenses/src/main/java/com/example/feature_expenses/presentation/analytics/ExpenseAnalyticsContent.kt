@@ -24,6 +24,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import com.example.charts.PieChartEntity
+import com.example.charts.CategoryPieChart
 import com.example.core_domain.models.Expense
 import com.example.core_ui.components.CustomDatePickerDialog
 import com.example.core_ui.components.CustomListItem
@@ -111,8 +113,26 @@ fun ExpenseAnalyticsContent(
             title = "Сумма",
             trailingText = formatAmountWithCurrency(total, getCurrencySymbol(currency))
         )
+        val pieChartData = expenses.map { (category, list) ->
+            PieChartEntity(
+                name = category,
+                sum = list.sumOf { it.amount.toDoubleOrNull() ?: 0.0 }
+            )
+        }
         HorizontalDivider()
         LazyColumn {
+            item {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                ) {
+                    CategoryPieChart(
+                        data = pieChartData,
+                        modifier = Modifier.align(Alignment.Center)
+                    )
+                }
+                HorizontalDivider()
+            }
             items(expenses.entries.toList()) { entry ->
                 val sum = entry.value.sumOf { it.amount.toDouble() }
                 println(total)
