@@ -10,10 +10,11 @@ import com.example.core_data.local.database.AppDatabase
 import com.example.core_data.repositories.AccountRepositoryImpl
 import com.example.core_data.repositories.CategoryRepositoryImpl
 import com.example.core_data.repositories.TransactionRepositoryImpl
-import com.example.core_data.repositories.ThemeRepository
+import com.example.core_data.repositories.ThemeRepositoryImpl
 import com.example.core_domain.repositories.AccountRepository
 import com.example.core_domain.repositories.CategoryRepository
 import com.example.core_domain.repositories.TransactionRepository
+import com.example.core_domain.repositories.ThemeRepository
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
@@ -34,6 +35,9 @@ abstract class DataModule {
     abstract fun bindTransactionRepository(
         impl: TransactionRepositoryImpl
     ): TransactionRepository
+
+    @Binds
+    abstract fun bindThemeRepository(impl: ThemeRepositoryImpl): ThemeRepository
 
     companion object {
         @Provides
@@ -60,9 +64,5 @@ abstract class DataModule {
         @Provides
         fun provideSyncPrefs(context: Context): SharedPreferences =
             context.getSharedPreferences("sync_prefs", Context.MODE_PRIVATE)
-
-        @Provides
-        fun provideThemeRepository(prefs: SharedPreferences): ThemeRepository =
-            ThemeRepository(prefs)
     }
 }

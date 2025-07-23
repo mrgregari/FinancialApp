@@ -3,6 +3,7 @@ package com.example.feature_settings.presentation
 import android.content.SharedPreferences
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.core_domain.repositories.ThemeRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -11,7 +12,6 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 import javax.inject.Inject
-import com.example.core_data.repositories.ThemeRepository
 
 class SettingsViewModel @Inject constructor(
     private val syncPrefs: SharedPreferences,

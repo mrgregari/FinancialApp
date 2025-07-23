@@ -3,7 +3,6 @@ package com.example.feature_settings.di
 import androidx.lifecycle.ViewModel
 import com.example.core_ui.di.ViewModelKey
 import com.example.feature_settings.presentation.SettingsViewModel
-import com.example.core_data.repositories.ThemeRepository
 import dagger.Binds
 import dagger.Module
 import dagger.multibindings.IntoMap

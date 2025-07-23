@@ -56,10 +56,11 @@ fun SettingsScreen() {
             .create(app.dataComponent)
     }
     val viewModelFactory = settingsComponent.viewModelFactory()
-    val viewModel: SettingsViewModel = androidx.lifecycle.viewmodel.compose.viewModel(factory = viewModelFactory)
-    val isDarkTheme by viewModel.isDarkTheme.collectAsState()
+    val viewModel: SettingsViewModel =
+        androidx.lifecycle.viewmodel.compose.viewModel(factory = viewModelFactory)
     val lastSyncText by viewModel.lastSyncText.collectAsState()
-    
+    val isDarkTheme by viewModel.isDarkTheme.collectAsState()
+
     val settings = listOf(
         R.string.dark_theme to true,
         R.string.main_color to false,
@@ -74,7 +75,11 @@ fun SettingsScreen() {
     var pendingRestart by remember { mutableStateOf(false) }
     var showColorSheet by remember { mutableStateOf(false) }
     val colorOptions = listOf(
-        Color(0xFF2AE881), Color(0xFFE46962), Color(0xFF62A3E4), Color(0xFFF39C12), Color(0xFF8E44AD)
+        Color(0xFF2AE881),
+        Color(0xFFE46962),
+        Color(0xFF62A3E4),
+        Color(0xFFF39C12),
+        Color(0xFF8E44AD)
     )
 
     fun restartApp(activity: Activity) {
@@ -101,7 +106,11 @@ fun SettingsScreen() {
         Column(
             modifier = Modifier.padding(innerPadding)
         ) {
-            Text(text = "Последняя синхронизация: $lastSyncText", style = MaterialTheme.typography.bodyMedium, modifier = Modifier.padding(16.dp))
+            Text(
+                text = "Последняя синхронизация: $lastSyncText",
+                style = MaterialTheme.typography.bodyMedium,
+                modifier = Modifier.padding(16.dp)
+            )
             HorizontalDivider()
             settings.forEach { (titleRes, isSwitch) ->
                 val title = stringResource(titleRes)
@@ -138,7 +147,10 @@ fun SettingsScreen() {
         if (showColorSheet) {
             ModalBottomSheet(onDismissRequest = { showColorSheet = false }) {
                 Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
-                    Row(modifier = Modifier.padding(16.dp), verticalAlignment = Alignment.CenterVertically) {
+                    Row(
+                        modifier = Modifier.padding(16.dp),
+                        verticalAlignment = Alignment.CenterVertically
+                    ) {
                         colorOptions.forEach { color ->
                             Box(
                                 modifier = Modifier
