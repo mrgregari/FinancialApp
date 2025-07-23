@@ -11,9 +11,11 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 import javax.inject.Inject
+import com.example.core_data.repositories.ThemeRepository
 
 class SettingsViewModel @Inject constructor(
-    private val syncPrefs: SharedPreferences
+    private val syncPrefs: SharedPreferences,
+    private val themeRepository: ThemeRepository
 ) : ViewModel() {
     private val _lastSyncText = MutableStateFlow("")
     val lastSyncText: StateFlow<String> = _lastSyncText.asStateFlow()
@@ -28,5 +30,10 @@ class SettingsViewModel @Inject constructor(
                 "Синхронизация ещё не проводилась"
             }
         }
+    }
+
+    val isDarkTheme: StateFlow<Boolean> = themeRepository.isDarkTheme
+    fun setDarkTheme(enabled: Boolean) {
+        themeRepository.setDarkTheme(enabled)
     }
 } 

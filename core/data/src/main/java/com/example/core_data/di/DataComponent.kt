@@ -6,6 +6,7 @@ import com.example.core_domain.repositories.AccountRepository
 import com.example.core_domain.repositories.CategoryRepository
 import com.example.core_domain.repositories.TransactionRepository
 import com.example.core_data.sync.TransactionSyncWorkerFactory
+import com.example.core_data.repositories.ThemeRepository
 import dagger.BindsInstance
 import dagger.Component
 
@@ -27,4 +28,5 @@ interface DataComponent {
 
     fun context(): Context
     fun sharedPreferences(): SharedPreferences
+    fun themeRepository(): ThemeRepository
 } 

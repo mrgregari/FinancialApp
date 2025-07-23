@@ -5,10 +5,16 @@ import android.app.PendingIntent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.core_data.sync.SyncReceiver
 import com.example.core_ui.theme.FinancialAppTheme
 import com.example.financialapp.navigation.AppNavGraph
+import com.example.feature_settings.presentation.SettingsViewModel
 import java.util.Calendar
+import android.content.Context
+import android.content.SharedPreferences
 
 /**
  * Main activity of the application.
@@ -19,7 +25,10 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
-            FinancialAppTheme(dynamicColor = false) {
+            val context = applicationContext
+            val prefs = context.getSharedPreferences("sync_prefs", Context.MODE_PRIVATE)
+            val isDarkTheme = prefs.getBoolean("dark_theme", false)
+            FinancialAppTheme(darkTheme = isDarkTheme, dynamicColor = false) {
                 AppNavGraph()
             }
         }

@@ -52,7 +52,7 @@ fun AccountScreen(
                 title = { Text(stringResource(R.string.account_title)) },
                 colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
                     containerColor = MaterialTheme.colorScheme.primary,
-                    titleContentColor = MaterialTheme.colorScheme.onSurface
+                    titleContentColor = MaterialTheme.colorScheme.onSurfaceVariant
                 ),
                 actions = {
                     IconButton(onClick = {
@@ -119,6 +119,7 @@ private fun AccountContent(
                 title = stringResource(R.string.account_name),
                 trailingText = account.name,
                 containerColor = MaterialTheme.colorScheme.secondary,
+                textColor = MaterialTheme.colorScheme.onSurfaceVariant
             )
             HorizontalDivider()
             CustomListItem(
@@ -128,6 +129,7 @@ private fun AccountContent(
                 title = stringResource(R.string.balance),
                 trailingText = "${formatNumber(account.balance)} ${getCurrencySymbol(account.currency)}",
                 containerColor = MaterialTheme.colorScheme.secondary,
+                textColor = MaterialTheme.colorScheme.onSurfaceVariant
             )
             HorizontalDivider()
             CustomListItem(
@@ -135,6 +137,7 @@ private fun AccountContent(
                 title = stringResource(R.string.currency),
                 trailingText = getCurrencySymbol(account.currency),
                 containerColor = MaterialTheme.colorScheme.secondary,
+                textColor = MaterialTheme.colorScheme.onSurfaceVariant
             )
             Spacer(modifier = Modifier.height(30.dp))
             BarChart(

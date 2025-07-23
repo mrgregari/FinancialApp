@@ -37,7 +37,7 @@ fun SettingsScreen() {
     }
     val viewModelFactory = settingsComponent.viewModelFactory()
     val viewModel: SettingsViewModel = androidx.lifecycle.viewmodel.compose.viewModel(factory = viewModelFactory)
-    var isDarkTheme by remember { mutableStateOf(false) }
+    val isDarkTheme by viewModel.isDarkTheme.collectAsState()
     val lastSyncText by viewModel.lastSyncText.collectAsState()
     
     val settings = listOf(
@@ -57,7 +57,7 @@ fun SettingsScreen() {
                 title = { Text(stringResource(R.string.settings_title)) },
                 colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
                     containerColor = MaterialTheme.colorScheme.primary,
-                    titleContentColor = MaterialTheme.colorScheme.onSurface
+                    titleContentColor = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             )
         }
@@ -75,7 +75,7 @@ fun SettingsScreen() {
                         trailingContent = {
                             Switch(
                                 checked = isDarkTheme,
-                                onCheckedChange = { isDarkTheme = it }
+                                onCheckedChange = { viewModel.setDarkTheme(it) }
                             )
                         }
                     )

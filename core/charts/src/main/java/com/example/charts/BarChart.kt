@@ -17,7 +17,9 @@ import androidx.compose.ui.graphics.drawscope.drawIntoCanvas
 import androidx.compose.ui.graphics.nativeCanvas
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.ui.graphics.toArgb
 import kotlinx.coroutines.delay
 
 
@@ -35,6 +37,7 @@ fun BarChart(
 
     if (barCount == 0) return
 
+    val textColor = MaterialTheme.colorScheme.onSurface
     var selectedBarIndex by remember { mutableStateOf<Int?>(null) }
     var chartVisible by remember { mutableStateOf(false) }
     val progress by animateFloatAsState(
@@ -99,7 +102,7 @@ fun BarChart(
                 val date = expenses[i].date
                 drawIntoCanvas { canvas ->
                     val paint = android.graphics.Paint().apply {
-                        color = android.graphics.Color.BLACK
+                        color = textColor.toArgb()
                         textSize = 32f
                         textAlign = android.graphics.Paint.Align.CENTER
                     }

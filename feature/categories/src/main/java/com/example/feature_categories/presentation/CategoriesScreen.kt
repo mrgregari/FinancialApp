@@ -49,7 +49,7 @@ fun CategoriesScreen(
                 title = { Text(stringResource(R.string.categories_title)) },
                 colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
                     containerColor = MaterialTheme.colorScheme.primary,
-                    titleContentColor = MaterialTheme.colorScheme.onSurface
+                    titleContentColor = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             )
         }
