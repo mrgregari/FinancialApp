@@ -13,11 +13,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.example.core_ui.components.CustomListItem
 import com.example.core_ui.components.EditField
 import com.example.core_ui.utils.getCurrencySymbol
+import com.example.core_ui.R
 
 @Composable
 fun AccountEditContent(
@@ -41,7 +43,7 @@ fun AccountEditContent(
             ) { focusManager.clearFocus() }
     ) {
         EditField(
-            label = "Название счета",
+            label = stringResource(R.string.account_name),
             value = name,
             onValueChange = onNameChange
         )
@@ -54,7 +56,7 @@ fun AccountEditContent(
             )
         }
         EditField(
-            label = "Баланс",
+            label = stringResource(R.string.balance),
             value = balance,
             onValueChange = onValueChange,
             keyboardType = KeyboardType.Number
@@ -69,7 +71,7 @@ fun AccountEditContent(
         }
         CustomListItem(
             modifier = Modifier.height(71.dp),
-            title = "Валюта",
+            title = stringResource(R.string.currency),
             trailingText = getCurrencySymbol(currency),
             showArrow = true,
             onClick = onCurrencyClick

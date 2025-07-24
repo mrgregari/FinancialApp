@@ -60,7 +60,7 @@ fun AddIncomeScreen(
                 title = { Text(stringResource(R.string.add_income)) },
                 colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
                     containerColor = MaterialTheme.colorScheme.primary,
-                    titleContentColor = MaterialTheme.colorScheme.onSurface
+                    titleContentColor = MaterialTheme.colorScheme.onSurfaceVariant
                 ),
                 navigationIcon = {
                     IconButton(onClick = { onNavigateBack() }) {

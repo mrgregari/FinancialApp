@@ -66,7 +66,7 @@ fun AddExpenseScreen(
                 title = { Text(stringResource(R.string.my_expenses)) },
                 colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
                     containerColor = MaterialTheme.colorScheme.primary,
-                    titleContentColor = MaterialTheme.colorScheme.onSurface
+                    titleContentColor = MaterialTheme.colorScheme.onSurfaceVariant
                 ),
                 navigationIcon = {
                     IconButton(onClick = { onNavigateBack() }) {

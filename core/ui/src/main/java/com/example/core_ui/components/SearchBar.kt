@@ -30,7 +30,8 @@ fun SearchBar(
             .height(56.dp),
         placeholder = {
             Text(
-                text = placeholder
+                text = placeholder,
+                color = MaterialTheme.colorScheme.onSurface
             )
         },
         trailingIcon = {

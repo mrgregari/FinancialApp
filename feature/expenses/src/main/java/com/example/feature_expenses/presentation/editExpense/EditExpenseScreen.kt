@@ -30,7 +30,6 @@ import com.example.core_ui.R
 import com.example.core_ui.components.ErrorScreen
 import com.example.core_ui.components.LoadingScreen
 import com.example.core_ui.components.NetworkErrorBanner
-import com.example.core_ui.utils.parseIso8601Date
 import com.example.core_ui.utils.parseIso8601LocalDate
 import com.example.feature_expenses.di.DaggerExpensesComponent
 import java.util.Date
@@ -66,7 +65,7 @@ fun EditExpenseScreen(
                 title = { Text(stringResource(R.string.my_expenses)) },
                 colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
                     containerColor = MaterialTheme.colorScheme.primary,
-                    titleContentColor = MaterialTheme.colorScheme.onSurface
+                    titleContentColor = MaterialTheme.colorScheme.onSurfaceVariant
                 ),
                 navigationIcon = {
                     IconButton(onClick = { onNavigateBack() }) {

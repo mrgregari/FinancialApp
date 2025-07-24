@@ -49,26 +49,29 @@ fun ExpensesHistoryContent(
                     trailingText =
                         startDate?.let { formatDate(it) } ?: stringResource(R.string.choose_date),
                     containerColor = MaterialTheme.colorScheme.secondary,
-                    onClick = onShowStartDatePicker
+                    onClick = onShowStartDatePicker,
+                    textColor = MaterialTheme.colorScheme.onSurfaceVariant
                 )
                 HorizontalDivider()
                 CustomListItem(
                     modifier = Modifier.height(56.dp),
-                    title = "Конец",
-                    trailingText = endDate?.let { formatDate(it) } ?: "Выберите дату",
+                    title = stringResource(R.string.end),
+                    trailingText = endDate?.let { formatDate(it) } ?: stringResource(R.string.choose_date),
                     containerColor = MaterialTheme.colorScheme.secondary,
-                    onClick = onShowEndDatePicker
+                    onClick = onShowEndDatePicker,
+                    textColor = MaterialTheme.colorScheme.onSurfaceVariant
                 )
                 HorizontalDivider()
                 CustomListItem(
                     modifier = Modifier.height(56.dp),
-                    title = "Сумма",
+                    title = stringResource(R.string.amount),
                     trailingText = formatAmountWithCurrency(
                         expenses.sumOf { it.amount.toDouble() },
                         getCurrencySymbol(currency)
                     ),
                     showArrow = false,
-                    containerColor = MaterialTheme.colorScheme.secondary
+                    containerColor = MaterialTheme.colorScheme.secondary,
+                    textColor = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             }
         }

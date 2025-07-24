@@ -64,7 +64,7 @@ fun IncomesHistoryScreen(
                 title = { Text(stringResource(R.string.incomes_history_title)) },
                 colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
                     containerColor = MaterialTheme.colorScheme.primary,
-                    titleContentColor = MaterialTheme.colorScheme.onSurface
+                    titleContentColor = MaterialTheme.colorScheme.onSurfaceVariant
                 ),
                 navigationIcon = {
                     IconButton(onClick = { onNavigateUp() }) {

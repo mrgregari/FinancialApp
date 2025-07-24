@@ -61,7 +61,7 @@ fun ExpensesScreen(
                 title = { Text(stringResource(R.string.expenses_today)) },
                 colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
                     containerColor = MaterialTheme.colorScheme.primary,
-                    titleContentColor = MaterialTheme.colorScheme.onSurface
+                    titleContentColor = MaterialTheme.colorScheme.onSurfaceVariant
                 ),
                 actions = {
                     IconButton(onClick = {

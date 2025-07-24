@@ -36,7 +36,8 @@ fun ExpensesContent(
                 ),
                 subTrailingText = null,
                 showArrow = false,
-                containerColor = MaterialTheme.colorScheme.secondary
+                containerColor = MaterialTheme.colorScheme.secondary,
+                textColor = MaterialTheme.colorScheme.onSurfaceVariant
             )
             HorizontalDivider()
         }

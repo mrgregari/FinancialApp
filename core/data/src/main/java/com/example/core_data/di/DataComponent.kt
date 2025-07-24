@@ -2,10 +2,11 @@ package com.example.core_data.di
 
 import android.content.Context
 import android.content.SharedPreferences
+import com.example.core_data.sync.TransactionSyncWorkerFactory
 import com.example.core_domain.repositories.AccountRepository
 import com.example.core_domain.repositories.CategoryRepository
+import com.example.core_domain.repositories.ThemeRepository
 import com.example.core_domain.repositories.TransactionRepository
-import com.example.core_data.sync.TransactionSyncWorkerFactory
 import dagger.BindsInstance
 import dagger.Component
 
@@ -27,4 +28,5 @@ interface DataComponent {
 
     fun context(): Context
     fun sharedPreferences(): SharedPreferences
+    fun themeRepository(): ThemeRepository
 } 

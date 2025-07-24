@@ -20,6 +20,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
+import com.example.core_ui.R
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.example.core_domain.models.Income
@@ -27,6 +29,8 @@ import com.example.core_ui.components.CustomDatePickerDialog
 import com.example.core_ui.components.CustomListItem
 import com.example.core_ui.utils.formatAmountWithCurrency
 import com.example.core_ui.utils.getCurrencySymbol
+import com.example.charts.PieChartEntity
+import com.example.charts.CategoryPieChart
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -58,7 +62,7 @@ fun IncomeAnalyticsContent(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                text = "Период: начало",
+                text = stringResource(R.string.period_start),
                 modifier = Modifier.padding(start = 16.dp, end = 8.dp)
             )
             Spacer(modifier = Modifier.weight(1f))
@@ -85,7 +89,7 @@ fun IncomeAnalyticsContent(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                text = "Период: конец",
+                text = stringResource(R.string.period_end),
                 modifier = Modifier.padding(start = 16.dp, end = 8.dp)
             )
             Spacer(modifier = Modifier.weight(1f))
@@ -105,11 +109,29 @@ fun IncomeAnalyticsContent(
         }
         HorizontalDivider()
         CustomListItem(
-            title = "Сумма",
+            title = stringResource(R.string.amount),
             trailingText = formatAmountWithCurrency(total, getCurrencySymbol(currency))
         )
+        val pieChartData = incomes.map { (category, list) ->
+            PieChartEntity(
+                name = category,
+                sum = list.sumOf { it.amount.toDoubleOrNull() ?: 0.0 }
+            )
+        }
         HorizontalDivider()
         LazyColumn {
+            item {
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                ) {
+                    CategoryPieChart(
+                        data = pieChartData,
+                        modifier = Modifier.align(Alignment.Center)
+                    )
+                }
+                HorizontalDivider()
+            }
             items(incomes.entries.toList()) { entry ->
                 val sum = entry.value.sumOf { it.amount.toDouble() }
                 CustomListItem(

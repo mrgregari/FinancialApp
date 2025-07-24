@@ -6,7 +6,7 @@ import com.example.core_domain.usecases.GetAccountUseCase
 import com.example.core_domain.usecases.SyncTransactionsUseCase
 import com.example.core_network.network.NetworkState
 import com.example.core_ui.base.BaseViewModel
-import com.example.feature_incomes.domain.GetIncomesUseCase
+import com.example.core_domain.usecases.GetIncomesUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow

@@ -61,7 +61,7 @@ fun IncomeScreen(
                 title = { Text(stringResource(R.string.today_incomes)) },
                 colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
                     containerColor = MaterialTheme.colorScheme.primary,
-                    titleContentColor = MaterialTheme.colorScheme.onSurface
+                    titleContentColor = MaterialTheme.colorScheme.onSurfaceVariant
                 ),
                 actions = {
                     IconButton(onClick = { onHistoryClick() }) {

@@ -11,6 +11,8 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.charts.BarChart
+import com.example.charts.BarChartEntity
 import com.example.core_data.di.DataComponentProvider
 import com.example.core_domain.models.Account
 import com.example.core_ui.components.CustomListItem
@@ -20,6 +22,7 @@ import com.example.core_ui.components.NetworkErrorBanner
 import com.example.core_ui.utils.formatNumber
 import com.example.core_ui.utils.getCurrencySymbol
 import com.example.core_ui.R
+import com.example.feature_account.alignBarChartEntities
 import com.example.feature_account.di.DaggerAccountComponent
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -40,6 +43,8 @@ fun AccountScreen(
     val isLoading by viewModel.isLoading.collectAsState()
     val errorResId by viewModel.errorResId.collectAsState()
     val isNetworkAvailable by viewModel.isNetworkAvailable.collectAsState()
+    val incomes by viewModel.incomes.collectAsState()
+    val expenses by viewModel.expenses.collectAsState()
 
     Scaffold(
         topBar = {
@@ -47,7 +52,7 @@ fun AccountScreen(
                 title = { Text(stringResource(R.string.account_title)) },
                 colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
                     containerColor = MaterialTheme.colorScheme.primary,
-                    titleContentColor = MaterialTheme.colorScheme.onSurface
+                    titleContentColor = MaterialTheme.colorScheme.onSurfaceVariant
                 ),
                 actions = {
                     IconButton(onClick = {
@@ -80,10 +85,19 @@ fun AccountScreen(
                     onRetry = { viewModel.retry() }
                 )
 
-                else -> AccountContent(
-                    accounts = accounts,
-                    modifier = Modifier.fillMaxSize()
-                )
+                else -> {
+                    val incomes =
+                        incomes.map { BarChartEntity(it.date, it.amount.toDouble()) }
+                    val expenses =
+                        expenses.map { BarChartEntity(it.date, it.amount.toDouble()) }
+                    val (alignedIncomes, alignedExpenses) = alignBarChartEntities(incomes, expenses)
+                    AccountContent(
+                        accounts = accounts,
+                        modifier = Modifier.fillMaxSize(),
+                        alignedIncomes,
+                        alignedExpenses
+                    )
+                }
             }
         }
     }
@@ -92,7 +106,9 @@ fun AccountScreen(
 @Composable
 private fun AccountContent(
     accounts: List<Account>,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    incomes: List<BarChartEntity>,
+    expenses: List<BarChartEntity>
 ) {
     val account = accounts.firstOrNull()
 
@@ -103,6 +119,7 @@ private fun AccountContent(
                 title = stringResource(R.string.account_name),
                 trailingText = account.name,
                 containerColor = MaterialTheme.colorScheme.secondary,
+                textColor = MaterialTheme.colorScheme.onSurfaceVariant
             )
             HorizontalDivider()
             CustomListItem(
@@ -112,6 +129,7 @@ private fun AccountContent(
                 title = stringResource(R.string.balance),
                 trailingText = "${formatNumber(account.balance)} ${getCurrencySymbol(account.currency)}",
                 containerColor = MaterialTheme.colorScheme.secondary,
+                textColor = MaterialTheme.colorScheme.onSurfaceVariant
             )
             HorizontalDivider()
             CustomListItem(
@@ -119,6 +137,15 @@ private fun AccountContent(
                 title = stringResource(R.string.currency),
                 trailingText = getCurrencySymbol(account.currency),
                 containerColor = MaterialTheme.colorScheme.secondary,
+                textColor = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+            Spacer(modifier = Modifier.height(30.dp))
+            BarChart(
+                incomes = incomes,
+                expenses = expenses,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(220.dp)
             )
         }
     } else {

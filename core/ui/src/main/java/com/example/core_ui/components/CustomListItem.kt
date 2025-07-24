@@ -32,6 +32,7 @@ import com.example.core_ui.R
 fun CustomListItem(
     modifier: Modifier = Modifier,
     containerColor: Color = MaterialTheme.colorScheme.surface,
+    textColor: Color = MaterialTheme.colorScheme.onSurface,
     emoji: String? = null,
     emojiBackgroundColor: Color = MaterialTheme.colorScheme.secondary,
     title: String,
@@ -91,13 +92,13 @@ fun CustomListItem(
                     Text(
                         text = title,
                         style = MaterialTheme.typography.bodyLarge,
-                        color = MaterialTheme.colorScheme.onSurface
+                        color = textColor
                     )
                     if (subTitle != null) {
                         Text(
                             text = subTitle,
                             style = MaterialTheme.typography.labelMedium,
-                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                            color = MaterialTheme.colorScheme.onSurface
                         )
                     }
                 }
@@ -109,14 +110,14 @@ fun CustomListItem(
                         Text(
                             text = trailingText,
                             style = MaterialTheme.typography.bodyLarge,
-                            color = MaterialTheme.colorScheme.onSurface,
+                            color = textColor
                         )
                     }
                     if (subTrailingText != null) {
                         Text(
                             text = subTrailingText,
                             style = MaterialTheme.typography.bodyLarge,
-                            color = MaterialTheme.colorScheme.onSurface,
+                            color = textColor,
                             maxLines = 1
                         )
                     }

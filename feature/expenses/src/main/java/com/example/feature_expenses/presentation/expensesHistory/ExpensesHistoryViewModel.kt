@@ -8,7 +8,7 @@ import com.example.core_network.network.ErrorHandler
 import com.example.core_network.network.NetworkResult
 import com.example.core_network.network.NetworkState
 import com.example.core_ui.base.BaseViewModel
-import com.example.feature_expenses.domain.GetExpensesUseCase
+import com.example.core_domain.usecases.GetExpensesUseCase
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow

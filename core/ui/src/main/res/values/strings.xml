@@ -53,4 +53,26 @@
     <string name="my_incomes">Мои доходы</string>
     <string name="add_income">Мои доходы</string>
     <string name="no_internet">Нет подключения к интернету</string>
+    <string name="category">Статья</string>
+    <string name="enter_sum">Введите сумму</string>
+    <string name="time">Время</string>
+    <string name="comment">Комментарий</string>
+    <string name="date">Дата</string>
+    <string name="account">Счет</string>
+    <string name="period_start">Период: начало</string>
+    <string name="period_end">Период: конец</string>
+    <string name="russian_ruble">Российский рубль ₽</string>
+    <string name="american_dollar">Американский доллар $</string>
+    <string name="euro">Евро €</string>
+    <string name="sync_interval">Интервал синхронизации: %1$d мин.</string>
+    <string name="save">Сохранить</string>
+    <string name="off">Выкл.</string>
+    <string name="short_hapt">Короткая</string>
+    <string name="mediun">Средняя</string>
+    <string name="long_hapt">Длинная</string>
+    <string name="last_sync">"Последняя синхронизация: %1$s"</string>
+    <string name="delete_expense">Удалить расход</string>
+    <string name="delete_income">Удалить доход</string>
+    <string name="version">Версия: %1$s (%2$d)</string>
+    <string name="update">Последнее обновление: %1$s</string>
 </resources> 

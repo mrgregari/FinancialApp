@@ -40,7 +40,7 @@ fun CustomDatePickerDialog(
                             datePickerState.selectedDateMillis = null
                         },
                         colors = ButtonDefaults.textButtonColors(
-                            contentColor = MaterialTheme.colorScheme.onSurface
+                            contentColor = MaterialTheme.colorScheme.onSurfaceVariant
                         )
                     ) {
                         Text("Clear")
@@ -49,7 +49,7 @@ fun CustomDatePickerDialog(
                         TextButton(
                             onClick = onDismiss,
                             colors = ButtonDefaults.textButtonColors(
-                                contentColor = MaterialTheme.colorScheme.onSurface
+                                contentColor = MaterialTheme.colorScheme.onSurfaceVariant
                             )
                         ) {
                             Text("Cancel")
@@ -62,7 +62,7 @@ fun CustomDatePickerDialog(
                                 onDismiss()
                             },
                             colors = ButtonDefaults.textButtonColors(
-                                contentColor = MaterialTheme.colorScheme.onSurface
+                                contentColor = MaterialTheme.colorScheme.onSurfaceVariant
                             )
                         ) {
                             Text("OK")
@@ -80,9 +80,12 @@ fun CustomDatePickerDialog(
                 headline = null,
                 showModeToggle = false,
                 colors = DatePickerDefaults.colors(
+                    weekdayContentColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                    headlineContentColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                    dayContentColor = MaterialTheme.colorScheme.onSurfaceVariant,
                     containerColor = MaterialTheme.colorScheme.secondary,
                     selectedDayContainerColor = MaterialTheme.colorScheme.primary,
-                    selectedDayContentColor = MaterialTheme.colorScheme.onSurface
+                    selectedDayContentColor = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             )
         }

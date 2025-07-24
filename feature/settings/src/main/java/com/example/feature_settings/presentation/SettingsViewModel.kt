@@ -3,6 +3,7 @@ package com.example.feature_settings.presentation
 import android.content.SharedPreferences
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.core_domain.repositories.ThemeRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -13,7 +14,8 @@ import java.util.Locale
 import javax.inject.Inject
 
 class SettingsViewModel @Inject constructor(
-    private val syncPrefs: SharedPreferences
+    private val syncPrefs: SharedPreferences,
+    private val themeRepository: ThemeRepository
 ) : ViewModel() {
     private val _lastSyncText = MutableStateFlow("")
     val lastSyncText: StateFlow<String> = _lastSyncText.asStateFlow()
@@ -28,5 +30,10 @@ class SettingsViewModel @Inject constructor(
                 "Синхронизация ещё не проводилась"
             }
         }
+    }
+
+    val isDarkTheme: StateFlow<Boolean> = themeRepository.isDarkTheme
+    fun setDarkTheme(enabled: Boolean) {
+        themeRepository.setDarkTheme(enabled)
     }
 } 
