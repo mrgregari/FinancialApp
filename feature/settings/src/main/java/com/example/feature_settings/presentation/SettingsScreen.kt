@@ -1,7 +1,10 @@
 package com.example.feature_settings.presentation
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.CenterAlignedTopAppBar
@@ -14,14 +17,14 @@ import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.setValue
-import kotlinx.coroutines.delay
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -30,32 +33,16 @@ import com.example.core_data.di.DataComponentProvider
 import com.example.core_ui.R
 import com.example.core_ui.components.CustomListItem
 import com.example.feature_settings.di.DaggerSettingsComponent
-import androidx.compose.material3.ModalBottomSheet
-import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.graphics.toArgb
-import android.util.Log
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
-import android.content.Context
-import androidx.compose.material3.Slider
-import androidx.compose.material3.Button
+import kotlinx.coroutines.delay
 
+@RequiresApi(Build.VERSION_CODES.P)
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SettingsScreen() {
     val app = LocalContext.current.applicationContext as DataComponentProvider
     val context = LocalContext.current
     val settingsComponent = remember {
-        DaggerSettingsComponent.factory()
-            .create(app.dataComponent)
+        DaggerSettingsComponent.factory().create(app.dataComponent)
     }
     val viewModelFactory = settingsComponent.viewModelFactory()
     val viewModel: SettingsViewModel =
@@ -99,6 +86,8 @@ fun SettingsScreen() {
     var showLanguageSheet by remember { mutableStateOf(false) }
     val currentLang = prefs.getString("app_lang", "ru") ?: "ru"
 
+    var showAboutSheet by remember { mutableStateOf(false) }
+
     fun restartApp(activity: Activity) {
         val intent = activity.packageManager.getLaunchIntentForPackage(activity.packageName)
         intent?.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
@@ -118,8 +107,7 @@ fun SettingsScreen() {
                     titleContentColor = MaterialTheme.colorScheme.onSurfaceVariant
                 )
             )
-        }
-    ) { innerPadding ->
+        }) { innerPadding ->
         Column(
             modifier = Modifier.padding(innerPadding)
         ) {
@@ -132,168 +120,89 @@ fun SettingsScreen() {
             settings.forEach { (titleRes, isSwitch) ->
                 val title = stringResource(titleRes)
                 if (isSwitch) {
-                    ListItem(
-                        headlineContent = { Text(title) },
-                        trailingContent = {
-                            Switch(
-                                checked = isDarkTheme,
-                                onCheckedChange = {
-                                    viewModel.setDarkTheme(it)
-                                    pendingRestart = true
-                                }
-                            )
-                        }
-                    )
+                    ListItem(headlineContent = { Text(title) }, trailingContent = {
+                        Switch(
+                            checked = isDarkTheme, onCheckedChange = {
+                                viewModel.setDarkTheme(it)
+                                pendingRestart = true
+                            })
+                    })
                 } else if (titleRes == R.string.main_color) {
                     CustomListItem(
                         title = title,
                         showArrow = true,
                         arrowIcon = painterResource(R.drawable.arrow_right),
-                        onClick = { showColorSheet = true }
-                    )
+                        onClick = { showColorSheet = true })
                 } else if (titleRes == R.string.haptics) {
                     CustomListItem(
                         title = title,
                         showArrow = true,
                         arrowIcon = painterResource(R.drawable.arrow_right),
-                        onClick = { showHapticSheet = true }
-                    )
+                        onClick = { showHapticSheet = true })
                 } else if (titleRes == R.string.sync) {
                     CustomListItem(
                         title = title,
                         showArrow = true,
                         arrowIcon = painterResource(R.drawable.arrow_right),
-                        onClick = { showSyncSheet = true }
-                    )
+                        onClick = { showSyncSheet = true })
                 } else if (titleRes == R.string.language) {
                     CustomListItem(
                         title = title,
                         showArrow = true,
                         arrowIcon = painterResource(R.drawable.arrow_right),
-                        onClick = { showLanguageSheet = true }
-                    )
+                        onClick = { showLanguageSheet = true })
                 } else {
                     CustomListItem(
                         title = title,
                         showArrow = true,
-                        arrowIcon = painterResource(R.drawable.arrow_right)
-                    )
+                        arrowIcon = painterResource(R.drawable.arrow_right),
+                        onClick = {
+                            if (titleRes == R.string.about) showAboutSheet = true
+                        })
                 }
                 HorizontalDivider()
             }
         }
         if (showColorSheet) {
-            ModalBottomSheet(onDismissRequest = { showColorSheet = false }) {
-                Box(modifier = Modifier.fillMaxWidth(), contentAlignment = Alignment.Center) {
-                    Row(
-                        modifier = Modifier.padding(16.dp),
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        colorOptions.forEach { color ->
-                            Box(
-                                modifier = Modifier
-                                    .size(48.dp)
-                                    .clip(CircleShape)
-                                    .background(color)
-                                    .clickable {
-                                        prefs.edit().putInt("main_color", color.toArgb()).apply()
-                                        showColorSheet = false
-                                        pendingRestart = true
-                                    }
-                            )
-                            Spacer(modifier = Modifier.size(16.dp))
-                        }
-                    }
-                }
-            }
+            ColorSheet(
+                showColorSheet = showColorSheet,
+                onDismiss = { showColorSheet = false },
+                colorOptions = colorOptions,
+                prefs = prefs,
+                onColorSelected = { pendingRestart = true })
         }
         if (showHapticSheet) {
-            ModalBottomSheet(onDismissRequest = { showHapticSheet = false }) {
-                Column(Modifier.padding(16.dp)) {
-                    hapticOptions.forEachIndexed { idx, label ->
-                        Row(
-                            Modifier
-                                .fillMaxWidth()
-                                .clickable {
-                                    prefs.edit().putInt("haptic_mode", idx).apply()
-                                    showHapticSheet = false
-                                }
-                                .padding(vertical = 12.dp),
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            androidx.compose.material3.RadioButton(
-                                selected = selectedHaptic == idx,
-                                onClick = {
-                                    prefs.edit().putInt("haptic_mode", idx).apply()
-                                    showHapticSheet = false
-                                }
-                            )
-                            Text(label, Modifier.padding(start = 8.dp))
-                        }
-                    }
-                }
-            }
+            HapticSheet(
+                showHapticSheet = showHapticSheet,
+                onDismiss = { showHapticSheet = false },
+                hapticOptions = hapticOptions,
+                selectedHaptic = selectedHaptic,
+                prefs = prefs
+            )
         }
         if (showSyncSheet) {
-            ModalBottomSheet(onDismissRequest = { showSyncSheet = false }) {
-                Column(Modifier.padding(16.dp)) {
-                    Text(
-                        stringResource(
-                            R.string.sync_interval,
-                            sliderValue.toInt()
-                        )
-                    )
-                    Slider(
-                        value = sliderValue,
-                        onValueChange = { sliderValue = it },
-                        valueRange = 5f..120f,
-                        steps = 23
-                    )
-                    Button(
-                        onClick = {
-                            prefs.edit().putInt("sync_interval_minutes", sliderValue.toInt())
-                                .apply()
-                            showSyncSheet = false
-                        },
-                        modifier = Modifier.padding(top = 16.dp)
-                    ) {
-                        Text(
-                            stringResource(
-                                R.string.save
-                            )
-                        )
-                    }
-                }
-            }
+            SyncSheet(
+                showSyncSheet = showSyncSheet,
+                onDismiss = { showSyncSheet = false },
+                sliderValue = sliderValue,
+                onSliderValueChange = { sliderValue = it },
+                prefs = prefs
+            )
         }
         if (showLanguageSheet) {
-            ModalBottomSheet(onDismissRequest = { showLanguageSheet = false }) {
-                Column(Modifier.padding(16.dp)) {
-                    listOf("ru" to "Русский", "en" to "English").forEach { (code, label) ->
-                        Row(
-                            Modifier
-                                .fillMaxWidth()
-                                .clickable {
-                                    prefs.edit().putString("app_lang", code).apply()
-                                    showLanguageSheet = false
-                                    pendingRestart = true
-                                }
-                                .padding(vertical = 12.dp),
-                            verticalAlignment = Alignment.CenterVertically
-                        ) {
-                            androidx.compose.material3.RadioButton(
-                                selected = currentLang == code,
-                                onClick = {
-                                    prefs.edit().putString("app_lang", code).apply()
-                                    showLanguageSheet = false
-                                    pendingRestart = true
-                                }
-                            )
-                            Text(label, Modifier.padding(start = 8.dp))
-                        }
-                    }
-                }
-            }
+            LanguageSheet(
+                showLanguageSheet = showLanguageSheet,
+                onDismiss = { showLanguageSheet = false },
+                currentLang = currentLang,
+                prefs = prefs,
+                onLangSelected = { pendingRestart = true })
+        }
+        if (showAboutSheet) {
+            AboutSheet(
+                showAboutSheet = showAboutSheet,
+                onDismiss = { showAboutSheet = false },
+                context = context
+            )
         }
     }
     if (pendingRestart) {

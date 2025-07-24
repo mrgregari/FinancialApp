@@ -73,4 +73,6 @@
     <string name="last_sync">"Последняя синхронизация: %1$s"</string>
     <string name="delete_expense">Удалить расход</string>
     <string name="delete_income">Удалить доход</string>
+    <string name="version">Версия: %1$s (%2$d)</string>
+    <string name="update">Последнее обновление: %1$s</string>
 </resources> 
