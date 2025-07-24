@@ -55,8 +55,8 @@ fun ExpensesHistoryContent(
                 HorizontalDivider()
                 CustomListItem(
                     modifier = Modifier.height(56.dp),
-                    title = "Конец",
-                    trailingText = endDate?.let { formatDate(it) } ?: "Выберите дату",
+                    title = stringResource(R.string.end),
+                    trailingText = endDate?.let { formatDate(it) } ?: stringResource(R.string.choose_date),
                     containerColor = MaterialTheme.colorScheme.secondary,
                     onClick = onShowEndDatePicker,
                     textColor = MaterialTheme.colorScheme.onSurfaceVariant
@@ -64,7 +64,7 @@ fun ExpensesHistoryContent(
                 HorizontalDivider()
                 CustomListItem(
                     modifier = Modifier.height(56.dp),
-                    title = "Сумма",
+                    title = stringResource(R.string.amount),
                     trailingText = formatAmountWithCurrency(
                         expenses.sumOf { it.amount.toDouble() },
                         getCurrencySymbol(currency)

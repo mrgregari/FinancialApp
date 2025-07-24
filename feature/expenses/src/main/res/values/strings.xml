@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="account">Счёт</string>
+    <string name="category">Статья</string>
+    <string name="comment">Комментарий</string>
+    <string name="choose_date">Выберите дату</string>
+    <string name="analytics">Анализ</string>
+</resources>

@@ -21,12 +21,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import com.example.charts.PieChartEntity
 import com.example.charts.CategoryPieChart
 import com.example.core_domain.models.Expense
+import com.example.core_ui.R
 import com.example.core_ui.components.CustomDatePickerDialog
 import com.example.core_ui.components.CustomListItem
 import com.example.core_ui.utils.formatAmountWithCurrency
@@ -63,7 +65,7 @@ fun ExpenseAnalyticsContent(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                text = "Период: начало",
+                text = stringResource(R.string.period_start),
                 modifier = Modifier.padding(start = 16.dp, end = 8.dp)
             )
             Spacer(modifier = Modifier.weight(1f))
@@ -90,7 +92,7 @@ fun ExpenseAnalyticsContent(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                text = "Период: конец",
+                text = stringResource(R.string.period_end),
                 modifier = Modifier.padding(start = 16.dp, end = 8.dp)
             )
             Spacer(modifier = Modifier.weight(1f))
@@ -110,7 +112,7 @@ fun ExpenseAnalyticsContent(
         }
         HorizontalDivider()
         CustomListItem(
-            title = "Сумма",
+            title = stringResource(R.string.amount),
             trailingText = formatAmountWithCurrency(total, getCurrencySymbol(currency))
         )
         val pieChartData = expenses.map { (category, list) ->

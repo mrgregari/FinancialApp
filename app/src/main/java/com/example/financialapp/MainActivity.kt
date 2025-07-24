@@ -2,6 +2,7 @@ package com.example.financialapp
 
 import android.app.AlarmManager
 import android.app.PendingIntent
+import android.content.Context
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -13,12 +14,19 @@ import com.example.core_ui.theme.getSecondaryForPrimary
 import com.example.financialapp.navigation.AppNavGraph
 import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import java.util.Calendar
+import com.example.financialapp.LocaleHelper
 
 /**
  * Main activity of the application.
  * Sets up Compose UI and navigation.
  */
 class MainActivity : ComponentActivity() {
+
+    override fun attachBaseContext(newBase: Context) {
+        val prefs = newBase.getSharedPreferences("sync_prefs", Context.MODE_PRIVATE)
+        val lang = prefs.getString("app_lang", "ru") ?: "ru"
+        super.attachBaseContext(LocaleHelper.wrap(newBase, lang))
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -63,15 +71,15 @@ class MainActivity : ComponentActivity() {
         calendar.add(Calendar.SECOND, 3)
         alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.timeInMillis, pendingIntent)
 
+        val prefs = getSharedPreferences("sync_prefs", MODE_PRIVATE)
+        val intervalMinutes = prefs.getInt("sync_interval_minutes", 20)
+        val intervalMillis = intervalMinutes * 60 * 1000L
 
         alarmManager.setRepeating(
             AlarmManager.RTC_WAKEUP,
             calendar.timeInMillis,
-            20 * 60 * 1000L, // 20 минут в миллисекундах,
-            //AlarmManager.INTERVAL_DAY,
+            intervalMillis,
             pendingIntent
         )
-
-
     }
 }

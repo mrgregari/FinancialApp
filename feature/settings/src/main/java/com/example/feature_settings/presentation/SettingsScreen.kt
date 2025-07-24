@@ -45,6 +45,8 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import android.content.Context
+import androidx.compose.material3.Slider
+import androidx.compose.material3.Button
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -65,7 +67,6 @@ fun SettingsScreen() {
         R.string.dark_theme to true,
         R.string.main_color to false,
         R.string.haptics to false,
-        R.string.code_password to false,
         R.string.sync to false,
         R.string.language to false,
         R.string.about to false
@@ -83,8 +84,20 @@ fun SettingsScreen() {
 
     val prefs = context.getSharedPreferences("sync_prefs", Context.MODE_PRIVATE)
     var showHapticSheet by remember { mutableStateOf(false) }
-    val hapticOptions = listOf("Выкл.", "Короткая", "Средняя", "Длинная")
+    val hapticOptions = listOf(
+        stringResource(R.string.off),
+        stringResource(R.string.short_hapt),
+        stringResource(R.string.mediun),
+        stringResource(R.string.long_hapt)
+    )
     val selectedHaptic = prefs.getInt("haptic_mode", 0)
+
+    var showSyncSheet by remember { mutableStateOf(false) }
+    val currentInterval = prefs.getInt("sync_interval_minutes", 20)
+    var sliderValue by remember { mutableStateOf(currentInterval.toFloat()) }
+
+    var showLanguageSheet by remember { mutableStateOf(false) }
+    val currentLang = prefs.getString("app_lang", "ru") ?: "ru"
 
     fun restartApp(activity: Activity) {
         val intent = activity.packageManager.getLaunchIntentForPackage(activity.packageName)
@@ -111,7 +124,7 @@ fun SettingsScreen() {
             modifier = Modifier.padding(innerPadding)
         ) {
             Text(
-                text = "Последняя синхронизация: $lastSyncText",
+                text = stringResource(R.string.last_sync, lastSyncText),
                 style = MaterialTheme.typography.bodyMedium,
                 modifier = Modifier.padding(16.dp)
             )
@@ -144,6 +157,20 @@ fun SettingsScreen() {
                         showArrow = true,
                         arrowIcon = painterResource(R.drawable.arrow_right),
                         onClick = { showHapticSheet = true }
+                    )
+                } else if (titleRes == R.string.sync) {
+                    CustomListItem(
+                        title = title,
+                        showArrow = true,
+                        arrowIcon = painterResource(R.drawable.arrow_right),
+                        onClick = { showSyncSheet = true }
+                    )
+                } else if (titleRes == R.string.language) {
+                    CustomListItem(
+                        title = title,
+                        showArrow = true,
+                        arrowIcon = painterResource(R.drawable.arrow_right),
+                        onClick = { showLanguageSheet = true }
                     )
                 } else {
                     CustomListItem(
@@ -199,6 +226,67 @@ fun SettingsScreen() {
                                 onClick = {
                                     prefs.edit().putInt("haptic_mode", idx).apply()
                                     showHapticSheet = false
+                                }
+                            )
+                            Text(label, Modifier.padding(start = 8.dp))
+                        }
+                    }
+                }
+            }
+        }
+        if (showSyncSheet) {
+            ModalBottomSheet(onDismissRequest = { showSyncSheet = false }) {
+                Column(Modifier.padding(16.dp)) {
+                    Text(
+                        stringResource(
+                            R.string.sync_interval,
+                            sliderValue.toInt()
+                        )
+                    )
+                    Slider(
+                        value = sliderValue,
+                        onValueChange = { sliderValue = it },
+                        valueRange = 5f..120f,
+                        steps = 23
+                    )
+                    Button(
+                        onClick = {
+                            prefs.edit().putInt("sync_interval_minutes", sliderValue.toInt())
+                                .apply()
+                            showSyncSheet = false
+                        },
+                        modifier = Modifier.padding(top = 16.dp)
+                    ) {
+                        Text(
+                            stringResource(
+                                R.string.save
+                            )
+                        )
+                    }
+                }
+            }
+        }
+        if (showLanguageSheet) {
+            ModalBottomSheet(onDismissRequest = { showLanguageSheet = false }) {
+                Column(Modifier.padding(16.dp)) {
+                    listOf("ru" to "Русский", "en" to "English").forEach { (code, label) ->
+                        Row(
+                            Modifier
+                                .fillMaxWidth()
+                                .clickable {
+                                    prefs.edit().putString("app_lang", code).apply()
+                                    showLanguageSheet = false
+                                    pendingRestart = true
+                                }
+                                .padding(vertical = 12.dp),
+                            verticalAlignment = Alignment.CenterVertically
+                        ) {
+                            androidx.compose.material3.RadioButton(
+                                selected = currentLang == code,
+                                onClick = {
+                                    prefs.edit().putString("app_lang", code).apply()
+                                    showLanguageSheet = false
+                                    pendingRestart = true
                                 }
                             )
                             Text(label, Modifier.padding(start = 8.dp))

@@ -21,6 +21,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalFocusManager
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import com.example.core_domain.models.Category
@@ -31,6 +32,7 @@ import com.example.core_ui.components.CustomTimePickerDialog
 import com.example.core_ui.components.EditField
 import com.example.core_ui.components.HintEditField
 import com.example.core_ui.utils.TransactionValidationState
+import com.example.feature_expenses.R
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
@@ -74,13 +76,13 @@ fun AddExpenseContent(
         Column {
             CustomListItem(
                 modifier = Modifier.height(71.dp),
-                title = "Счёт",
+                title = stringResource(com.example.core_ui.R.string.account),
                 trailingText = account,
             )
             HorizontalDivider()
             CustomListItem(
                 modifier = Modifier.height(71.dp),
-                title = "Статья",
+                title = stringResource(com.example.core_ui.R.string.category),
                 showArrow = true,
                 trailingText = selectedCategory ?: "",
                 onClick = { showCategorySheet = true }
@@ -95,11 +97,11 @@ fun AddExpenseContent(
             }
             HorizontalDivider()
             EditField(
-                label = "Сумма",
+                label = stringResource(com.example.core_ui.R.string.amount),
                 value = value,
                 onValueChange = onValueChange,
                 keyboardType = KeyboardType.Number,
-                hint = "Введите сумму"
+                hint = stringResource(com.example.core_ui.R.string.enter_sum)
             )
             validationState.valueError?.let { error ->
                 Text(
@@ -111,7 +113,7 @@ fun AddExpenseContent(
             }
             CustomListItem(
                 modifier = Modifier.height(71.dp),
-                title = "Дата",
+                title = stringResource(com.example.core_ui.R.string.date),
                 trailingText = dateFormat.format(date),
                 showArrow = true,
                 onClick = { showDatePicker = true }
@@ -119,7 +121,7 @@ fun AddExpenseContent(
             HorizontalDivider()
             CustomListItem(
                 modifier = Modifier.height(71.dp),
-                title = "Время",
+                title = stringResource(com.example.core_ui.R.string.time),
                 trailingText = timeFormat.format(time),
                 showArrow = true,
                 onClick = { showTimePicker = true }
@@ -128,7 +130,7 @@ fun AddExpenseContent(
             HintEditField(
                 value = comment,
                 onValueChange = onCommentChange,
-                hint = "Комментарий"
+                hint = stringResource(com.example.core_ui.R.string.comment)
             )
             HorizontalDivider()
         }
